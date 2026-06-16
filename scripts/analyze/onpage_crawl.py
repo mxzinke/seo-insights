@@ -46,9 +46,16 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 DEFAULT_TOP_N = 20
-CRAWL_DELAY_SECONDS = 1.0
-CRAWL_TIMEOUT = 15
-USER_AGENT = "SEOInsightsBot/1.0 (SEO analysis; +https://github.com/seo-insights)"
+CRAWL_DELAY_SECONDS = 2.0
+CRAWL_TIMEOUT = 20
+MAX_RETRIES = 3
+# A realistic browser User-Agent. Many sites / WAFs rate-limit or block
+# unknown bot agents (HTTP 429/403), which would otherwise be misread as
+# on-page problems. We crawl politely (delay + backoff) instead.
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+)
 
 # Title length thresholds.
 TITLE_MIN = 30
@@ -147,43 +154,88 @@ class _PageParser(html.parser.HTMLParser):
         return len(all_text.split())
 
 
+def _fetch_html(url: str) -> tuple[str, int, str]:
+    """
+    Fetch a page, retrying on transient rate-limit/server responses.
+
+    Returns (html_text, status_code, content_type). Retries HTTP 429 and 503
+    with exponential backoff (honouring a numeric Retry-After header). Raises
+    the last exception if all attempts fail.
+    """
+    last_exc: Exception | None = None
+    for attempt in range(MAX_RETRIES):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=CRAWL_TIMEOUT) as resp:
+                content_type = resp.headers.get("Content-Type", "")
+                html_bytes = resp.read()
+                charset = "utf-8"
+                if "charset=" in content_type:
+                    charset = content_type.split("charset=")[-1].split(";")[0].strip()
+                return html_bytes.decode(charset, errors="replace"), resp.status, content_type
+        except urllib.error.HTTPError as exc:
+            last_exc = exc
+            if exc.code in (429, 503) and attempt < MAX_RETRIES - 1:
+                retry_after = exc.headers.get("Retry-After") if exc.headers else None
+                wait = float(retry_after) if (retry_after and retry_after.isdigit()) else (2.0 ** attempt) * 3
+                time.sleep(min(wait, 30))
+                continue
+            raise
+        except Exception as exc:  # noqa: BLE001 — network/parse errors all map to "uncrawlable"
+            last_exc = exc
+            if attempt < MAX_RETRIES - 1:
+                time.sleep((2.0 ** attempt) * 2)
+                continue
+            raise
+    raise last_exc if last_exc else RuntimeError("fetch failed")
+
+
+def _fetch_error(url: str, status_code: int, reason: str) -> dict:
+    """
+    A finding for a page we could NOT crawl (rate-limit, timeout, connection
+    error). This is a crawler-side limitation, NOT an on-page SEO defect, so
+    `issues` stays empty — these never become on-page recommendations. Genuine
+    SEO-relevant HTTP errors (404/410/5xx) are surfaced separately via
+    `http_issue` so the recommender can treat them as real, lower-confidence.
+    """
+    # 4xx/5xx (other than 429) on a page that GSC says earns clicks is a real
+    # problem worth flagging; 429/timeouts/connection errors are crawler noise.
+    http_issue = status_code in (404, 410) or (500 <= status_code < 600 and status_code != 503)
+    return {
+        "url": url,
+        "status_code": status_code,
+        "fetch_error": reason,
+        "http_issue": http_issue,
+        "issues": [],
+        "so_what": (
+            f"{url}: page returns HTTP {status_code} — verify it is reachable and indexable."
+            if http_issue
+            else f"{url}: could not be crawled ({reason}) — on-page audit skipped, not an SEO defect."
+        ),
+    }
+
+
 def _audit_page(url: str) -> dict:
     """Fetch and audit a single page. Returns a finding dict."""
     issues: list[str] = []
 
-    # Fetch the page.
+    # Fetch the page (with retry/backoff on transient responses).
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=CRAWL_TIMEOUT) as resp:
-            status_code = resp.status
-            content_type = resp.headers.get("Content-Type", "")
-            # Only parse HTML.
-            if "text/html" not in content_type:
-                return {
-                    "url": url,
-                    "status_code": status_code,
-                    "issues": [f"Non-HTML content type: {content_type}"],
-                    "so_what": f"{url}: Non-HTML content type ({content_type}) — cannot audit.",
-                }
-            html_bytes = resp.read()
-            # Detect charset from headers or default to utf-8.
-            charset = "utf-8"
-            if "charset=" in content_type:
-                charset = content_type.split("charset=")[-1].split(";")[0].strip()
-            html_text = html_bytes.decode(charset, errors="replace")
+        html_text, status_code, content_type = _fetch_html(url)
     except urllib.error.HTTPError as exc:
+        return _fetch_error(url, exc.code, f"HTTP {exc.code} {exc.reason}")
+    except Exception as exc:  # noqa: BLE001
+        return _fetch_error(url, 0, f"{type(exc).__name__}: {exc}")
+
+    # Only parse HTML.
+    if "text/html" not in content_type:
         return {
             "url": url,
-            "status_code": exc.code,
-            "issues": [f"HTTP {exc.code} {exc.reason}"],
-            "so_what": f"{url}: HTTP {exc.code} — fix this broken page immediately.",
-        }
-    except Exception as exc:
-        return {
-            "url": url,
-            "status_code": 0,
-            "issues": [f"Fetch error: {exc}"],
-            "so_what": f"{url}: Could not fetch ({exc}).",
+            "status_code": status_code,
+            "fetch_error": f"Non-HTML content type: {content_type}",
+            "http_issue": False,
+            "issues": [],
+            "so_what": f"{url}: Non-HTML content type ({content_type}) — on-page audit skipped.",
         }
 
     if status_code != 200:
@@ -243,6 +295,8 @@ def _audit_page(url: str) -> dict:
     return {
         "url": url,
         "status_code": status_code,
+        "fetch_error": None,
+        "http_issue": False,
         "title": parser.title,
         "title_length": len(parser.title) if parser.title else 0,
         "title_issues": title_issues,

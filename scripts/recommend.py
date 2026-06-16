@@ -100,7 +100,7 @@ def _from_striking_distance(findings: list[dict], icp: dict) -> list[dict]:
                 f'to better target "{query}" — currently at position {position}, '
                 f"moving to top 3 could add ~{extra} clicks per period."
             ),
-            impact=min(5, max(1, 3 + (extra // 50))),  # Scale impact by click potential.
+            impact=min(5, max(1, 3 + (extra // 25))),  # Scale impact by click potential.
             effort=2,
             evidence=[f],
             detail=(
@@ -218,19 +218,38 @@ def _from_content_decay(findings: list[dict], icp: dict) -> list[dict]:
 def _from_onpage(findings: list[dict], icp: dict) -> list[dict]:
     """On-page SEO fixes: title, meta, H1, schema, canonical."""
     recs = []
-    for i, f in enumerate(findings):
-        issues = f.get("issues", [])
-        if not issues:
-            continue
+    uncrawlable = [f for f in findings if f.get("fetch_error") and not f.get("http_issue")]
+    http_broken = [f for f in findings if f.get("http_issue")]
+
+    # Genuine HTTP errors (404/410/5xx) on pages GSC tracks ARE real issues.
+    for i, f in enumerate(http_broken):
+        url = f.get("url", "unknown")
+        recs.append(_rec(
+            rec_id=f"http_{i+1:03d}",
+            title=f"Broken page: {url[:50]} returns HTTP {f.get('status_code')}",
+            category="technical_seo",
+            action=f"Restore or redirect {url} — it returns HTTP {f.get('status_code')} but is tracked in Search Console.",
+            impact=4,
+            effort=2,
+            evidence=[{k: v for k, v in f.items() if k != "so_what"}],
+            detail=(
+                f"{url} returns HTTP {f.get('status_code')}. A page Google has indexed that now "
+                "errors loses its rankings and wastes crawl budget. Fix the page or 301-redirect it "
+                "to the most relevant live URL."
+            ),
+        ))
+
+    # Real on-page SEO defects (title/meta/H1/thin content/noindex).
+    issue_findings = [f for f in findings if f.get("issues") and not f.get("fetch_error")]
+    for i, f in enumerate(issue_findings):
+        issues = f["issues"]
         url = f.get("url", "unknown")
 
-        # Categorize the severity of the finding.
         is_critical = any(
             kw in " ".join(issues).lower()
-            for kw in ["missing title", "noindex", "non-200", "http 4", "http 5"]
+            for kw in ["missing title", "noindex", "non-200"]
         )
         impact = 4 if is_critical else 2
-        effort = 1
 
         recs.append(_rec(
             rec_id=f"op_{i+1:03d}",
@@ -241,7 +260,7 @@ def _from_onpage(findings: list[dict], icp: dict) -> list[dict]:
                 + (f" (and {len(issues) - 3} more)" if len(issues) > 3 else "") + "."
             ),
             impact=impact,
-            effort=effort,
+            effort=1,
             evidence=[{k: v for k, v in f.items() if k != "so_what"}],
             detail=(
                 f"Crawl of {url} found {len(issues)} issue(s): {', '.join(issues)}. "
@@ -252,6 +271,30 @@ def _from_onpage(findings: list[dict], icp: dict) -> list[dict]:
         ))
         if i >= 15:
             break
+
+    # Pages we could not crawl are a DATA-COLLECTION gap, not an SEO defect.
+    # Surface them as a single low-priority note so the user knows coverage was
+    # incomplete — never as per-page "fix this page" recommendations.
+    if uncrawlable:
+        sample = ", ".join(f.get("url", "?") for f in uncrawlable[:5])
+        recs.append(_rec(
+            rec_id="op_uncrawlable",
+            title=f"{len(uncrawlable)} page(s) could not be crawled for the on-page audit",
+            category="technical_seo",
+            action=(
+                f"Re-run the on-page audit for {len(uncrawlable)} page(s) that were rate-limited or "
+                f"unreachable during this run (e.g. {sample}). Consider allow-listing the crawler "
+                "or lowering crawl concurrency. This is a coverage gap, not a confirmed SEO issue."
+            ),
+            impact=1,
+            effort=1,
+            evidence=[{"url": f.get("url"), "reason": f.get("fetch_error")} for f in uncrawlable],
+            detail=(
+                "These pages returned rate-limit (HTTP 429), timeout, or connection errors and could "
+                "not be analysed. This reflects crawl conditions, not page quality — do not treat as "
+                "an on-page defect. Re-run during off-peak hours or allow-list the User-Agent."
+            ),
+        ))
     return recs
 
 
@@ -319,7 +362,25 @@ def generate_recommendations(analyses: dict, icp: dict | None = None) -> list[di
     all_recs.extend(_from_onpage(analyses.get("onpage", []), icp))
     all_recs.extend(_from_cwv(analyses.get("core_web_vitals"), icp))
 
-    # Sort by priority descending, then by impact descending as tiebreaker.
-    all_recs.sort(key=lambda r: (r["priority"], r["impact"]), reverse=True)
+    # Sort by priority desc, then impact desc, then absolute click opportunity
+    # desc — so among equally efficient actions, the biggest real win surfaces
+    # first (e.g. a 40-click quick win outranks a niche tweak of the same ratio).
+    all_recs.sort(
+        key=lambda r: (r["priority"], r["impact"], _opportunity(r)),
+        reverse=True,
+    )
 
     return all_recs
+
+
+def _opportunity(rec: dict) -> int:
+    """Absolute click opportunity behind a recommendation, for tiebreaking."""
+    best = 0
+    for ev in rec.get("evidence", []):
+        if not isinstance(ev, dict):
+            continue
+        for key in ("estimated_extra_clicks", "click_gap", "clicks"):
+            val = ev.get(key)
+            if isinstance(val, (int, float)):
+                best = max(best, int(val))
+    return best

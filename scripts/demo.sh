@@ -26,26 +26,33 @@ echo "============================================"
 
 # Step 1: Copy fixture data to the demo run directory.
 echo ""
-echo "[1/3] Copying fixture data to $DATA_DIR …"
+echo "[1/4] Copying fixture data to $DATA_DIR …"
 python3 "$SCRIPT_DIR/fetch.py" --demo --days 90
 
 # Step 2: Validate the ICP.
 echo ""
-echo "[2/3] Validating ICP …"
+echo "[2/4] Validating ICP …"
 python3 "$SCRIPT_DIR/validate_icp.py" "$ICP_PATH"
 
 # Step 3: Build the report_data.json (demo mode — no live HTTP calls).
 echo ""
-echo "[3/3] Running analysis and building report_data.json …"
+echo "[3/4] Running analysis and building report_data.json …"
 python3 "$SCRIPT_DIR/build_report_data.py" \
   --data-dir "$DATA_DIR" \
   --icp "$ICP_PATH" \
   --demo
 
+# Step 4: Render the HTML report.
+echo ""
+echo "[4/4] Rendering HTML report …"
+REPORT_HTML="$DATA_DIR/report.html"
+python3 "$SCRIPT_DIR/report.py" "$REPORT_PATH" --out "$REPORT_HTML"
+
 echo ""
 echo "============================================"
 echo "  Demo complete!"
 echo "  report_data.json: $REPORT_PATH"
+echo "  report.html:      $REPORT_HTML"
 echo ""
 
 # Quick validation: check the JSON is well-formed and has non-empty recommendations.

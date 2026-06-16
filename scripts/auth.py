@@ -14,9 +14,16 @@ Usage:
 
 import argparse
 import json
+import pathlib
 import sys
 import urllib.parse
 import urllib.request
+
+# Bootstrap: add repo root to sys.path so direct invocation works.
+# e.g. `python3 scripts/auth.py refresh` as well as `python3 -m scripts.auth`
+_ROOT = pathlib.Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 
 # The only OAuth scope required for Search Console read access.
 GSC_SCOPE = "https://www.googleapis.com/auth/webmasters.readonly"
