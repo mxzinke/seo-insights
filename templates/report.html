@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEO Report — {{ display_domain }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-bg:          #f7f6f3;
+      --color-surface:     #ffffff;
+      --color-border:      #e8e5df;
+      --color-border-soft: #f0ede8;
+      --color-text:        #1a1917;
+      --color-text-muted:  #6b6760;
+      --color-text-faint:  #a09d98;
+      --color-accent:      #2d5be3;
+      --color-accent-soft: #eef1fc;
+      --color-accent-mid:  #6d8df5;
+
+      --color-green:       #1a7f4f;
+      --color-green-bg:    #edfaf4;
+      --color-amber:       #92600a;
+      --color-amber-bg:    #fef8ec;
+      --color-red:         #b81c1c;
+      --color-red-bg:      #fdf1f1;
+
+      --color-quick-win:   #1a6b3a;
+      --color-quick-bg:    #e8f8ef;
+      --color-quick-border:#b6e5cb;
+
+      --radius-sm:  6px;
+      --radius-md:  10px;
+      --radius-lg:  16px;
+      --radius-xl:  20px;
+
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md:  0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-lg:  0 8px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+
+      --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono:  'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+      --transition-base: 250ms ease;
+      --transition-slow: 320ms ease;
+    }
+
+    html {
+      font-size: 15px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    .page-wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    .site-header {
+      padding: 44px 0 36px;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 52px;
+    }
+
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeSlideIn 0.5s ease 0.1s forwards;
+    }
+
+    .header-domain {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeSlideIn 0.5s ease 0.2s forwards;
+    }
+
+    .header-meta {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeSlideIn 0.5s ease 0.3s forwards;
+    }
+
+    .header-meta time { font-weight: 500; color: var(--color-text); }
+
+    .header-verdict {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-accent-soft);
+      border: 1px solid #c8d5f8;
+      border-radius: var(--radius-sm);
+      padding: 7px 14px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--color-accent);
+      opacity: 0;
+      animation: fadeSlideIn 0.5s ease 0.4s forwards;
+    }
+
+    .verdict-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       SECTION STRUCTURE
+    ============================================================ */
+    .section {
+      margin-bottom: 64px;
+    }
+
+    .section-header {
+      margin-bottom: 28px;
+    }
+
+    .section-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-text-faint);
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    /* ============================================================
+       RECOMMENDATION CARDS
+    ============================================================ */
+    .rec-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .rec-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition-slow), transform var(--transition-slow), border-color var(--transition-slow);
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .rec-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.45s ease, transform 0.45s ease,
+                  box-shadow var(--transition-slow), border-color var(--transition-slow);
+    }
+
+    .rec-card:hover {
+      box-shadow: var(--shadow-lg);
+      border-color: #d8d4ce;
+      transform: translateY(-1px);
+    }
+
+    /* Quick Win cards get special treatment */
+    .rec-card.quick-win {
+      border-color: var(--color-quick-border);
+      background: linear-gradient(135deg, #ffffff 80%, #f0fbf4 100%);
+    }
+
+    .rec-card.quick-win:hover {
+      border-color: #80c9a0;
+    }
+
+    .rec-card-inner {
+      padding: 22px 24px 20px;
+    }
+
+    .rec-card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .rec-rank {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: var(--color-bg);
+      color: var(--color-text-muted);
+      margin-top: 2px;
+    }
+
+    .quick-win .rec-rank {
+      background: var(--color-quick-bg);
+      color: var(--color-quick-win);
+    }
+
+    .rec-header-content { flex: 1; }
+
+    .rec-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 7px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 9px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border: 1px solid transparent;
+    }
+
+    /* Category badges */
+    .badge-cat-quick-win    { background: var(--color-quick-bg);    color: var(--color-quick-win); border-color: var(--color-quick-border); }
+    .badge-cat-ctr          { background: #e8f0fd;  color: #1a3fa3; border-color: #b8ccf6; }
+    .badge-cat-onpage       { background: #fdf3e7;  color: #7c4a0f; border-color: #f0d0a0; }
+    .badge-cat-cannibalization { background: #fdf0f8; color: #7c1a5e; border-color: #eeb8d8; }
+    .badge-cat-decay        { background: #f5f0fd;  color: #4a1a8c; border-color: #cdb8f0; }
+    .badge-cat-technical    { background: #f0f5fd;  color: #1a3a7c; border-color: #b8ccf0; }
+    .badge-cat-content-gap  { background: #f0faf7;  color: #1a5a4a; border-color: #b8e0d4; }
+
+    /* Impact badges */
+    .badge-impact-high   { background: #e8f8ee; color: var(--color-green); border-color: #b8e8cc; }
+    .badge-impact-medium { background: #fef8ec; color: var(--color-amber); border-color: #f0d8a0; }
+    .badge-impact-low    { background: #f5f5f5; color: #555; border-color: #ddd; }
+
+    /* Effort badges */
+    .badge-effort-easy   { background: #e8f8ee; color: var(--color-green); border-color: #b8e8cc; }
+    .badge-effort-medium { background: #fef8ec; color: var(--color-amber); border-color: #f0d8a0; }
+    .badge-effort-hard   { background: #fdf1f1; color: var(--color-red); border-color: #f0b8b8; }
+
+    .rec-title {
+      font-size: 15.5px;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+    }
+
+    .quick-win .rec-title { color: #0f3d22; }
+
+    .rec-action {
+      font-size: 13.5px;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      padding-left: 44px;
+    }
+
+    .rec-detail {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      padding: 14px 16px;
+      background: var(--color-bg);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--color-border);
+      margin: 0 0 0 44px;
+    }
+
+    .quick-win .rec-detail { border-left-color: var(--color-quick-border); }
+
+    /* Collapsible evidence section */
+    .rec-evidence-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      margin-left: 44px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-faint);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px 0;
+      text-decoration: none;
+      user-select: none;
+      transition: color var(--transition-base);
+    }
+
+    .rec-evidence-toggle:hover { color: var(--color-accent); }
+    .rec-evidence-toggle:focus-visible { outline: 2px solid var(--color-accent); border-radius: 3px; }
+
+    .toggle-chevron {
+      display: inline-block;
+      transition: transform var(--transition-base);
+      font-style: normal;
+    }
+
+    .rec-evidence-toggle[aria-expanded="true"] .toggle-chevron {
+      transform: rotate(180deg);
+    }
+
+    .rec-evidence-body {
+      margin: 10px 0 0 44px;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.35s ease, opacity 0.35s ease;
+      opacity: 0;
+    }
+
+    .rec-evidence-body.open {
+      max-height: 800px;
+      opacity: 1;
+    }
+
+    .evidence-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .evidence-table th {
+      background: var(--color-bg);
+      padding: 7px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--color-text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .evidence-table td {
+      padding: 8px 12px;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border-soft);
+      vertical-align: top;
+    }
+
+    .evidence-table tr:last-child td { border-bottom: none; }
+    .evidence-table td.mono { font-family: var(--font-mono); font-size: 11.5px; }
+
+    .evidence-so-what {
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--color-text-muted);
+      background: var(--color-accent-soft);
+      border-top: 1px solid #d8e2fb;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       PERFORMANCE AT A GLANCE
+    ============================================================ */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .kpi-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 20px 20px 18px;
+      box-shadow: var(--shadow-sm);
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .kpi-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-faint);
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--color-text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .kpi-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 100px;
+    }
+
+    .delta-pos { color: var(--color-green); background: var(--color-green-bg); }
+    .delta-neg { color: var(--color-red);   background: var(--color-red-bg);   }
+    .delta-neu { color: var(--color-text-muted); background: var(--color-bg); }
+
+    /* Charts */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .chart-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 22px 20px 20px;
+      box-shadow: var(--shadow-sm);
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .chart-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .chart-card-full {
+      grid-column: 1 / -1;
+    }
+
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 16px;
+    }
+
+    .chart-subtitle {
+      font-size: 12px;
+      color: var(--color-text-faint);
+      font-weight: 400;
+      margin-left: 6px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 200px;
+    }
+
+    .chart-wrap-tall {
+      height: 240px;
+    }
+
+    /* ============================================================
+       APPENDIX / DETAIL SECTIONS
+    ============================================================ */
+    .appendix-section {
+      margin-bottom: 20px;
+    }
+
+    .collapsible-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition-base);
+    }
+
+    .collapsible-header:hover { background: #fafaf8; }
+    .collapsible-header:focus-visible { outline: 2px solid var(--color-accent); }
+
+    .collapsible-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .collapsible-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .collapsible-count {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 8px;
+      border-radius: 100px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+    }
+
+    .collapsible-chevron {
+      color: var(--color-text-faint);
+      transition: transform var(--transition-base);
+      flex-shrink: 0;
+    }
+
+    .collapsible-header[aria-expanded="true"] .collapsible-chevron {
+      transform: rotate(180deg);
+    }
+
+    .collapsible-body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .collapsible-body.open {
+      max-height: 2000px;
+      opacity: 1;
+    }
+
+    .collapsible-inner {
+      border: 1px solid var(--color-border);
+      border-top: none;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      overflow: hidden;
+    }
+
+    /* Data tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      background: var(--color-bg);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--color-text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .data-table td {
+      padding: 11px 14px;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border-soft);
+      vertical-align: middle;
+    }
+
+    .data-table tbody tr:last-child td { border-bottom: none; }
+
+    .data-table tbody tr:hover td { background: #fafaf8; }
+
+    .data-table td.text-main { color: var(--color-text); font-weight: 500; }
+    .data-table td.mono { font-family: var(--font-mono); font-size: 12px; }
+    .data-table td.num { text-align: right; }
+
+    /* CWV status dots */
+    .cwv-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 5px;
+      flex-shrink: 0;
+    }
+
+    .cwv-dot.good { background: var(--color-green); }
+    .cwv-dot.warn { background: #d97706; }
+    .cwv-dot.poor { background: var(--color-red); }
+
+    .cwv-cell {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Issue list inline */
+    .issue-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .issue-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--color-red-bg);
+      color: var(--color-red);
+      border: 1px solid #f0c0c0;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer {
+      padding: 28px 0 0;
+      border-top: 1px solid var(--color-border);
+      font-size: 12px;
+      color: var(--color-text-faint);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       UTILITY
+    ============================================================ */
+    .text-muted { color: var(--color-text-muted); }
+    .text-faint { color: var(--color-text-faint); }
+    .font-mono  { font-family: var(--font-mono); }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    .tag-green { background: var(--color-green-bg); color: var(--color-green); }
+    .tag-amber { background: var(--color-amber-bg); color: var(--color-amber); }
+    .tag-red   { background: var(--color-red-bg);   color: var(--color-red);   }
+    .tag-neu   { background: var(--color-bg);        color: var(--color-text-muted); border: 1px solid var(--color-border); }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .charts-grid { grid-template-columns: 1fr; }
+      .rec-action, .rec-detail, .rec-evidence-toggle, .rec-evidence-body { padding-left: 0; margin-left: 0; }
+      .rec-card-top { flex-wrap: wrap; }
+    }
+
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .page-wrap { padding: 0 16px 60px; }
+      .header-domain { font-size: 22px; }
+    }
+
+    /* ============================================================
+       PRINT STYLES
+    ============================================================ */
+    @media print {
+      :root {
+        --color-bg: #fff;
+        --shadow-sm: none;
+        --shadow-md: none;
+        --shadow-lg: none;
+      }
+
+      body { background: white; font-size: 13px; }
+      .page-wrap { max-width: 100%; padding: 0 20px; }
+      .site-header { padding: 24px 0 20px; }
+
+      /* Expand all collapsibles in print */
+      .collapsible-body, .rec-evidence-body {
+        max-height: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+      }
+
+      .collapsible-header .collapsible-chevron { display: none; }
+
+      /* Reset animations */
+      .rec-card, .kpi-card, .chart-card {
+        opacity: 1 !important;
+        transform: none !important;
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+      }
+
+      .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+      .charts-grid { display: none; } /* Charts don't print well */
+
+      /* Show print-only elements */
+      .print-show { display: block !important; }
+      .print-hide { display: none !important; }
+
+      /* Avoid page breaks inside cards */
+      .rec-card { page-break-inside: avoid; }
+
+      a { text-decoration: none; color: inherit; }
+
+      header { animation: none !important; }
+      .header-eyebrow, .header-domain, .header-meta, .header-verdict {
+        opacity: 1 !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+
+    <!-- ======================================================
+         HEADER
+    ====================================================== -->
+    <header class="site-header">
+      <div class="header-eyebrow">SEO Insights Report</div>
+      <h1 class="header-domain">{{ display_domain }}</h1>
+      <p class="header-meta">
+        Analysis window: <time>{{ meta.window.start }}</time> – <time>{{ meta.window.end }}</time>
+        ({{ meta.window.days }} days)
+        {% if meta.prior_window %}
+          &nbsp;·&nbsp; vs prior: {{ meta.prior_window.start }} – {{ meta.prior_window.end }}
+        {% endif %}
+        &nbsp;·&nbsp; Generated {{ meta.generated_at[:10] }}
+      </p>
+      <div class="header-verdict">
+        <span class="verdict-dot"></span>
+        {{ headline }}
+      </div>
+    </header>
+
+    <!-- ======================================================
+         SECTION 1: RECOMMENDATIONS (HERO)
+    ====================================================== -->
+    <section class="section" aria-labelledby="recs-heading">
+      <div class="section-header">
+        <div class="section-label">Action Plan</div>
+        <h2 class="section-title" id="recs-heading">Prioritized Recommendations</h2>
+        <p class="section-subtitle">
+          Sorted by impact-to-effort ratio. Quick wins are highlighted.
+          {{ total_recs }} total actions across {{ recommendations | map(attribute='category') | unique | list | length }} categories.
+        </p>
+      </div>
+
+      <div class="rec-cards" role="list">
+        {% for rec in recommendations %}
+        <article class="rec-card {% if rec.is_quick %}quick-win{% endif %}"
+                 role="listitem"
+                 data-animate="true">
+          <div class="rec-card-inner">
+            <div class="rec-card-top">
+              <div class="rec-rank" aria-label="Priority {{ rec.rank }}">{{ rec.rank }}</div>
+              <div class="rec-header-content">
+                <div class="rec-badges">
+                  <span class="badge badge-cat-{{ category_meta[rec.category]['css'] | replace('cat-', '') }}"
+                        title="{{ rec.category }}">
+                    {{ rec.category_label }}
+                  </span>
+                  <span class="badge badge-impact-{{ rec.impact_class }}"
+                        title="Impact: {{ rec.impact }}/5">
+                    Impact: {{ rec.impact_label }}
+                  </span>
+                  <span class="badge badge-effort-{{ rec.effort_class }}"
+                        title="Effort: {{ rec.effort }}/5">
+                    Effort: {{ rec.effort_label }}
+                  </span>
+                </div>
+                <h3 class="rec-title">{{ rec.title }}</h3>
+              </div>
+            </div>
+
+            <p class="rec-action">{{ rec.action }}</p>
+
+            <blockquote class="rec-detail">
+              {{ rec.detail }}
+            </blockquote>
+
+            {% if rec.evidence %}
+            <button class="rec-evidence-toggle"
+                    aria-expanded="false"
+                    aria-controls="evidence-{{ rec.id }}">
+              <span class="toggle-chevron">▾</span>
+              Show supporting data ({{ rec.evidence | length }} row{{ 's' if rec.evidence | length != 1 else '' }})
+            </button>
+
+            <div class="rec-evidence-body" id="evidence-{{ rec.id }}" role="region">
+              {% for ev in rec.evidence %}
+              <div style="margin-top: 8px;">
+                {% if ev.query is defined %}
+                {# CTR / striking distance / cannibalization evidence #}
+                <table class="evidence-table">
+                  <thead>
+                    <tr>
+                      {% if ev.query is defined %}<th>Query</th>{% endif %}
+                      {% if ev.position is defined %}<th>Position</th>{% endif %}
+                      {% if ev.impressions is defined %}<th>Impr.</th>{% endif %}
+                      {% if ev.clicks is defined %}<th>Clicks</th>{% endif %}
+                      {% if ev.actual_ctr is defined %}<th>Actual CTR</th>{% endif %}
+                      {% if ev.expected_ctr is defined %}<th>Expected CTR</th>{% endif %}
+                      {% if ev.click_gap is defined %}<th>Click Gap</th>{% endif %}
+                      {% if ev.estimated_extra_clicks is defined %}<th>Est. Extra</th>{% endif %}
+                      {% if ev.best_page is defined %}<th>Page</th>{% endif %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      {% if ev.query is defined %}<td class="text-main">{{ ev.query }}</td>{% endif %}
+                      {% if ev.position is defined %}<td>{{ "%.1f"|format(ev.position) }}</td>{% endif %}
+                      {% if ev.impressions is defined %}<td>{{ "{:,}".format(ev.impressions) }}</td>{% endif %}
+                      {% if ev.clicks is defined %}<td>{{ "{:,}".format(ev.clicks) }}</td>{% endif %}
+                      {% if ev.actual_ctr is defined %}<td>{{ "%.1f%%"|format(ev.actual_ctr * 100) }}</td>{% endif %}
+                      {% if ev.expected_ctr is defined %}<td>{{ "%.1f%%"|format(ev.expected_ctr * 100) }}</td>{% endif %}
+                      {% if ev.click_gap is defined %}<td><strong>+{{ "{:,}".format(ev.click_gap) }}</strong></td>{% endif %}
+                      {% if ev.estimated_extra_clicks is defined %}<td><strong>+{{ "{:,}".format(ev.estimated_extra_clicks) }}</strong></td>{% endif %}
+                      {% if ev.best_page is defined %}<td class="mono" style="font-size:11px; max-width:200px; word-break:break-all;">{{ ev.best_page }}</td>{% endif %}
+                    </tr>
+                  </tbody>
+                </table>
+                {% elif ev.pages is defined %}
+                {# Cannibalization evidence #}
+                <table class="evidence-table">
+                  <thead><tr><th>Page</th><th>Clicks</th><th>Impr.</th><th>Position</th></tr></thead>
+                  <tbody>
+                    {% for p in ev.pages %}
+                    <tr>
+                      <td class="mono" style="font-size:11px; word-break:break-all;">{{ p.page }}</td>
+                      <td>{{ "{:,}".format(p.clicks) }}</td>
+                      <td>{{ "{:,}".format(p.impressions) }}</td>
+                      <td>{{ "%.1f"|format(p.position) }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% elif ev.url is defined %}
+                {# On-page / CWV / decay evidence #}
+                {% if ev.issues is defined %}
+                <table class="evidence-table">
+                  <thead>
+                    <tr>
+                      <th>URL</th>
+                      <th>Issues</th>
+                      {% if ev.word_count is defined %}<th>Words</th>{% endif %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mono" style="font-size:11px; word-break:break-all;">{{ ev.url }}</td>
+                      <td>
+                        <ul class="issue-list">
+                          {% for issue in ev.issues %}
+                          <li><span class="issue-tag">{{ issue }}</span></li>
+                          {% endfor %}
+                        </ul>
+                      </td>
+                      {% if ev.word_count is defined %}<td>{{ ev.word_count }}</td>{% endif %}
+                    </tr>
+                  </tbody>
+                </table>
+                {% elif ev.lcp_ms is defined %}
+                <table class="evidence-table">
+                  <thead><tr><th>URL</th><th>Score</th><th>LCP</th><th>CLS</th><th>INP</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="mono" style="font-size:11px; word-break:break-all;">{{ ev.url }}</td>
+                      <td>{{ ev.performance_score }}/100</td>
+                      <td>{{ ev.lcp_ms }}ms ({{ ev.lcp_category }})</td>
+                      <td>{{ ev.cls }} ({{ ev.cls_category }})</td>
+                      <td>{{ ev.inp_ms }}ms ({{ ev.inp_category }})</td>
+                    </tr>
+                  </tbody>
+                </table>
+                {% else %}
+                <table class="evidence-table">
+                  <thead>
+                    <tr>
+                      <th>URL / Subject</th>
+                      {% if ev.prior_clicks is defined %}<th>Prior Clicks</th>{% endif %}
+                      {% if ev.current_clicks is defined %}<th>Current Clicks</th>{% endif %}
+                      {% if ev.clicks_decline_pct is defined %}<th>Decline</th>{% endif %}
+                      {% if ev.first_half_clicks is defined %}<th>1st Half</th>{% endif %}
+                      {% if ev.second_half_clicks is defined %}<th>2nd Half</th>{% endif %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mono" style="font-size:11px;">{{ ev.url }}</td>
+                      {% if ev.prior_clicks is defined %}<td>{{ "{:,}".format(ev.prior_clicks) }}</td>{% endif %}
+                      {% if ev.current_clicks is defined %}<td>{{ "{:,}".format(ev.current_clicks) }}</td>{% endif %}
+                      {% if ev.clicks_decline_pct is defined %}<td class="tag-red" style="color:#b81c1c;">-{{ "%.1f"|format(ev.clicks_decline_pct) }}%</td>{% endif %}
+                      {% if ev.first_half_clicks is defined %}<td>{{ "{:,}".format(ev.first_half_clicks) }}</td>{% endif %}
+                      {% if ev.second_half_clicks is defined %}<td>{{ "{:,}".format(ev.second_half_clicks) }}</td>{% endif %}
+                    </tr>
+                  </tbody>
+                </table>
+                {% endif %}
+                {% endif %}
+
+                {% if ev.so_what is defined %}
+                <div class="evidence-so-what">
+                  <strong>So what:</strong> {{ ev.so_what }}
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SECTION 2: PERFORMANCE AT A GLANCE
+    ====================================================== -->
+    <section class="section" aria-labelledby="perf-heading">
+      <div class="section-header">
+        <div class="section-label">Performance</div>
+        <h2 class="section-title" id="perf-heading">At a Glance</h2>
+        <p class="section-subtitle">{{ meta.window.start }} – {{ meta.window.end }} vs prior period</p>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card" data-animate="true">
+          <div class="kpi-label">Total Clicks</div>
+          <div class="kpi-value">{{ clicks }}</div>
+          <span class="kpi-delta {{ clicks_delta_class }}">{{ clicks_delta }}</span>
+        </div>
+        <div class="kpi-card" data-animate="true" style="transition-delay: 0.07s">
+          <div class="kpi-label">Impressions</div>
+          <div class="kpi-value">{{ impressions }}</div>
+          <span class="kpi-delta {{ impressions_delta_class }}">{{ impressions_delta }}</span>
+        </div>
+        <div class="kpi-card" data-animate="true" style="transition-delay: 0.14s">
+          <div class="kpi-label">Avg. CTR</div>
+          <div class="kpi-value">{{ ctr }}</div>
+          <span class="kpi-delta {{ ctr_delta_class }}" title="Percentage point change">{{ ctr_delta }}</span>
+        </div>
+        <div class="kpi-card" data-animate="true" style="transition-delay: 0.21s">
+          <div class="kpi-label">Avg. Position</div>
+          <div class="kpi-value">{{ position }}</div>
+          <span class="kpi-delta {{ position_delta_class }}"
+                title="Position change — negative is better (moved up)">{{ position_delta }}</span>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid print-hide">
+        <!-- Clicks over time: full width -->
+        <div class="chart-card chart-card-full" data-animate="true">
+          <div class="chart-title">
+            Clicks over time
+            <span class="chart-subtitle">daily, {{ meta.window.days }}-day window</span>
+          </div>
+          <div class="chart-wrap chart-wrap-tall">
+            <canvas id="chart-clicks-date" aria-label="Clicks over time chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Top pages -->
+        <div class="chart-card" data-animate="true">
+          <div class="chart-title">Top pages by clicks</div>
+          <div class="chart-wrap">
+            <canvas id="chart-top-pages" aria-label="Top pages bar chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Recommendations by category: donut -->
+        <div class="chart-card" data-animate="true">
+          <div class="chart-title">Actions by category</div>
+          <div class="chart-wrap">
+            <canvas id="chart-recs-cat" aria-label="Recommendations by category donut chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Position distribution -->
+        <div class="chart-card" data-animate="true">
+          <div class="chart-title">
+            Keyword position distribution
+            <span class="chart-subtitle">by bucket</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chart-pos-dist" aria-label="Position distribution bar chart"></canvas>
+          </div>
+        </div>
+
+        <!-- WoW page deltas -->
+        {% if top_page_deltas %}
+        <div class="chart-card" data-animate="true">
+          <div class="chart-title">
+            Top page changes
+            <span class="chart-subtitle">clicks vs prior period</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chart-page-deltas" aria-label="Top page click deltas chart"></canvas>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SECTION 3: APPENDIX / DETAIL
+    ====================================================== -->
+    <section class="section" aria-labelledby="appendix-heading">
+      <div class="section-header">
+        <div class="section-label">Appendix</div>
+        <h2 class="section-title" id="appendix-heading">Analysis Detail</h2>
+        <p class="section-subtitle">Collapsible tables with raw findings behind the recommendations.</p>
+      </div>
+
+      <!-- Striking Distance -->
+      {% if sd_rows %}
+      <div class="appendix-section">
+        <button class="collapsible-header"
+                aria-expanded="false"
+                aria-controls="appendix-sd">
+          <div class="collapsible-header-left">
+            <span class="collapsible-title">Striking Distance Keywords</span>
+            <span class="collapsible-count">{{ sd_rows | length }}</span>
+          </div>
+          <svg class="collapsible-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="collapsible-body" id="appendix-sd">
+          <div class="collapsible-inner">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Query</th>
+                  <th>Position</th>
+                  <th>Impressions</th>
+                  <th>Clicks</th>
+                  <th>Est. Extra Clicks</th>
+                  <th>Best Page</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in sd_rows %}
+                <tr>
+                  <td class="text-main">{{ row.query }}</td>
+                  <td>{{ row.position }}</td>
+                  <td class="num">{{ row.impressions }}</td>
+                  <td class="num">{{ row.clicks }}</td>
+                  <td class="num"><strong>+{{ row.extra_clicks }}</strong></td>
+                  <td class="mono" style="font-size:11.5px; max-width:220px; word-break:break-all;">{{ row.best_page }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Cannibalization -->
+      {% if can_rows %}
+      <div class="appendix-section">
+        <button class="collapsible-header"
+                aria-expanded="false"
+                aria-controls="appendix-can">
+          <div class="collapsible-header-left">
+            <span class="collapsible-title">Keyword Cannibalization</span>
+            <span class="collapsible-count">{{ can_rows | length }}</span>
+          </div>
+          <svg class="collapsible-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="collapsible-body" id="appendix-can">
+          <div class="collapsible-inner">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Query</th>
+                  <th>Likely Canonical</th>
+                  <th>Competing Pages</th>
+                  <th>Total Clicks</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in can_rows %}
+                <tr>
+                  <td class="text-main">{{ row.query }}</td>
+                  <td class="mono" style="font-size:11.5px;">{{ row.canonical }}</td>
+                  <td>
+                    {% for p in row.pages %}
+                    <div style="font-size:11.5px; font-family: var(--font-mono); color: var(--color-text-muted);">
+                      {{ p.page }} — {{ p.clicks }} clicks @ pos {{ p.position }}
+                    </div>
+                    {% endfor %}
+                  </td>
+                  <td class="num">{{ row.total_clicks }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- CTR Outliers -->
+      {% if ctr_rows %}
+      <div class="appendix-section">
+        <button class="collapsible-header"
+                aria-expanded="false"
+                aria-controls="appendix-ctr">
+          <div class="collapsible-header-left">
+            <span class="collapsible-title">CTR Outliers</span>
+            <span class="collapsible-count">{{ ctr_rows | length }}</span>
+          </div>
+          <svg class="collapsible-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="collapsible-body" id="appendix-ctr">
+          <div class="collapsible-inner">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Query</th>
+                  <th>Position</th>
+                  <th>Impressions</th>
+                  <th>Actual CTR</th>
+                  <th>Expected CTR</th>
+                  <th>Click Gap</th>
+                  <th>Best Page</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in ctr_rows %}
+                <tr>
+                  <td class="text-main">{{ row.query }}</td>
+                  <td>{{ row.position }}</td>
+                  <td class="num">{{ row.impressions }}</td>
+                  <td class="num" style="color: var(--color-red);">{{ row.actual_ctr }}</td>
+                  <td class="num" style="color: var(--color-green);">{{ row.expected_ctr }}</td>
+                  <td class="num"><strong>+{{ row.click_gap }}</strong></td>
+                  <td class="mono" style="font-size:11.5px; word-break:break-all;">{{ row.best_page }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Content Decay -->
+      {% if decay_rows %}
+      <div class="appendix-section">
+        <button class="collapsible-header"
+                aria-expanded="false"
+                aria-controls="appendix-decay">
+          <div class="collapsible-header-left">
+            <span class="collapsible-title">Content Decay</span>
+            <span class="collapsible-count">{{ decay_rows | length }}</span>
+          </div>
+          <svg class="collapsible-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="collapsible-body" id="appendix-decay">
+          <div class="collapsible-inner">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>URL / Subject</th>
+                  <th>Type</th>
+                  <th>Prior Clicks</th>
+                  <th>Current Clicks</th>
+                  <th>Click Decline</th>
+                  <th>Impression Decline</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in decay_rows %}
+                <tr>
+                  <td class="text-main mono" style="font-size:12px; word-break:break-all;">{{ row.url }}</td>
+                  <td><span class="tag tag-amber">{{ row.type }}</span></td>
+                  <td class="num">{{ row.prior_clicks }}</td>
+                  <td class="num">{{ row.current_clicks }}</td>
+                  <td class="num" style="color: var(--color-red);">-{{ "%.1f"|format(row.clicks_decline_pct) }}%</td>
+                  <td class="num" style="color: var(--color-red);">-{{ "%.1f"|format(row.impressions_decline_pct) }}%</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- On-Page -->
+      {% if onpage_rows %}
+      <div class="appendix-section">
+        <button class="collapsible-header"
+                aria-expanded="false"
+                aria-controls="appendix-onpage">
+          <div class="collapsible-header-left">
+            <span class="collapsible-title">On-Page Audit</span>
+            <span class="collapsible-count">{{ onpage_rows | length }}</span>
+          </div>
+          <svg class="collapsible-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="collapsible-body" id="appendix-onpage">
+          <div class="collapsible-inner">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>URL</th>
+                  <th>Title</th>
+                  <th>Words</th>
+                  <th>Issues</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in onpage_rows %}
+                <tr>
+                  <td class="mono" style="font-size:11.5px; word-break:break-all;">{{ row.short_url }}</td>
+                  <td style="max-width:200px; font-size:12.5px;">{{ row.title }}</td>
+                  <td class="num">{{ row.word_count }}</td>
+                  <td>
+                    {% if row.issues %}
+                    <ul class="issue-list">
+                      {% for issue in row.issues %}
+                      <li><span class="issue-tag">{{ issue }}</span></li>
+                      {% endfor %}
+                    </ul>
+                    {% else %}
+                    <span class="tag tag-green">No issues</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Core Web Vitals -->
+      {% if cwv_rows %}
+      <div class="appendix-section">
+        <button class="collapsible-header"
+                aria-expanded="false"
+                aria-controls="appendix-cwv">
+          <div class="collapsible-header-left">
+            <span class="collapsible-title">Core Web Vitals</span>
+            <span class="collapsible-count">{{ cwv_rows | length }}</span>
+          </div>
+          <svg class="collapsible-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="collapsible-body" id="appendix-cwv">
+          <div class="collapsible-inner">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>URL</th>
+                  <th>Score</th>
+                  <th>LCP</th>
+                  <th>CLS</th>
+                  <th>INP</th>
+                  <th>Issues</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in cwv_rows %}
+                <tr>
+                  <td class="mono" style="font-size:11.5px; word-break:break-all;">{{ row.short_url }}</td>
+                  <td>
+                    <span class="tag tag-{{ 'green' if row.score_class == 'good' else ('amber' if row.score_class == 'warn' else 'red') }}">
+                      {{ row.score }}/100
+                    </span>
+                  </td>
+                  <td>
+                    <div class="cwv-cell">
+                      <span class="cwv-dot {{ row.lcp_class }}"></span>
+                      {{ row.lcp_ms }}ms
+                    </div>
+                  </td>
+                  <td>
+                    <div class="cwv-cell">
+                      <span class="cwv-dot {{ row.cls_class }}"></span>
+                      {{ row.cls }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="cwv-cell">
+                      <span class="cwv-dot {{ row.inp_class }}"></span>
+                      {{ row.inp_ms }}ms
+                    </div>
+                  </td>
+                  <td>
+                    {% if row.issues %}
+                    <ul class="issue-list">
+                      {% for issue in row.issues %}
+                      <li><span class="issue-tag">{{ issue }}</span></li>
+                      {% endfor %}
+                    </ul>
+                    {% else %}
+                    <span class="tag tag-green">Passing</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+    </section>
+
+    <!-- ======================================================
+         FOOTER
+    ====================================================== -->
+    <footer class="site-footer">
+      <span>SEO Insights · {{ display_domain }}</span>
+      <span>Generated {{ meta.generated_at[:10] }}</span>
+    </footer>
+
+  </div><!-- /.page-wrap -->
+
+  <!-- ======================================================
+       CHART.JS (CDN)
+  ====================================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ----------------------------------------------------------
+       Chart data from Python
+    ---------------------------------------------------------- */
+    const clicksByDate  = {{ clicks_by_date_json | safe }};
+    const topPages      = {{ top_pages_json | safe }};
+    const positionDist  = {{ position_dist_json | safe }};
+    const recsByCat     = {{ recs_by_cat_json | safe }};
+
+    {% if top_page_deltas %}
+    const pageDeltaData = {{ top_page_deltas | tojson | safe }};
+    {% else %}
+    const pageDeltaData = [];
+    {% endif %}
+
+    /* ----------------------------------------------------------
+       Colour palette
+    ---------------------------------------------------------- */
+    const ACCENT  = '#2d5be3';
+    const ACCENT_SOFT = 'rgba(45,91,227,0.08)';
+
+    const CAT_COLORS = {
+      quick_win:       '#1a7f4f',
+      ctr_optimization:'#2d5be3',
+      on_page:         '#d97706',
+      cannibalization: '#9b2c8a',
+      decay_recovery:  '#6d28d9',
+      technical_seo:   '#1e40af',
+      content_gap:     '#065f46',
+      other:           '#6b7280',
+    };
+
+    const CAT_LABELS = {
+      quick_win:        'Quick Win',
+      ctr_optimization: 'CTR Optimization',
+      on_page:          'On-Page',
+      cannibalization:  'Cannibalization',
+      decay_recovery:   'Decay Recovery',
+      technical_seo:    'Technical SEO',
+      content_gap:      'Content Gap',
+    };
+
+    const CHART_DEFAULTS = {
+      font: { family: "'Inter', sans-serif", size: 11 },
+      color: '#6b6760',
+    };
+
+    Chart.defaults.font.family = CHART_DEFAULTS.font.family;
+    Chart.defaults.font.size   = CHART_DEFAULTS.font.size;
+    Chart.defaults.color       = CHART_DEFAULTS.color;
+
+    /* ----------------------------------------------------------
+       Clicks over time — line chart
+    ---------------------------------------------------------- */
+    function buildClicksChart() {
+      const el = document.getElementById('chart-clicks-date');
+      if (!el || !clicksByDate.length) return;
+      const ctx = el.getContext('2d');
+
+      const labels = clicksByDate.map(d => d.date);
+      const values = clicksByDate.map(d => d.clicks);
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Clicks',
+            data: values,
+            borderColor: ACCENT,
+            backgroundColor: ACCENT_SOFT,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointBackgroundColor: ACCENT,
+            tension: 0.35,
+            fill: true,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 900, easing: 'easeInOutQuart' },
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#fff',
+              borderColor: '#e8e5df',
+              borderWidth: 1,
+              titleColor: '#1a1917',
+              bodyColor: '#6b6760',
+              padding: 10,
+              cornerRadius: 8,
+            },
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: {
+                maxTicksLimit: 10,
+                maxRotation: 0,
+                callback: function(val, i) {
+                  const d = this.getLabelForValue(val);
+                  return d ? d.slice(5) : ''; // MM-DD
+                },
+              },
+            },
+            y: {
+              grid: { color: '#f0ede8' },
+              ticks: { maxTicksLimit: 6 },
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+
+    /* ----------------------------------------------------------
+       Top pages — horizontal bar
+    ---------------------------------------------------------- */
+    function buildTopPagesChart() {
+      const el = document.getElementById('chart-top-pages');
+      if (!el || !topPages.length) return;
+      const ctx = el.getContext('2d');
+
+      const sliced = topPages.slice(0, 8);
+      const labels = sliced.map(p => {
+        try {
+          const url = new URL(p.page);
+          const path = url.pathname.replace(/\/$/, '') || '/';
+          return path.length > 30 ? '…' + path.slice(-28) : path;
+        } catch { return p.page; }
+      });
+      const values = sliced.map(p => p.clicks);
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Clicks',
+            data: values,
+            backgroundColor: 'rgba(45,91,227,0.15)',
+            borderColor: ACCENT,
+            borderWidth: 1.5,
+            borderRadius: 4,
+          }],
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 800, delay: (ctx) => ctx.dataIndex * 60 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#fff',
+              borderColor: '#e8e5df',
+              borderWidth: 1,
+              titleColor: '#1a1917',
+              bodyColor: '#6b6760',
+              padding: 10,
+              cornerRadius: 8,
+              callbacks: {
+                title: (items) => sliced[items[0].dataIndex]?.page || '',
+              },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: '#f0ede8' },
+              ticks: { maxTicksLimit: 5 },
+              beginAtZero: true,
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 11 } },
+            },
+          },
+        },
+      });
+    }
+
+    /* ----------------------------------------------------------
+       Recommendations by category — donut
+    ---------------------------------------------------------- */
+    function buildRecsCatChart() {
+      const el = document.getElementById('chart-recs-cat');
+      if (!el || !recsByCat.length) return;
+      const ctx = el.getContext('2d');
+
+      const labels = recsByCat.map(r => CAT_LABELS[r.category] || r.category);
+      const values = recsByCat.map(r => r.count);
+      const colors = recsByCat.map(r => CAT_COLORS[r.category] || '#6b7280');
+      const bgs    = colors.map(c => c + '22');
+
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors,
+            borderColor: '#fff',
+            borderWidth: 2,
+            hoverOffset: 6,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          animation: { animateRotate: true, duration: 900 },
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                boxWidth: 10,
+                boxHeight: 10,
+                borderRadius: 3,
+                padding: 10,
+                font: { size: 11 },
+              },
+            },
+            tooltip: {
+              backgroundColor: '#fff',
+              borderColor: '#e8e5df',
+              borderWidth: 1,
+              titleColor: '#1a1917',
+              bodyColor: '#6b6760',
+              padding: 10,
+              cornerRadius: 8,
+            },
+          },
+        },
+      });
+    }
+
+    /* ----------------------------------------------------------
+       Position distribution — bar
+    ---------------------------------------------------------- */
+    function buildPosDistChart() {
+      const el = document.getElementById('chart-pos-dist');
+      if (!el || !positionDist.length) return;
+      const ctx = el.getContext('2d');
+
+      const labels = positionDist.map(d => d.bucket);
+      const values = positionDist.map(d => d.count);
+      const positionalColors = [
+        '#1a7f4f', '#2d5be3', '#d97706', '#9b2c8a', '#6b7280'
+      ];
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Queries',
+            data: values,
+            backgroundColor: positionalColors.map(c => c + 'cc'),
+            borderColor: positionalColors,
+            borderWidth: 1.5,
+            borderRadius: 4,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 700, delay: (ctx) => ctx.dataIndex * 80 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#fff',
+              borderColor: '#e8e5df',
+              borderWidth: 1,
+              titleColor: '#1a1917',
+              bodyColor: '#6b6760',
+              padding: 10,
+              cornerRadius: 8,
+            },
+          },
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              grid: { color: '#f0ede8' },
+              ticks: { maxTicksLimit: 5 },
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+
+    /* ----------------------------------------------------------
+       Page WoW deltas — horizontal bar
+    ---------------------------------------------------------- */
+    function buildPageDeltasChart() {
+      const el = document.getElementById('chart-page-deltas');
+      if (!el || !pageDeltaData.length) return;
+      const ctx = el.getContext('2d');
+
+      const sliced = pageDeltaData.slice(0, 8);
+      const labels = sliced.map(p => {
+        try {
+          const url = new URL(p.url);
+          const path = url.pathname.replace(/\/$/, '') || '/';
+          return path.length > 28 ? '…' + path.slice(-26) : path;
+        } catch { return p.url; }
+      });
+      const values = sliced.map(p => p.clicks_delta_pct);
+      const colors = values.map(v => v >= 0 ? '#1a7f4f' : '#b81c1c');
+      const bgs    = values.map(v => v >= 0 ? 'rgba(26,127,79,0.15)' : 'rgba(184,28,28,0.15)');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Clicks % change',
+            data: values,
+            backgroundColor: bgs,
+            borderColor: colors,
+            borderWidth: 1.5,
+            borderRadius: 4,
+          }],
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 800, delay: (ctx) => ctx.dataIndex * 60 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#fff',
+              borderColor: '#e8e5df',
+              borderWidth: 1,
+              titleColor: '#1a1917',
+              bodyColor: '#6b6760',
+              padding: 10,
+              cornerRadius: 8,
+              callbacks: {
+                label: (item) => ` ${item.raw.toFixed(1)}% vs prior`,
+              },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: '#f0ede8' },
+              ticks: {
+                callback: (v) => v + '%',
+                maxTicksLimit: 6,
+              },
+            },
+            y: {
+              grid: { display: false },
+              ticks: { font: { size: 11 } },
+            },
+          },
+        },
+      });
+    }
+
+    /* ----------------------------------------------------------
+       Scroll-based reveal animation (IntersectionObserver)
+    ---------------------------------------------------------- */
+    function initAnimations() {
+      const items = document.querySelectorAll('[data-animate="true"]');
+      if (!items.length) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+          if (entry.isIntersecting) {
+            // Stagger siblings a tiny bit
+            const card = entry.target;
+            const delay = parseFloat(card.style.transitionDelay || '0') * 1000;
+            setTimeout(() => {
+              card.classList.add('visible');
+            }, delay);
+            observer.unobserve(card);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+      items.forEach((el) => observer.observe(el));
+    }
+
+    /* ----------------------------------------------------------
+       Collapsible (appendix sections)
+    ---------------------------------------------------------- */
+    function initCollapsibles() {
+      document.querySelectorAll('.collapsible-header').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          const expanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', String(!expanded));
+          const body = document.getElementById(this.getAttribute('aria-controls'));
+          if (body) {
+            body.classList.toggle('open', !expanded);
+          }
+        });
+
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+      });
+
+      // Evidence toggles on rec cards
+      document.querySelectorAll('.rec-evidence-toggle').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          const expanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', String(!expanded));
+          const body = document.getElementById(this.getAttribute('aria-controls'));
+          if (body) {
+            body.classList.toggle('open', !expanded);
+          }
+        });
+      });
+    }
+
+    /* ----------------------------------------------------------
+       Boot
+    ---------------------------------------------------------- */
+    document.addEventListener('DOMContentLoaded', function () {
+      initAnimations();
+      initCollapsibles();
+      buildClicksChart();
+      buildTopPagesChart();
+      buildRecsCatChart();
+      buildPosDistChart();
+      buildPageDeltasChart();
+    });
+
+  }());
+  </script>
+</body>
+</html>

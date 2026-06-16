@@ -2,6 +2,7 @@
 # The following optional packages are accepted per spec:
 #   requests  - not used (urllib used instead)
 #   pyyaml    - used for ICP config parsing
-#   jinja2    - reserved for future template task
+#   jinja2    - used by report.py for HTML template rendering
 
 pyyaml>=6.0
+jinja2>=3.1
