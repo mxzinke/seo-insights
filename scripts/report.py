@@ -97,6 +97,7 @@ def prepare_template_context(data: dict) -> dict:
     analyses = data.get("analyses", {})
     charts = data.get("charts", {})
     icp = data.get("icp") or {}
+    explore = data.get("explore") or {}
 
     wow = summary.get("wow") or {}
 
@@ -289,6 +290,15 @@ def prepare_template_context(data: dict) -> dict:
         "top_pages_json": json.dumps(top_pages),
         "position_dist_json": json.dumps(position_dist),
         "recs_by_cat_json": json.dumps(recs_by_cat),
+
+        # Explore data (JSON for JS — interactive tables and additional charts)
+        "explore_queries_json": json.dumps(explore.get("queries", [])),
+        "explore_pages_json": json.dumps(explore.get("pages", [])),
+        "explore_countries_json": json.dumps(explore.get("countries", [])),
+        "explore_devices_json": json.dumps(explore.get("devices", [])),
+        "explore_timeseries_json": json.dumps(explore.get("timeseries", [])),
+        "explore_ctr_vs_position_json": json.dumps(explore.get("ctr_vs_position", [])),
+        "explore_benchmark_curve_json": json.dumps(explore.get("benchmark_curve", [])),
 
         # Appendix data
         "top_page_deltas": top_page_deltas,

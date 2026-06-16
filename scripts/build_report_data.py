@@ -73,6 +73,175 @@ def build_summary_section(data_dir: pathlib.Path, wow_result: dict | None) -> di
     }
 
 
+_COUNTRY_NAMES: dict[str, str] = {
+    "usa": "United States",
+    "gbr": "United Kingdom",
+    "can": "Canada",
+    "aus": "Australia",
+    "ind": "India",
+    "deu": "Germany",
+    "nld": "Netherlands",
+    "fra": "France",
+    "sgp": "Singapore",
+    "bra": "Brazil",
+    "jpn": "Japan",
+    "kor": "South Korea",
+    "chn": "China",
+    "esp": "Spain",
+    "ita": "Italy",
+    "pol": "Poland",
+    "swe": "Sweden",
+    "nor": "Norway",
+    "dnk": "Denmark",
+    "fin": "Finland",
+    "che": "Switzerland",
+    "aut": "Austria",
+    "bel": "Belgium",
+    "prt": "Portugal",
+    "mex": "Mexico",
+    "arg": "Argentina",
+    "chl": "Chile",
+    "col": "Colombia",
+    "zaf": "South Africa",
+    "nzl": "New Zealand",
+    "idn": "Indonesia",
+    "mys": "Malaysia",
+    "tha": "Thailand",
+    "phl": "Philippines",
+    "vnm": "Vietnam",
+    "pak": "Pakistan",
+    "bgd": "Bangladesh",
+    "tur": "Turkey",
+    "sau": "Saudi Arabia",
+    "are": "United Arab Emirates",
+    "isr": "Israel",
+    "egy": "Egypt",
+    "nga": "Nigeria",
+    "ken": "Kenya",
+    "ukr": "Ukraine",
+    "rus": "Russia",
+    "cze": "Czech Republic",
+    "hun": "Hungary",
+    "rou": "Romania",
+    "hrv": "Croatia",
+}
+
+
+def build_explore(data_dir: pathlib.Path) -> dict:
+    """Build the explore data object for interactive data exploration in the report."""
+    from scripts.analyze import CTR_BENCHMARK, CTR_BENCHMARK_FALLBACK, expected_ctr as _expected_ctr  # noqa: PLC0415
+
+    explore: dict = {}
+
+    # ── Queries (top 250 by impressions) ────────────────────────────────────
+    query_rows = load_json(data_dir / "queries.json") or []
+    queries_sorted = sorted(query_rows, key=lambda r: r.get("impressions", 0), reverse=True)[:250]
+    explore["queries"] = [
+        {
+            "query": r["keys"][0] if r.get("keys") else "",
+            "clicks": int(r.get("clicks", 0)),
+            "impressions": int(r.get("impressions", 0)),
+            "ctr": round(r.get("ctr", 0.0) * 100, 2),   # percent, e.g. 6.49
+            "position": round(r.get("position", 0.0), 1),
+        }
+        for r in queries_sorted
+        if isinstance(r, dict) and r.get("keys")
+    ]
+
+    # ── Pages ────────────────────────────────────────────────────────────────
+    page_rows = load_json(data_dir / "pages.json") or []
+    pages_sorted = sorted(page_rows, key=lambda r: r.get("impressions", 0), reverse=True)
+    explore["pages"] = [
+        {
+            "page": r["keys"][0] if r.get("keys") else "",
+            "clicks": int(r.get("clicks", 0)),
+            "impressions": int(r.get("impressions", 0)),
+            "ctr": round(r.get("ctr", 0.0) * 100, 2),
+            "position": round(r.get("position", 0.0), 1),
+        }
+        for r in pages_sorted
+        if isinstance(r, dict) and r.get("keys")
+    ]
+
+    # ── Countries ────────────────────────────────────────────────────────────
+    country_rows = load_json(data_dir / "country.json") or []
+    country_sorted = sorted(country_rows, key=lambda r: r.get("impressions", 0), reverse=True)
+    explore["countries"] = [
+        {
+            "country": _COUNTRY_NAMES.get(
+                (r["keys"][0] if r.get("keys") else "").lower(),
+                (r["keys"][0] if r.get("keys") else "").upper(),
+            ),
+            "country_code": (r["keys"][0] if r.get("keys") else "").lower(),
+            "clicks": int(r.get("clicks", 0)),
+            "impressions": int(r.get("impressions", 0)),
+            "ctr": round(r.get("ctr", 0.0) * 100, 2),
+            "position": round(r.get("position", 0.0), 1),
+        }
+        for r in country_sorted
+        if isinstance(r, dict) and r.get("keys")
+    ]
+
+    # ── Devices ──────────────────────────────────────────────────────────────
+    device_rows = load_json(data_dir / "device.json") or []
+    explore["devices"] = [
+        {
+            "device": (r["keys"][0] if r.get("keys") else "").title(),
+            "clicks": int(r.get("clicks", 0)),
+            "impressions": int(r.get("impressions", 0)),
+            "ctr": round(r.get("ctr", 0.0) * 100, 2),
+            "position": round(r.get("position", 0.0), 1),
+        }
+        for r in sorted(device_rows, key=lambda r: r.get("impressions", 0), reverse=True)
+        if isinstance(r, dict) and r.get("keys")
+    ]
+
+    # ── Timeseries ───────────────────────────────────────────────────────────
+    date_rows = load_json(data_dir / "date.json") or []
+    timeseries = []
+    for r in date_rows:
+        if isinstance(r, dict) and r.get("keys"):
+            timeseries.append({
+                "date": r["keys"][0],
+                "clicks": int(r.get("clicks", 0)),
+                "impressions": int(r.get("impressions", 0)),
+                "ctr": round(r.get("ctr", 0.0) * 100, 2),
+                "position": round(r.get("position", 0.0), 1),
+            })
+    timeseries.sort(key=lambda x: x["date"])
+    explore["timeseries"] = timeseries
+
+    # ── CTR vs Position scatter (queries with impressions >= 20) ─────────────
+    scatter = []
+    for r in query_rows:
+        if not isinstance(r, dict) or not r.get("keys"):
+            continue
+        impressions = int(r.get("impressions", 0))
+        if impressions < 20:
+            continue
+        pos = round(r.get("position", 0.0), 1)
+        scatter.append({
+            "query": r["keys"][0],
+            "position": pos,
+            "ctr": round(r.get("ctr", 0.0) * 100, 2),   # percent
+            "impressions": impressions,
+            "clicks": int(r.get("clicks", 0)),
+        })
+    scatter.sort(key=lambda x: x["impressions"], reverse=True)
+    explore["ctr_vs_position"] = scatter
+
+    # ── Benchmark curve ──────────────────────────────────────────────────────
+    benchmark_curve = []
+    for pos in range(1, 21):
+        benchmark_curve.append({
+            "position": pos,
+            "expected_ctr": round(CTR_BENCHMARK.get(pos, CTR_BENCHMARK_FALLBACK) * 100, 2),
+        })
+    explore["benchmark_curve"] = benchmark_curve
+
+    return explore
+
+
 def build_charts(data_dir: pathlib.Path) -> dict:
     """Build chart-ready data series from the stored dimension files."""
     charts: dict = {}
@@ -205,9 +374,12 @@ def build_report_data(
     recommendations = generate_recommendations(analyses, icp)
     print(f"[build] {len(recommendations)} recommendations generated.")
 
-    # --- Build summary and charts ---
+    # --- Build summary, charts, and explore data ---
     summary = build_summary_section(data_dir, wow)
     charts = build_charts(data_dir)
+
+    print("[build] Building explore data …")
+    explore = build_explore(data_dir)
 
     # Add recommendation category distribution to charts.
     cat_counts: dict[str, int] = {}
@@ -237,6 +409,7 @@ def build_report_data(
         "recommendations": recommendations,
         "analyses": analyses,
         "charts": charts,
+        "explore": explore,
     }
 
     return report_data

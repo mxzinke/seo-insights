@@ -71,6 +71,7 @@ with open(path) as f:
 recs = data.get("recommendations", [])
 analyses = data.get("analyses", {})
 charts = data.get("charts", {})
+explore = data.get("explore", {})
 
 print(f"  JSON valid: YES")
 print(f"  Meta domain: {data['meta']['domain']}")
@@ -78,6 +79,7 @@ print(f"  Summary clicks: {data['summary']['clicks']}")
 print(f"  Recommendations: {len(recs)}")
 print(f"  Analyses produced: {', '.join(k for k, v in analyses.items() if v)}")
 print(f"  Chart series: {', '.join(k for k in charts)}")
+print(f"  Explore keys: {', '.join(k for k in explore)}")
 print()
 
 if not recs:
@@ -92,7 +94,7 @@ for i, rec in enumerate(recs[:5], 1):
 
 print()
 print("  All contract keys present:", end=" ")
-required_keys = {"meta", "icp", "summary", "recommendations", "analyses", "charts"}
+required_keys = {"meta", "icp", "summary", "recommendations", "analyses", "charts", "explore"}
 missing = required_keys - set(data.keys())
 if missing:
     print(f"MISSING: {missing}", file=sys.stderr)

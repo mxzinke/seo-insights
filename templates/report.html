@@ -50,6 +50,8 @@
 
       --transition-base: 250ms ease;
       --transition-slow: 320ms ease;
+
+      --nav-h: 52px;
     }
 
     html {
@@ -64,6 +66,66 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
+    }
+
+    /* ============================================================
+       STICKY NAV
+    ============================================================ */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247, 246, 243, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-border);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+    }
+
+    .sticky-nav-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .nav-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      transition: color var(--transition-base), background var(--transition-base);
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--color-accent);
+      background: var(--color-accent-soft);
     }
 
     /* ============================================================
@@ -143,7 +205,7 @@
        SECTION STRUCTURE
     ============================================================ */
     .section {
-      margin-bottom: 64px;
+      margin-bottom: 72px;
     }
 
     .section-header {
@@ -205,7 +267,6 @@
       transform: translateY(-1px);
     }
 
-    /* Quick Win cards get special treatment */
     .rec-card.quick-win {
       border-color: var(--color-quick-border);
       background: linear-gradient(135deg, #ffffff 80%, #f0fbf4 100%);
@@ -268,7 +329,6 @@
       border: 1px solid transparent;
     }
 
-    /* Category badges */
     .badge-cat-quick-win    { background: var(--color-quick-bg);    color: var(--color-quick-win); border-color: var(--color-quick-border); }
     .badge-cat-ctr          { background: #e8f0fd;  color: #1a3fa3; border-color: #b8ccf6; }
     .badge-cat-onpage       { background: #fdf3e7;  color: #7c4a0f; border-color: #f0d0a0; }
@@ -277,12 +337,10 @@
     .badge-cat-technical    { background: #f0f5fd;  color: #1a3a7c; border-color: #b8ccf0; }
     .badge-cat-content-gap  { background: #f0faf7;  color: #1a5a4a; border-color: #b8e0d4; }
 
-    /* Impact badges */
     .badge-impact-high   { background: #e8f8ee; color: var(--color-green); border-color: #b8e8cc; }
     .badge-impact-medium { background: #fef8ec; color: var(--color-amber); border-color: #f0d8a0; }
     .badge-impact-low    { background: #f5f5f5; color: #555; border-color: #ddd; }
 
-    /* Effort badges */
     .badge-effort-easy   { background: #e8f8ee; color: var(--color-green); border-color: #b8e8cc; }
     .badge-effort-medium { background: #fef8ec; color: var(--color-amber); border-color: #f0d8a0; }
     .badge-effort-hard   { background: #fdf1f1; color: var(--color-red); border-color: #f0b8b8; }
@@ -318,7 +376,6 @@
 
     .quick-win .rec-detail { border-left-color: var(--color-quick-border); }
 
-    /* Collapsible evidence section */
     .rec-evidence-toggle {
       display: inline-flex;
       align-items: center;
@@ -461,7 +518,7 @@
     .delta-neg { color: var(--color-red);   background: var(--color-red-bg);   }
     .delta-neu { color: var(--color-text-muted); background: var(--color-bg); }
 
-    /* Charts */
+    /* Charts grid */
     .charts-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -493,14 +550,15 @@
       font-size: 13px;
       font-weight: 600;
       color: var(--color-text);
-      margin-bottom: 16px;
+      margin-bottom: 4px;
     }
 
     .chart-subtitle {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--color-text-faint);
       font-weight: 400;
-      margin-left: 6px;
+      margin-bottom: 14px;
+      display: block;
     }
 
     .chart-wrap {
@@ -511,6 +569,258 @@
     .chart-wrap-tall {
       height: 240px;
     }
+
+    .chart-wrap-md {
+      height: 220px;
+    }
+
+    /* Chart legend custom */
+    .chart-legend {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--color-text-muted);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-line {
+      width: 16px;
+      height: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       EXPLORE SECTION — TABS
+    ============================================================ */
+    .explore-tabs {
+      display: flex;
+      gap: 2px;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .explore-tabs::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 16px 11px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      white-space: nowrap;
+      transition: color var(--transition-base), border-color var(--transition-base);
+      font-family: var(--font-sans);
+    }
+
+    .tab-btn:hover { color: var(--color-text); }
+
+    .tab-btn.active {
+      color: var(--color-accent);
+      border-bottom-color: var(--color-accent);
+    }
+
+    .tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 18px;
+      padding: 0 5px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--color-text-faint);
+      transition: background var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+    }
+
+    .tab-btn.active .tab-count {
+      background: var(--color-accent-soft);
+      border-color: #c8d5f8;
+      color: var(--color-accent);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* ============================================================
+       INTERACTIVE DATA TABLE
+    ============================================================ */
+    .itbl-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .itbl-search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 180px;
+      max-width: 320px;
+    }
+
+    .itbl-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-faint);
+      pointer-events: none;
+    }
+
+    .itbl-search {
+      width: 100%;
+      padding: 8px 12px 8px 32px;
+      font-size: 13px;
+      font-family: var(--font-sans);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      background: var(--color-surface);
+      color: var(--color-text);
+      outline: none;
+      transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    }
+
+    .itbl-search::placeholder { color: var(--color-text-faint); }
+    .itbl-search:focus {
+      border-color: var(--color-accent-mid);
+      box-shadow: 0 0 0 3px rgba(45,91,227,0.1);
+    }
+
+    .itbl-meta {
+      font-size: 12px;
+      color: var(--color-text-faint);
+      white-space: nowrap;
+    }
+
+    .itbl-wrap {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .itbl-scroll {
+      overflow-x: auto;
+    }
+
+    .itbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .itbl th {
+      background: var(--color-bg);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--color-text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--color-border);
+      white-space: nowrap;
+      user-select: none;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .itbl th:hover { background: #f0ede8; color: var(--color-text); }
+
+    .itbl th.sort-asc::after  { content: ' ▲'; font-size: 9px; color: var(--color-accent); }
+    .itbl th.sort-desc::after { content: ' ▼'; font-size: 9px; color: var(--color-accent); }
+
+    .itbl th[data-col="query"],
+    .itbl th[data-col="page"],
+    .itbl th[data-col="country"],
+    .itbl th[data-col="device"] {
+      cursor: pointer;
+      min-width: 180px;
+    }
+
+    .itbl td {
+      padding: 10px 14px;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border-soft);
+      vertical-align: middle;
+    }
+
+    .itbl tbody tr:last-child td { border-bottom: none; }
+    .itbl tbody tr:hover td { background: #fafaf8; }
+
+    .itbl td.cell-main {
+      color: var(--color-text);
+      font-weight: 500;
+      max-width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .itbl td.cell-num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* Position color coding */
+    .pos-top    { color: var(--color-green); font-weight: 600; }
+    .pos-mid    { color: var(--color-amber); font-weight: 600; }
+    .pos-low    { color: var(--color-text-muted); }
+
+    /* Show-all footer */
+    .itbl-show-more {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .itbl-show-btn {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--color-accent);
+      background: none;
+      border: 1px solid #c8d5f8;
+      border-radius: var(--radius-sm);
+      padding: 6px 18px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: background var(--transition-base);
+    }
+
+    .itbl-show-btn:hover { background: var(--color-accent-soft); }
 
     /* ============================================================
        APPENDIX / DETAIL SECTIONS
@@ -588,7 +898,7 @@
       overflow: hidden;
     }
 
-    /* Data tables */
+    /* Data tables (appendix) */
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -615,9 +925,7 @@
     }
 
     .data-table tbody tr:last-child td { border-bottom: none; }
-
     .data-table tbody tr:hover td { background: #fafaf8; }
-
     .data-table td.text-main { color: var(--color-text); font-weight: 500; }
     .data-table td.mono { font-family: var(--font-mono); font-size: 12px; }
     .data-table td.num { text-align: right; }
@@ -641,7 +949,6 @@
       align-items: center;
     }
 
-    /* Issue list inline */
     .issue-list {
       list-style: none;
       display: flex;
@@ -701,7 +1008,40 @@
     .tag-green { background: var(--color-green-bg); color: var(--color-green); }
     .tag-amber { background: var(--color-amber-bg); color: var(--color-amber); }
     .tag-red   { background: var(--color-red-bg);   color: var(--color-red);   }
-    .tag-neu   { background: var(--color-bg);        color: var(--color-text-muted); border: 1px solid var(--color-border); }
+    .tag-neu   { background: var(--color-bg); color: var(--color-text-muted); border: 1px solid var(--color-border); }
+
+    /* Scatter chart callout */
+    .scatter-legend {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 11.5px;
+      color: var(--color-text-muted);
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .scatter-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .scatter-legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .scatter-callout {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: var(--color-accent-soft);
+      border: 1px solid #c8d5f8;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      color: var(--color-accent);
+    }
 
     /* ============================================================
        RESPONSIVE
@@ -711,6 +1051,8 @@
       .charts-grid { grid-template-columns: 1fr; }
       .rec-action, .rec-detail, .rec-evidence-toggle, .rec-evidence-body { padding-left: 0; margin-left: 0; }
       .rec-card-top { flex-wrap: wrap; }
+      .sticky-nav-inner { gap: 2px; }
+      .nav-label { display: none; }
     }
 
     @media (max-width: 480px) {
@@ -733,8 +1075,8 @@
       body { background: white; font-size: 13px; }
       .page-wrap { max-width: 100%; padding: 0 20px; }
       .site-header { padding: 24px 0 20px; }
+      .sticky-nav { display: none; }
 
-      /* Expand all collapsibles in print */
       .collapsible-body, .rec-evidence-body {
         max-height: none !important;
         opacity: 1 !important;
@@ -743,7 +1085,6 @@
 
       .collapsible-header .collapsible-chevron { display: none; }
 
-      /* Reset animations */
       .rec-card, .kpi-card, .chart-card {
         opacity: 1 !important;
         transform: none !important;
@@ -752,17 +1093,18 @@
       }
 
       .kpi-grid { grid-template-columns: repeat(4, 1fr); }
-      .charts-grid { display: none; } /* Charts don't print well */
-
-      /* Show print-only elements */
-      .print-show { display: block !important; }
+      .charts-grid { display: none; }
       .print-hide { display: none !important; }
+      .print-show { display: block !important; }
 
-      /* Avoid page breaks inside cards */
+      /* Expand explore tables for print */
+      .tab-panel { display: block !important; }
+      .explore-tabs { display: none; }
+      .itbl-show-more { display: none; }
+      .itbl tbody tr.row-hidden { display: table-row !important; }
+
       .rec-card { page-break-inside: avoid; }
-
       a { text-decoration: none; color: inherit; }
-
       header { animation: none !important; }
       .header-eyebrow, .header-domain, .header-meta, .header-verdict {
         opacity: 1 !important;
@@ -772,6 +1114,22 @@
   </style>
 </head>
 <body>
+
+  <!-- ============================================================
+       STICKY NAV
+  ============================================================ -->
+  <nav class="sticky-nav print-hide" aria-label="Page sections">
+    <div class="sticky-nav-inner">
+      <span class="nav-label">Jump to</span>
+      <ul class="nav-links">
+        <li><a class="nav-link" href="#section-recs">Action Plan</a></li>
+        <li><a class="nav-link" href="#section-perf">Performance</a></li>
+        <li><a class="nav-link" href="#section-explore">Explore Data</a></li>
+        <li><a class="nav-link" href="#section-appendix">Appendix</a></li>
+      </ul>
+    </div>
+  </nav>
+
   <div class="page-wrap">
 
     <!-- ======================================================
@@ -797,7 +1155,7 @@
     <!-- ======================================================
          SECTION 1: RECOMMENDATIONS (HERO)
     ====================================================== -->
-    <section class="section" aria-labelledby="recs-heading">
+    <section class="section" id="section-recs" aria-labelledby="recs-heading">
       <div class="section-header">
         <div class="section-label">Action Plan</div>
         <h2 class="section-title" id="recs-heading">Prioritized Recommendations</h2>
@@ -852,7 +1210,6 @@
               {% for ev in rec.evidence %}
               <div style="margin-top: 8px;">
                 {% if ev.query is defined %}
-                {# CTR / striking distance / cannibalization evidence #}
                 <table class="evidence-table">
                   <thead>
                     <tr>
@@ -882,7 +1239,6 @@
                   </tbody>
                 </table>
                 {% elif ev.pages is defined %}
-                {# Cannibalization evidence #}
                 <table class="evidence-table">
                   <thead><tr><th>Page</th><th>Clicks</th><th>Impr.</th><th>Position</th></tr></thead>
                   <tbody>
@@ -897,7 +1253,6 @@
                   </tbody>
                 </table>
                 {% elif ev.url is defined %}
-                {# On-page / CWV / decay evidence #}
                 {% if ev.issues is defined %}
                 <table class="evidence-table">
                   <thead>
@@ -951,7 +1306,7 @@
                       <td class="mono" style="font-size:11px;">{{ ev.url }}</td>
                       {% if ev.prior_clicks is defined %}<td>{{ "{:,}".format(ev.prior_clicks) }}</td>{% endif %}
                       {% if ev.current_clicks is defined %}<td>{{ "{:,}".format(ev.current_clicks) }}</td>{% endif %}
-                      {% if ev.clicks_decline_pct is defined %}<td class="tag-red" style="color:#b81c1c;">-{{ "%.1f"|format(ev.clicks_decline_pct) }}%</td>{% endif %}
+                      {% if ev.clicks_decline_pct is defined %}<td style="color:#b81c1c;">-{{ "%.1f"|format(ev.clicks_decline_pct) }}%</td>{% endif %}
                       {% if ev.first_half_clicks is defined %}<td>{{ "{:,}".format(ev.first_half_clicks) }}</td>{% endif %}
                       {% if ev.second_half_clicks is defined %}<td>{{ "{:,}".format(ev.second_half_clicks) }}</td>{% endif %}
                     </tr>
@@ -978,7 +1333,7 @@
     <!-- ======================================================
          SECTION 2: PERFORMANCE AT A GLANCE
     ====================================================== -->
-    <section class="section" aria-labelledby="perf-heading">
+    <section class="section" id="section-perf" aria-labelledby="perf-heading">
       <div class="section-header">
         <div class="section-label">Performance</div>
         <h2 class="section-title" id="perf-heading">At a Glance</h2>
@@ -1012,40 +1367,77 @@
 
       <!-- Charts -->
       <div class="charts-grid print-hide">
-        <!-- Clicks over time: full width -->
+
+        <!-- Clicks + Impressions over time: full width dual-axis -->
         <div class="chart-card chart-card-full" data-animate="true">
-          <div class="chart-title">
-            Clicks over time
-            <span class="chart-subtitle">daily, {{ meta.window.days }}-day window</span>
+          <div class="chart-title">Clicks &amp; Impressions over time</div>
+          <div class="chart-legend">
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#2d5be3;"></span>
+              Clicks (left axis)
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot" style="background:#d97706; opacity:0.7;"></span>
+              Impressions (right axis)
+            </div>
           </div>
           <div class="chart-wrap chart-wrap-tall">
-            <canvas id="chart-clicks-date" aria-label="Clicks over time chart"></canvas>
+            <canvas id="chart-clicks-impressions" aria-label="Clicks and impressions over time chart"></canvas>
           </div>
         </div>
 
-        <!-- Top pages -->
+        <!-- Average position over time (inverted Y — up = better) -->
         <div class="chart-card" data-animate="true">
-          <div class="chart-title">Top pages by clicks</div>
-          <div class="chart-wrap">
-            <canvas id="chart-top-pages" aria-label="Top pages bar chart"></canvas>
+          <div class="chart-title">Avg. Position over time</div>
+          <span class="chart-subtitle">Y-axis inverted — higher = better ranking</span>
+          <div class="chart-wrap chart-wrap-md">
+            <canvas id="chart-position-time" aria-label="Average position over time chart"></canvas>
           </div>
         </div>
 
-        <!-- Recommendations by category: donut -->
+        <!-- CTR vs Position scatter with benchmark curve -->
         <div class="chart-card" data-animate="true">
-          <div class="chart-title">Actions by category</div>
-          <div class="chart-wrap">
-            <canvas id="chart-recs-cat" aria-label="Recommendations by category donut chart"></canvas>
+          <div class="chart-title">CTR vs. Position</div>
+          <span class="chart-subtitle">Queries with ≥20 impressions — dots below curve = opportunity</span>
+          <div class="scatter-legend">
+            <div class="scatter-legend-item">
+              <span class="scatter-legend-swatch" style="background:rgba(45,91,227,0.6);"></span>
+              Query
+            </div>
+            <div class="scatter-legend-item">
+              <span class="scatter-legend-swatch" style="background:#b81c1c; border-radius:0; width:14px; height:2px;"></span>
+              Benchmark curve
+            </div>
+          </div>
+          <div class="chart-wrap chart-wrap-md">
+            <canvas id="chart-ctr-scatter" aria-label="CTR vs position scatter chart"></canvas>
+          </div>
+          <div class="scatter-callout" id="scatter-callout" style="display:none;"></div>
+        </div>
+
+        <!-- Country breakdown -->
+        <div class="chart-card" data-animate="true">
+          <div class="chart-title">Clicks by Country</div>
+          <span class="chart-subtitle">top countries</span>
+          <div class="chart-wrap chart-wrap-md">
+            <canvas id="chart-countries" aria-label="Clicks by country bar chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Device split — donut -->
+        <div class="chart-card" data-animate="true">
+          <div class="chart-title">Device Split</div>
+          <span class="chart-subtitle">clicks by device type</span>
+          <div class="chart-wrap chart-wrap-md">
+            <canvas id="chart-devices" aria-label="Device split donut chart"></canvas>
           </div>
         </div>
 
         <!-- Position distribution -->
         <div class="chart-card" data-animate="true">
-          <div class="chart-title">
-            Keyword position distribution
-            <span class="chart-subtitle">by bucket</span>
-          </div>
-          <div class="chart-wrap">
+          <div class="chart-title">Keyword Position Distribution</div>
+          <span class="chart-subtitle">queries by position bucket</span>
+          <div class="chart-wrap chart-wrap-md">
             <canvas id="chart-pos-dist" aria-label="Position distribution bar chart"></canvas>
           </div>
         </div>
@@ -1053,22 +1445,192 @@
         <!-- WoW page deltas -->
         {% if top_page_deltas %}
         <div class="chart-card" data-animate="true">
-          <div class="chart-title">
-            Top page changes
-            <span class="chart-subtitle">clicks vs prior period</span>
-          </div>
-          <div class="chart-wrap">
+          <div class="chart-title">Top page changes</div>
+          <span class="chart-subtitle">clicks vs prior period</span>
+          <div class="chart-wrap chart-wrap-md">
             <canvas id="chart-page-deltas" aria-label="Top page click deltas chart"></canvas>
           </div>
         </div>
         {% endif %}
-      </div>
+
+        <!-- Recs by category — donut -->
+        <div class="chart-card" data-animate="true">
+          <div class="chart-title">Actions by category</div>
+          <span class="chart-subtitle">recommendation mix</span>
+          <div class="chart-wrap chart-wrap-md">
+            <canvas id="chart-recs-cat" aria-label="Recommendations by category donut chart"></canvas>
+          </div>
+        </div>
+
+      </div><!-- /.charts-grid -->
     </section>
 
     <!-- ======================================================
-         SECTION 3: APPENDIX / DETAIL
+         SECTION 3: EXPLORE THE DATA
     ====================================================== -->
-    <section class="section" aria-labelledby="appendix-heading">
+    <section class="section" id="section-explore" aria-labelledby="explore-heading">
+      <div class="section-header">
+        <div class="section-label">Data Explorer</div>
+        <h2 class="section-title" id="explore-heading">Explore the Data</h2>
+        <p class="section-subtitle">
+          Sortable, filterable tables for every dimension. Click any column header to sort. Numbers are real GSC data.
+        </p>
+      </div>
+
+      <!-- Tab nav -->
+      <div class="explore-tabs print-hide" role="tablist" aria-label="Explore data tabs">
+        <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="tab-queries"   data-tab="queries">
+          Queries <span class="tab-count" id="tc-queries">—</span>
+        </button>
+        <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-pages"    data-tab="pages">
+          Pages <span class="tab-count" id="tc-pages">—</span>
+        </button>
+        <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-countries" data-tab="countries">
+          Countries <span class="tab-count" id="tc-countries">—</span>
+        </button>
+        <button class="tab-btn"        role="tab" aria-selected="false" aria-controls="tab-devices"   data-tab="devices">
+          Devices <span class="tab-count" id="tc-devices">—</span>
+        </button>
+      </div>
+
+      <!-- Queries tab -->
+      <div class="tab-panel active" id="tab-queries" role="tabpanel">
+        <div class="itbl-toolbar">
+          <div class="itbl-search-wrap">
+            <svg class="itbl-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="search" class="itbl-search" id="search-queries" placeholder="Filter queries…" aria-label="Filter queries">
+          </div>
+          <span class="itbl-meta" id="meta-queries"></span>
+        </div>
+        <div class="itbl-wrap">
+          <div class="itbl-scroll">
+            <table class="itbl" id="tbl-queries" aria-label="Queries data table">
+              <thead>
+                <tr>
+                  <th data-col="query"       data-type="str"  class="sort-desc">Query</th>
+                  <th data-col="clicks"      data-type="num"  style="text-align:right;">Clicks</th>
+                  <th data-col="impressions" data-type="num"  style="text-align:right;">Impressions</th>
+                  <th data-col="ctr"         data-type="num"  style="text-align:right;">CTR %</th>
+                  <th data-col="position"    data-type="num"  style="text-align:right;">Position</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-queries"></tbody>
+            </table>
+          </div>
+          <div class="itbl-show-more" id="showmore-queries">
+            <button class="itbl-show-btn" data-table="queries">Show all rows</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pages tab -->
+      <div class="tab-panel" id="tab-pages" role="tabpanel">
+        <div class="itbl-toolbar">
+          <div class="itbl-search-wrap">
+            <svg class="itbl-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="search" class="itbl-search" id="search-pages" placeholder="Filter pages…" aria-label="Filter pages">
+          </div>
+          <span class="itbl-meta" id="meta-pages"></span>
+        </div>
+        <div class="itbl-wrap">
+          <div class="itbl-scroll">
+            <table class="itbl" id="tbl-pages" aria-label="Pages data table">
+              <thead>
+                <tr>
+                  <th data-col="page"        data-type="str" class="sort-desc">Page URL</th>
+                  <th data-col="clicks"      data-type="num" style="text-align:right;">Clicks</th>
+                  <th data-col="impressions" data-type="num" style="text-align:right;">Impressions</th>
+                  <th data-col="ctr"         data-type="num" style="text-align:right;">CTR %</th>
+                  <th data-col="position"    data-type="num" style="text-align:right;">Position</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-pages"></tbody>
+            </table>
+          </div>
+          <div class="itbl-show-more" id="showmore-pages">
+            <button class="itbl-show-btn" data-table="pages">Show all rows</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Countries tab -->
+      <div class="tab-panel" id="tab-countries" role="tabpanel">
+        <div class="itbl-toolbar">
+          <div class="itbl-search-wrap">
+            <svg class="itbl-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="search" class="itbl-search" id="search-countries" placeholder="Filter countries…" aria-label="Filter countries">
+          </div>
+          <span class="itbl-meta" id="meta-countries"></span>
+        </div>
+        <div class="itbl-wrap">
+          <div class="itbl-scroll">
+            <table class="itbl" id="tbl-countries" aria-label="Countries data table">
+              <thead>
+                <tr>
+                  <th data-col="country"     data-type="str" class="sort-desc">Country</th>
+                  <th data-col="clicks"      data-type="num" style="text-align:right;">Clicks</th>
+                  <th data-col="impressions" data-type="num" style="text-align:right;">Impressions</th>
+                  <th data-col="ctr"         data-type="num" style="text-align:right;">CTR %</th>
+                  <th data-col="position"    data-type="num" style="text-align:right;">Position</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-countries"></tbody>
+            </table>
+          </div>
+          <div class="itbl-show-more" id="showmore-countries" style="display:none;">
+            <button class="itbl-show-btn" data-table="countries">Show all rows</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Devices tab -->
+      <div class="tab-panel" id="tab-devices" role="tabpanel">
+        <div class="itbl-toolbar">
+          <div class="itbl-search-wrap">
+            <svg class="itbl-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input type="search" class="itbl-search" id="search-devices" placeholder="Filter devices…" aria-label="Filter devices">
+          </div>
+          <span class="itbl-meta" id="meta-devices"></span>
+        </div>
+        <div class="itbl-wrap">
+          <div class="itbl-scroll">
+            <table class="itbl" id="tbl-devices" aria-label="Devices data table">
+              <thead>
+                <tr>
+                  <th data-col="device"      data-type="str" class="sort-desc">Device</th>
+                  <th data-col="clicks"      data-type="num" style="text-align:right;">Clicks</th>
+                  <th data-col="impressions" data-type="num" style="text-align:right;">Impressions</th>
+                  <th data-col="ctr"         data-type="num" style="text-align:right;">CTR %</th>
+                  <th data-col="position"    data-type="num" style="text-align:right;">Position</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-devices"></tbody>
+            </table>
+          </div>
+          <div class="itbl-show-more" id="showmore-devices" style="display:none;">
+            <button class="itbl-show-btn" data-table="devices">Show all rows</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================
+         SECTION 4: APPENDIX / DETAIL
+    ====================================================== -->
+    <section class="section" id="section-appendix" aria-labelledby="appendix-heading">
       <div class="section-header">
         <div class="section-label">Appendix</div>
         <h2 class="section-title" id="appendix-heading">Analysis Detail</h2>
@@ -1406,34 +1968,48 @@
     'use strict';
 
     /* ----------------------------------------------------------
-       Chart data from Python
+       Data from Python
     ---------------------------------------------------------- */
-    const clicksByDate  = {{ clicks_by_date_json | safe }};
-    const topPages      = {{ top_pages_json | safe }};
-    const positionDist  = {{ position_dist_json | safe }};
-    const recsByCat     = {{ recs_by_cat_json | safe }};
+    const clicksByDate   = {{ clicks_by_date_json | safe }};
+    const topPages       = {{ top_pages_json | safe }};
+    const positionDist   = {{ position_dist_json | safe }};
+    const recsByCat      = {{ recs_by_cat_json | safe }};
 
     {% if top_page_deltas %}
-    const pageDeltaData = {{ top_page_deltas | tojson | safe }};
+    const pageDeltaData  = {{ top_page_deltas | tojson | safe }};
     {% else %}
-    const pageDeltaData = [];
+    const pageDeltaData  = [];
     {% endif %}
+
+    // Explore data
+    const exploreQueries   = {{ explore_queries_json | safe }};
+    const explorePages     = {{ explore_pages_json | safe }};
+    const exploreCountries = {{ explore_countries_json | safe }};
+    const exploreDevices   = {{ explore_devices_json | safe }};
+    const exploreTimeseries = {{ explore_timeseries_json | safe }};
+    const exploreCtrScatter = {{ explore_ctr_vs_position_json | safe }};
+    const exploreBenchmark  = {{ explore_benchmark_curve_json | safe }};
 
     /* ----------------------------------------------------------
        Colour palette
     ---------------------------------------------------------- */
-    const ACCENT  = '#2d5be3';
-    const ACCENT_SOFT = 'rgba(45,91,227,0.08)';
+    const ACCENT       = '#2d5be3';
+    const ACCENT_SOFT  = 'rgba(45,91,227,0.08)';
+    const ACCENT_FILL  = 'rgba(45,91,227,0.12)';
+    const AMBER        = '#d97706';
+    const AMBER_SOFT   = 'rgba(217,119,6,0.12)';
+    const GREEN        = '#1a7f4f';
+    const RED          = '#b81c1c';
 
     const CAT_COLORS = {
-      quick_win:       '#1a7f4f',
-      ctr_optimization:'#2d5be3',
-      on_page:         '#d97706',
-      cannibalization: '#9b2c8a',
-      decay_recovery:  '#6d28d9',
-      technical_seo:   '#1e40af',
-      content_gap:     '#065f46',
-      other:           '#6b7280',
+      quick_win:        '#1a7f4f',
+      ctr_optimization: '#2d5be3',
+      on_page:          '#d97706',
+      cannibalization:  '#9b2c8a',
+      decay_recovery:   '#6d28d9',
+      technical_seo:    '#1e40af',
+      content_gap:      '#065f46',
+      other:            '#6b7280',
     };
 
     const CAT_LABELS = {
@@ -1446,40 +2022,135 @@
       content_gap:      'Content Gap',
     };
 
-    const CHART_DEFAULTS = {
-      font: { family: "'Inter', sans-serif", size: 11 },
-      color: '#6b6760',
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.font.size   = 11;
+    Chart.defaults.color       = '#6b6760';
+
+    const TOOLTIP_STYLE = {
+      backgroundColor: '#fff',
+      borderColor: '#e8e5df',
+      borderWidth: 1,
+      titleColor: '#1a1917',
+      bodyColor: '#6b6760',
+      padding: 10,
+      cornerRadius: 8,
     };
 
-    Chart.defaults.font.family = CHART_DEFAULTS.font.family;
-    Chart.defaults.font.size   = CHART_DEFAULTS.font.size;
-    Chart.defaults.color       = CHART_DEFAULTS.color;
+    /* ----------------------------------------------------------
+       Clicks + Impressions dual-axis line chart
+    ---------------------------------------------------------- */
+    function buildClicksImpressionsChart() {
+      const el = document.getElementById('chart-clicks-impressions');
+      if (!el) return;
+      const data = exploreTimeseries.length ? exploreTimeseries : clicksByDate;
+      if (!data.length) return;
+
+      const labels = data.map(d => d.date);
+      const clicks = data.map(d => d.clicks);
+      const impressions = data.map(d => d.impressions);
+
+      new Chart(el.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Clicks',
+              data: clicks,
+              borderColor: ACCENT,
+              backgroundColor: ACCENT_FILL,
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 5,
+              pointBackgroundColor: ACCENT,
+              tension: 0.35,
+              fill: true,
+              yAxisID: 'yClicks',
+            },
+            {
+              label: 'Impressions',
+              data: impressions,
+              borderColor: AMBER,
+              backgroundColor: AMBER_SOFT,
+              borderWidth: 1.5,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointBackgroundColor: AMBER,
+              tension: 0.35,
+              fill: false,
+              borderDash: [4, 3],
+              yAxisID: 'yImpr',
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 900, easing: 'easeInOutQuart' },
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              ...TOOLTIP_STYLE,
+              callbacks: {
+                label: (item) => {
+                  const v = item.raw;
+                  return ` ${item.dataset.label}: ${v.toLocaleString()}`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { maxTicksLimit: 10, maxRotation: 0,
+                callback: function(val) { const d = this.getLabelForValue(val); return d ? d.slice(5) : ''; } },
+            },
+            yClicks: {
+              position: 'left',
+              grid: { color: '#f0ede8' },
+              ticks: { maxTicksLimit: 5 },
+              beginAtZero: true,
+              title: { display: true, text: 'Clicks', color: ACCENT, font: { size: 10 } },
+            },
+            yImpr: {
+              position: 'right',
+              grid: { drawOnChartArea: false },
+              ticks: { maxTicksLimit: 5 },
+              beginAtZero: true,
+              title: { display: true, text: 'Impressions', color: AMBER, font: { size: 10 } },
+            },
+          },
+        },
+      });
+    }
 
     /* ----------------------------------------------------------
-       Clicks over time — line chart
+       Average position over time — inverted Y
     ---------------------------------------------------------- */
-    function buildClicksChart() {
-      const el = document.getElementById('chart-clicks-date');
-      if (!el || !clicksByDate.length) return;
-      const ctx = el.getContext('2d');
+    function buildPositionTimeChart() {
+      const el = document.getElementById('chart-position-time');
+      if (!el) return;
+      const data = exploreTimeseries.length ? exploreTimeseries : [];
+      if (!data.length) return;
 
-      const labels = clicksByDate.map(d => d.date);
-      const values = clicksByDate.map(d => d.clicks);
+      const labels = data.map(d => d.date);
+      const positions = data.map(d => d.position);
 
-      new Chart(ctx, {
+      new Chart(el.getContext('2d'), {
         type: 'line',
         data: {
           labels,
           datasets: [{
-            label: 'Clicks',
-            data: values,
-            borderColor: ACCENT,
-            backgroundColor: ACCENT_SOFT,
+            label: 'Avg. Position',
+            data: positions,
+            borderColor: '#9b2c8a',
+            backgroundColor: 'rgba(155,44,138,0.07)',
             borderWidth: 2,
             pointRadius: 0,
             pointHoverRadius: 5,
-            pointBackgroundColor: ACCENT,
-            tension: 0.35,
+            pointBackgroundColor: '#9b2c8a',
+            tension: 0.3,
             fill: true,
           }],
         },
@@ -1491,31 +2162,26 @@
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: '#fff',
-              borderColor: '#e8e5df',
-              borderWidth: 1,
-              titleColor: '#1a1917',
-              bodyColor: '#6b6760',
-              padding: 10,
-              cornerRadius: 8,
+              ...TOOLTIP_STYLE,
+              callbacks: {
+                label: (item) => ` Position: ${item.raw.toFixed(1)} (${item.raw <= 3 ? 'top 3' : item.raw <= 10 ? 'page 1' : 'page 2+'})`,
+              },
             },
           },
           scales: {
             x: {
               grid: { display: false },
-              ticks: {
-                maxTicksLimit: 10,
-                maxRotation: 0,
-                callback: function(val, i) {
-                  const d = this.getLabelForValue(val);
-                  return d ? d.slice(5) : ''; // MM-DD
-                },
-              },
+              ticks: { maxTicksLimit: 8, maxRotation: 0,
+                callback: function(val) { const d = this.getLabelForValue(val); return d ? d.slice(5) : ''; } },
             },
             y: {
+              reverse: true,
               grid: { color: '#f0ede8' },
-              ticks: { maxTicksLimit: 6 },
-              beginAtZero: true,
+              ticks: {
+                maxTicksLimit: 6,
+                callback: (v) => '#' + v,
+              },
+              title: { display: true, text: '↑ better', color: '#6b6760', font: { size: 10 } },
             },
           },
         },
@@ -1523,30 +2189,138 @@
     }
 
     /* ----------------------------------------------------------
-       Top pages — horizontal bar
+       CTR vs Position scatter with benchmark
     ---------------------------------------------------------- */
-    function buildTopPagesChart() {
-      const el = document.getElementById('chart-top-pages');
-      if (!el || !topPages.length) return;
-      const ctx = el.getContext('2d');
+    function buildCtrScatterChart() {
+      const el = document.getElementById('chart-ctr-scatter');
+      if (!el || !exploreCtrScatter.length) return;
 
-      const sliced = topPages.slice(0, 8);
-      const labels = sliced.map(p => {
-        try {
-          const url = new URL(p.page);
-          const path = url.pathname.replace(/\/$/, '') || '/';
-          return path.length > 30 ? '…' + path.slice(-28) : path;
-        } catch { return p.page; }
+      // Size dots by impressions
+      const maxImpr = Math.max(...exploreCtrScatter.map(d => d.impressions));
+
+      const scatterPoints = exploreCtrScatter.map(d => ({
+        x: d.position,
+        y: d.ctr,
+        impressions: d.impressions,
+        query: d.query,
+        clicks: d.clicks,
+      }));
+
+      const benchmarkLine = exploreBenchmark.map(b => ({
+        x: b.position,
+        y: b.expected_ctr,
+      }));
+
+      new Chart(el.getContext('2d'), {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'Query',
+              data: scatterPoints,
+              backgroundColor: scatterPoints.map(d => {
+                // Color by whether CTR is below benchmark
+                const bm = exploreBenchmark.find(b => b.position === Math.round(d.x));
+                const expected = bm ? bm.expected_ctr : 0;
+                return d.y < expected * 0.8
+                  ? 'rgba(184,28,28,0.55)'   // well below — red opportunity
+                  : 'rgba(45,91,227,0.45)';   // at/above benchmark — blue
+              }),
+              borderColor: 'transparent',
+              pointRadius: scatterPoints.map(d => {
+                const r = 3 + (d.impressions / maxImpr) * 8;
+                return Math.max(3, Math.min(r, 11));
+              }),
+              pointHoverRadius: scatterPoints.map(d => {
+                const r = 5 + (d.impressions / maxImpr) * 9;
+                return Math.max(5, Math.min(r, 13));
+              }),
+              order: 2,
+            },
+            {
+              label: 'Benchmark',
+              data: benchmarkLine,
+              type: 'line',
+              borderColor: RED,
+              backgroundColor: 'transparent',
+              borderWidth: 1.5,
+              borderDash: [5, 4],
+              pointRadius: 0,
+              tension: 0.4,
+              order: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 800 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              ...TOOLTIP_STYLE,
+              filter: (item) => item.datasetIndex === 0,
+              callbacks: {
+                title: (items) => items[0]?.raw?.query || '',
+                label: (item) => {
+                  const d = item.raw;
+                  const bm = exploreBenchmark.find(b => b.position === Math.round(d.x));
+                  const lines = [
+                    ` Position: ${d.x.toFixed(1)}`,
+                    ` CTR: ${d.y.toFixed(2)}%`,
+                    ` Impressions: ${d.impressions.toLocaleString()}`,
+                  ];
+                  if (bm) lines.push(` Expected: ${bm.expected_ctr.toFixed(2)}%`);
+                  return lines;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Position', font: { size: 11 } },
+              grid: { color: '#f0ede8' },
+              ticks: { callback: (v) => '#' + v },
+            },
+            y: {
+              title: { display: true, text: 'CTR %', font: { size: 11 } },
+              grid: { color: '#f0ede8' },
+              ticks: { callback: (v) => v + '%' },
+              beginAtZero: true,
+            },
+          },
+        },
       });
-      const values = sliced.map(p => p.clicks);
 
-      new Chart(ctx, {
+      // Scatter callout: count opportunities
+      const opps = exploreCtrScatter.filter(d => {
+        const bm = exploreBenchmark.find(b => b.position === Math.round(d.position));
+        return bm && d.ctr < bm.expected_ctr * 0.8;
+      });
+      if (opps.length) {
+        const callout = document.getElementById('scatter-callout');
+        if (callout) {
+          callout.style.display = 'block';
+          callout.textContent = `${opps.length} quer${opps.length === 1 ? 'y is' : 'ies are'} performing well below the CTR benchmark — red dots are click opportunities.`;
+        }
+      }
+    }
+
+    /* ----------------------------------------------------------
+       Country breakdown bar
+    ---------------------------------------------------------- */
+    function buildCountriesChart() {
+      const el = document.getElementById('chart-countries');
+      if (!el || !exploreCountries.length) return;
+
+      const top = exploreCountries.slice(0, 8);
+      new Chart(el.getContext('2d'), {
         type: 'bar',
         data: {
-          labels,
+          labels: top.map(c => c.country),
           datasets: [{
             label: 'Clicks',
-            data: values,
+            data: top.map(c => c.clicks),
             backgroundColor: 'rgba(45,91,227,0.15)',
             borderColor: ACCENT,
             borderWidth: 1.5,
@@ -1557,31 +2331,55 @@
           indexAxis: 'y',
           responsive: true,
           maintainAspectRatio: false,
-          animation: { duration: 800, delay: (ctx) => ctx.dataIndex * 60 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#fff',
-              borderColor: '#e8e5df',
-              borderWidth: 1,
-              titleColor: '#1a1917',
-              bodyColor: '#6b6760',
-              padding: 10,
-              cornerRadius: 8,
-              callbacks: {
-                title: (items) => sliced[items[0].dataIndex]?.page || '',
-              },
-            },
-          },
+          animation: { duration: 800, delay: (ctx) => ctx.dataIndex * 50 },
+          plugins: { legend: { display: false }, tooltip: TOOLTIP_STYLE },
           scales: {
-            x: {
-              grid: { color: '#f0ede8' },
-              ticks: { maxTicksLimit: 5 },
-              beginAtZero: true,
+            x: { grid: { color: '#f0ede8' }, ticks: { maxTicksLimit: 5 }, beginAtZero: true },
+            y: { grid: { display: false }, ticks: { font: { size: 11 } } },
+          },
+        },
+      });
+    }
+
+    /* ----------------------------------------------------------
+       Device split — donut
+    ---------------------------------------------------------- */
+    function buildDevicesChart() {
+      const el = document.getElementById('chart-devices');
+      if (!el || !exploreDevices.length) return;
+
+      const colors = [ACCENT, AMBER, GREEN, '#9b2c8a'];
+      new Chart(el.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: exploreDevices.map(d => d.device),
+          datasets: [{
+            data: exploreDevices.map(d => d.clicks),
+            backgroundColor: colors.slice(0, exploreDevices.length),
+            borderColor: '#fff',
+            borderWidth: 2,
+            hoverOffset: 6,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '62%',
+          animation: { animateRotate: true, duration: 900 },
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: { boxWidth: 10, boxHeight: 10, borderRadius: 3, padding: 10, font: { size: 11 } },
             },
-            y: {
-              grid: { display: false },
-              ticks: { font: { size: 11 } },
+            tooltip: {
+              ...TOOLTIP_STYLE,
+              callbacks: {
+                label: (item) => {
+                  const d = exploreDevices[item.dataIndex];
+                  const pct = ((d.clicks / exploreDevices.reduce((s, x) => s + x.clicks, 0)) * 100).toFixed(1);
+                  return ` ${item.label}: ${item.raw.toLocaleString()} clicks (${pct}%)`;
+                },
+              },
             },
           },
         },
@@ -1594,14 +2392,12 @@
     function buildRecsCatChart() {
       const el = document.getElementById('chart-recs-cat');
       if (!el || !recsByCat.length) return;
-      const ctx = el.getContext('2d');
 
       const labels = recsByCat.map(r => CAT_LABELS[r.category] || r.category);
       const values = recsByCat.map(r => r.count);
       const colors = recsByCat.map(r => CAT_COLORS[r.category] || '#6b7280');
-      const bgs    = colors.map(c => c + '22');
 
-      new Chart(ctx, {
+      new Chart(el.getContext('2d'), {
         type: 'doughnut',
         data: {
           labels,
@@ -1621,23 +2417,9 @@
           plugins: {
             legend: {
               position: 'right',
-              labels: {
-                boxWidth: 10,
-                boxHeight: 10,
-                borderRadius: 3,
-                padding: 10,
-                font: { size: 11 },
-              },
+              labels: { boxWidth: 10, boxHeight: 10, borderRadius: 3, padding: 10, font: { size: 11 } },
             },
-            tooltip: {
-              backgroundColor: '#fff',
-              borderColor: '#e8e5df',
-              borderWidth: 1,
-              titleColor: '#1a1917',
-              bodyColor: '#6b6760',
-              padding: 10,
-              cornerRadius: 8,
-            },
+            tooltip: TOOLTIP_STYLE,
           },
         },
       });
@@ -1649,23 +2431,17 @@
     function buildPosDistChart() {
       const el = document.getElementById('chart-pos-dist');
       if (!el || !positionDist.length) return;
-      const ctx = el.getContext('2d');
 
-      const labels = positionDist.map(d => d.bucket);
-      const values = positionDist.map(d => d.count);
-      const positionalColors = [
-        '#1a7f4f', '#2d5be3', '#d97706', '#9b2c8a', '#6b7280'
-      ];
-
-      new Chart(ctx, {
+      const colors = ['#1a7f4f', '#2d5be3', '#d97706', '#9b2c8a', '#6b7280'];
+      new Chart(el.getContext('2d'), {
         type: 'bar',
         data: {
-          labels,
+          labels: positionDist.map(d => d.bucket),
           datasets: [{
             label: 'Queries',
-            data: values,
-            backgroundColor: positionalColors.map(c => c + 'cc'),
-            borderColor: positionalColors,
+            data: positionDist.map(d => d.count),
+            backgroundColor: colors.map(c => c + 'cc'),
+            borderColor: colors,
             borderWidth: 1.5,
             borderRadius: 4,
           }],
@@ -1674,25 +2450,10 @@
           responsive: true,
           maintainAspectRatio: false,
           animation: { duration: 700, delay: (ctx) => ctx.dataIndex * 80 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#fff',
-              borderColor: '#e8e5df',
-              borderWidth: 1,
-              titleColor: '#1a1917',
-              bodyColor: '#6b6760',
-              padding: 10,
-              cornerRadius: 8,
-            },
-          },
+          plugins: { legend: { display: false }, tooltip: TOOLTIP_STYLE },
           scales: {
             x: { grid: { display: false } },
-            y: {
-              grid: { color: '#f0ede8' },
-              ticks: { maxTicksLimit: 5 },
-              beginAtZero: true,
-            },
+            y: { grid: { color: '#f0ede8' }, ticks: { maxTicksLimit: 5 }, beginAtZero: true },
           },
         },
       });
@@ -1704,7 +2465,6 @@
     function buildPageDeltasChart() {
       const el = document.getElementById('chart-page-deltas');
       if (!el || !pageDeltaData.length) return;
-      const ctx = el.getContext('2d');
 
       const sliced = pageDeltaData.slice(0, 8);
       const labels = sliced.map(p => {
@@ -1715,10 +2475,10 @@
         } catch { return p.url; }
       });
       const values = sliced.map(p => p.clicks_delta_pct);
-      const colors = values.map(v => v >= 0 ? '#1a7f4f' : '#b81c1c');
+      const colors = values.map(v => v >= 0 ? GREEN : RED);
       const bgs    = values.map(v => v >= 0 ? 'rgba(26,127,79,0.15)' : 'rgba(184,28,28,0.15)');
 
-      new Chart(ctx, {
+      new Chart(el.getContext('2d'), {
         type: 'bar',
         data: {
           labels,
@@ -1739,61 +2499,290 @@
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: '#fff',
-              borderColor: '#e8e5df',
-              borderWidth: 1,
-              titleColor: '#1a1917',
-              bodyColor: '#6b6760',
-              padding: 10,
-              cornerRadius: 8,
-              callbacks: {
-                label: (item) => ` ${item.raw.toFixed(1)}% vs prior`,
-              },
+              ...TOOLTIP_STYLE,
+              callbacks: { label: (item) => ` ${item.raw.toFixed(1)}% vs prior` },
             },
           },
           scales: {
-            x: {
-              grid: { color: '#f0ede8' },
-              ticks: {
-                callback: (v) => v + '%',
-                maxTicksLimit: 6,
-              },
-            },
-            y: {
-              grid: { display: false },
-              ticks: { font: { size: 11 } },
-            },
+            x: { grid: { color: '#f0ede8' }, ticks: { callback: (v) => v + '%', maxTicksLimit: 6 } },
+            y: { grid: { display: false }, ticks: { font: { size: 11 } } },
           },
         },
       });
     }
 
     /* ----------------------------------------------------------
-       Scroll-based reveal animation (IntersectionObserver)
+       Interactive Tables — engine
+    ---------------------------------------------------------- */
+    const PAGE_SIZE = 50;
+
+    const tableDefs = [
+      {
+        id:       'queries',
+        data:     exploreQueries,
+        tbody:    'tbody-queries',
+        search:   'search-queries',
+        meta:     'meta-queries',
+        showmore: 'showmore-queries',
+        tcEl:     'tc-queries',
+        mainCol:  'query',
+        defaultSort: 'impressions',
+        defaultDir:  -1,  // desc
+        renderRow: (row) => {
+          const posClass = row.position <= 3 ? 'pos-top' : row.position <= 10 ? 'pos-mid' : 'pos-low';
+          return `<tr>
+            <td class="cell-main" title="${_esc(row.query)}">${_esc(row.query)}</td>
+            <td class="cell-num">${_fmtN(row.clicks)}</td>
+            <td class="cell-num">${_fmtN(row.impressions)}</td>
+            <td class="cell-num">${row.ctr.toFixed(2)}%</td>
+            <td class="cell-num ${posClass}">${row.position.toFixed(1)}</td>
+          </tr>`;
+        },
+      },
+      {
+        id:       'pages',
+        data:     explorePages,
+        tbody:    'tbody-pages',
+        search:   'search-pages',
+        meta:     'meta-pages',
+        showmore: 'showmore-pages',
+        tcEl:     'tc-pages',
+        mainCol:  'page',
+        defaultSort: 'impressions',
+        defaultDir:  -1,
+        renderRow: (row) => {
+          const posClass = row.position <= 3 ? 'pos-top' : row.position <= 10 ? 'pos-mid' : 'pos-low';
+          let display = row.page;
+          try { display = new URL(row.page).pathname || '/'; } catch {}
+          if (display.length > 60) display = '…' + display.slice(-58);
+          return `<tr>
+            <td class="cell-main" title="${_esc(row.page)}" style="font-family:var(--font-mono); font-size:12px;">${_esc(display)}</td>
+            <td class="cell-num">${_fmtN(row.clicks)}</td>
+            <td class="cell-num">${_fmtN(row.impressions)}</td>
+            <td class="cell-num">${row.ctr.toFixed(2)}%</td>
+            <td class="cell-num ${posClass}">${row.position.toFixed(1)}</td>
+          </tr>`;
+        },
+      },
+      {
+        id:       'countries',
+        data:     exploreCountries,
+        tbody:    'tbody-countries',
+        search:   'search-countries',
+        meta:     'meta-countries',
+        showmore: 'showmore-countries',
+        tcEl:     'tc-countries',
+        mainCol:  'country',
+        defaultSort: 'clicks',
+        defaultDir:  -1,
+        renderRow: (row) => {
+          const posClass = row.position <= 3 ? 'pos-top' : row.position <= 10 ? 'pos-mid' : 'pos-low';
+          return `<tr>
+            <td class="cell-main">${_esc(row.country)}</td>
+            <td class="cell-num">${_fmtN(row.clicks)}</td>
+            <td class="cell-num">${_fmtN(row.impressions)}</td>
+            <td class="cell-num">${row.ctr.toFixed(2)}%</td>
+            <td class="cell-num ${posClass}">${row.position.toFixed(1)}</td>
+          </tr>`;
+        },
+      },
+      {
+        id:       'devices',
+        data:     exploreDevices,
+        tbody:    'tbody-devices',
+        search:   'search-devices',
+        meta:     'meta-devices',
+        showmore: 'showmore-devices',
+        tcEl:     'tc-devices',
+        mainCol:  'device',
+        defaultSort: 'clicks',
+        defaultDir:  -1,
+        renderRow: (row) => {
+          const posClass = row.position <= 3 ? 'pos-top' : row.position <= 10 ? 'pos-mid' : 'pos-low';
+          return `<tr>
+            <td class="cell-main">${_esc(row.device)}</td>
+            <td class="cell-num">${_fmtN(row.clicks)}</td>
+            <td class="cell-num">${_fmtN(row.impressions)}</td>
+            <td class="cell-num">${row.ctr.toFixed(2)}%</td>
+            <td class="cell-num ${posClass}">${row.position.toFixed(1)}</td>
+          </tr>`;
+        },
+      },
+    ];
+
+    // Helpers
+    function _esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function _fmtN(n) {
+      return Number(n).toLocaleString();
+    }
+
+    // Per-table state
+    const state = {};
+
+    function initTable(def) {
+      state[def.id] = {
+        sortCol: def.defaultSort,
+        sortDir: def.defaultDir,
+        filter: '',
+        showAll: false,
+      };
+
+      // Tab count
+      const tcEl = document.getElementById(def.tcEl);
+      if (tcEl) tcEl.textContent = def.data.length;
+
+      // Search
+      const searchEl = document.getElementById(def.search);
+      if (searchEl) {
+        searchEl.addEventListener('input', () => {
+          state[def.id].filter = searchEl.value.toLowerCase().trim();
+          state[def.id].showAll = false;
+          renderTable(def);
+        });
+      }
+
+      // Show-more button
+      const smWrap = document.getElementById(def.showmore);
+      if (smWrap) {
+        const btn = smWrap.querySelector('.itbl-show-btn');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            state[def.id].showAll = true;
+            renderTable(def);
+            smWrap.style.display = 'none';
+          });
+        }
+      }
+
+      // Column sort headers
+      const tableEl = document.getElementById('tbl-' + def.id);
+      if (tableEl) {
+        tableEl.querySelectorAll('th[data-col]').forEach(th => {
+          th.addEventListener('click', () => {
+            const col = th.dataset.col;
+            if (state[def.id].sortCol === col) {
+              state[def.id].sortDir *= -1;
+            } else {
+              state[def.id].sortCol = col;
+              state[def.id].sortDir = th.dataset.type === 'num' ? -1 : 1;
+            }
+            // Update header classes
+            tableEl.querySelectorAll('th[data-col]').forEach(h => {
+              h.classList.remove('sort-asc', 'sort-desc');
+            });
+            th.classList.add(state[def.id].sortDir === 1 ? 'sort-asc' : 'sort-desc');
+            renderTable(def);
+          });
+        });
+
+        // Set initial sort indicator
+        const initTh = tableEl.querySelector(`th[data-col="${def.defaultSort}"]`);
+        if (initTh) {
+          initTh.classList.add(def.defaultDir === 1 ? 'sort-asc' : 'sort-desc');
+        }
+      }
+
+      renderTable(def);
+    }
+
+    function renderTable(def) {
+      const s = state[def.id];
+      const filterStr = s.filter;
+
+      // Filter
+      let rows = def.data;
+      if (filterStr) {
+        rows = rows.filter(row => {
+          const mainVal = String(row[def.mainCol] || '').toLowerCase();
+          return mainVal.includes(filterStr);
+        });
+      }
+
+      // Sort
+      const col = s.sortCol;
+      rows = [...rows].sort((a, b) => {
+        const av = a[col];
+        const bv = b[col];
+        if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * s.sortDir;
+        return String(av).localeCompare(String(bv)) * s.sortDir;
+      });
+
+      // Paginate
+      const total = rows.length;
+      const shown = s.showAll ? rows : rows.slice(0, PAGE_SIZE);
+
+      // Render
+      const tbody = document.getElementById(def.tbody);
+      if (!tbody) return;
+      tbody.innerHTML = shown.map(def.renderRow).join('');
+
+      // Meta
+      const metaEl = document.getElementById(def.meta);
+      if (metaEl) {
+        if (filterStr) {
+          metaEl.textContent = `${total} of ${def.data.length} rows`;
+        } else {
+          metaEl.textContent = `${def.data.length} rows`;
+        }
+      }
+
+      // Show-more
+      const smWrap = document.getElementById(def.showmore);
+      if (smWrap) {
+        if (!s.showAll && total > PAGE_SIZE) {
+          smWrap.style.display = 'flex';
+          const btn = smWrap.querySelector('.itbl-show-btn');
+          if (btn) btn.textContent = `Show all ${total} rows`;
+        } else {
+          smWrap.style.display = 'none';
+        }
+      }
+    }
+
+    /* ----------------------------------------------------------
+       Tab switching
+    ---------------------------------------------------------- */
+    function initTabs() {
+      const tabs = document.querySelectorAll('.tab-btn');
+      tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.tab;
+          tabs.forEach(b => {
+            b.classList.toggle('active', b.dataset.tab === target);
+            b.setAttribute('aria-selected', String(b.dataset.tab === target));
+          });
+          document.querySelectorAll('.tab-panel').forEach(panel => {
+            panel.classList.toggle('active', panel.id === 'tab-' + target);
+          });
+        });
+      });
+    }
+
+    /* ----------------------------------------------------------
+       Scroll-based reveal animation
     ---------------------------------------------------------- */
     function initAnimations() {
       const items = document.querySelectorAll('[data-animate="true"]');
       if (!items.length) return;
 
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Stagger siblings a tiny bit
             const card = entry.target;
             const delay = parseFloat(card.style.transitionDelay || '0') * 1000;
-            setTimeout(() => {
-              card.classList.add('visible');
-            }, delay);
+            setTimeout(() => { card.classList.add('visible'); }, delay);
             observer.unobserve(card);
           }
         });
-      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
 
       items.forEach((el) => observer.observe(el));
     }
 
     /* ----------------------------------------------------------
-       Collapsible (appendix sections)
+       Collapsible sections (appendix + evidence)
     ---------------------------------------------------------- */
     function initCollapsibles() {
       document.querySelectorAll('.collapsible-header').forEach((btn) => {
@@ -1801,30 +2790,42 @@
           const expanded = this.getAttribute('aria-expanded') === 'true';
           this.setAttribute('aria-expanded', String(!expanded));
           const body = document.getElementById(this.getAttribute('aria-controls'));
-          if (body) {
-            body.classList.toggle('open', !expanded);
-          }
+          if (body) body.classList.toggle('open', !expanded);
         });
-
         btn.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            btn.click();
-          }
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
         });
       });
 
-      // Evidence toggles on rec cards
       document.querySelectorAll('.rec-evidence-toggle').forEach((btn) => {
         btn.addEventListener('click', function () {
           const expanded = this.getAttribute('aria-expanded') === 'true';
           this.setAttribute('aria-expanded', String(!expanded));
           const body = document.getElementById(this.getAttribute('aria-controls'));
-          if (body) {
-            body.classList.toggle('open', !expanded);
-          }
+          if (body) body.classList.toggle('open', !expanded);
         });
       });
+    }
+
+    /* ----------------------------------------------------------
+       Sticky nav — highlight active section
+    ---------------------------------------------------------- */
+    function initNavHighlight() {
+      const sections = document.querySelectorAll('section[id]');
+      const links = document.querySelectorAll('.nav-link');
+      if (!sections.length || !links.length) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            links.forEach(l => {
+              l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id);
+            });
+          }
+        });
+      }, { threshold: 0.3 });
+
+      sections.forEach(s => observer.observe(s));
     }
 
     /* ----------------------------------------------------------
@@ -1833,11 +2834,21 @@
     document.addEventListener('DOMContentLoaded', function () {
       initAnimations();
       initCollapsibles();
-      buildClicksChart();
-      buildTopPagesChart();
-      buildRecsCatChart();
+      initTabs();
+      initNavHighlight();
+
+      // Charts
+      buildClicksImpressionsChart();
+      buildPositionTimeChart();
+      buildCtrScatterChart();
+      buildCountriesChart();
+      buildDevicesChart();
       buildPosDistChart();
       buildPageDeltasChart();
+      buildRecsCatChart();
+
+      // Interactive tables
+      tableDefs.forEach(initTable);
     });
 
   }());
