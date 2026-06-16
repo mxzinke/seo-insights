@@ -1,0 +1,11 @@
+[
+  {"keys": ["usa"], "clicks": 3180, "impressions": 103400, "ctr": 0.0308, "position": 12.9},
+  {"keys": ["gbr"], "clicks": 760, "impressions": 25600, "ctr": 0.0297, "position": 13.8},
+  {"keys": ["can"], "clicks": 460, "impressions": 16100, "ctr": 0.0286, "position": 14.0},
+  {"keys": ["aus"], "clicks": 330, "impressions": 11400, "ctr": 0.0289, "position": 14.5},
+  {"keys": ["ind"], "clicks": 200, "impressions": 9900, "ctr": 0.0202, "position": 15.8},
+  {"keys": ["deu"], "clicks": 156, "impressions": 7600, "ctr": 0.0205, "position": 15.5},
+  {"keys": ["nld"], "clicks": 112, "impressions": 5100, "ctr": 0.022, "position": 15.1},
+  {"keys": ["fra"], "clicks": 98, "impressions": 4500, "ctr": 0.0218, "position": 15.3},
+  {"keys": ["sgp"], "clicks": 72, "impressions": 3300, "ctr": 0.0218, "position": 15.9}
+]

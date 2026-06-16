@@ -1,0 +1,12 @@
+[
+  {"keys": ["2025-12-18"], "clicks": 58, "impressions": 2100, "ctr": 0.0276, "position": 13.8},
+  {"keys": ["2025-12-19"], "clicks": 63, "impressions": 2280, "ctr": 0.0276, "position": 13.7},
+  {"keys": ["2025-12-20"], "clicks": 72, "impressions": 2540, "ctr": 0.0283, "position": 13.6},
+  {"keys": ["2025-12-21"], "clicks": 55, "impressions": 2020, "ctr": 0.0272, "position": 13.9},
+  {"keys": ["2025-12-22"], "clicks": 48, "impressions": 1800, "ctr": 0.0267, "position": 14.1},
+  {"keys": ["2025-12-23"], "clicks": 38, "impressions": 1460, "ctr": 0.026, "position": 14.4},
+  {"keys": ["2025-12-24"], "clicks": 40, "impressions": 1540, "ctr": 0.026, "position": 14.3},
+  {"keys": ["2025-12-25"], "clicks": 65, "impressions": 2380, "ctr": 0.0273, "position": 13.8},
+  {"keys": ["2025-12-26"], "clicks": 74, "impressions": 2660, "ctr": 0.0278, "position": 13.5},
+  {"keys": ["2025-12-27"], "clicks": 68, "impressions": 2480, "ctr": 0.0274, "position": 13.7}
+]

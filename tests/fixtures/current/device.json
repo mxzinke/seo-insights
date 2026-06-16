@@ -1,0 +1,5 @@
+[
+  {"keys": ["DESKTOP"], "clicks": 3290, "impressions": 118400, "ctr": 0.0278, "position": 13.9},
+  {"keys": ["MOBILE"], "clicks": 1240, "impressions": 58700, "ctr": 0.0211, "position": 15.4},
+  {"keys": ["TABLET"], "clicks": 291, "impressions": 10330, "ctr": 0.0282, "position": 14.7}
+]

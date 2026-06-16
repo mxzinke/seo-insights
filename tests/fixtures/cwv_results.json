@@ -1,0 +1,38 @@
+[
+  {
+    "url": "https://demo.example.com/",
+    "lcp_ms": 3120,
+    "lcp_category": "NEEDS_IMPROVEMENT",
+    "cls": 0.08,
+    "cls_category": "GOOD",
+    "inp_ms": 180,
+    "inp_category": "GOOD",
+    "performance_score": 71,
+    "issues": ["LCP: NEEDS_IMPROVEMENT"],
+    "so_what": "https://demo.example.com/: performance score 71, LCP 3120ms (NEEDS_IMPROVEMENT), CLS 0.08 (GOOD), INP 180ms (GOOD). Issues: LCP: NEEDS_IMPROVEMENT."
+  },
+  {
+    "url": "https://demo.example.com/features",
+    "lcp_ms": 4800,
+    "lcp_category": "POOR",
+    "cls": 0.31,
+    "cls_category": "POOR",
+    "inp_ms": 620,
+    "inp_category": "POOR",
+    "performance_score": 38,
+    "issues": ["LCP: POOR", "CLS: POOR", "INP: POOR"],
+    "so_what": "https://demo.example.com/features: performance score 38, LCP 4800ms (POOR), CLS 0.31 (POOR), INP 620ms (POOR). Issues: LCP: POOR; CLS: POOR; INP: POOR."
+  },
+  {
+    "url": "https://demo.example.com/blog/gsc-analysis",
+    "lcp_ms": 2100,
+    "lcp_category": "GOOD",
+    "cls": 0.05,
+    "cls_category": "GOOD",
+    "inp_ms": 150,
+    "inp_category": "GOOD",
+    "performance_score": 92,
+    "issues": [],
+    "so_what": "https://demo.example.com/blog/gsc-analysis: performance score 92, LCP 2100ms (GOOD), CLS 0.05 (GOOD), INP 150ms (GOOD). All CWV passing."
+  }
+]

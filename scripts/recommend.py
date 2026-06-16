@@ -1,0 +1,325 @@
+"""
+recommend.py — Translate analysis findings into scored, prioritized recommendations.
+
+Each recommendation is an action the site owner can take. Recommendations are:
+  - Specific and imperative ("rewrite the title of /pricing to include X")
+  - Scored by impact (1–5) and effort (1–5)
+  - Prioritized by impact/effort ratio (higher = do first)
+  - Backed by traceable evidence rows from the analysis data
+  - Filtered through the ICP to ensure keyword opportunities are relevant
+
+Recommendation object schema:
+  {
+    "id"        : str (stable, e.g. "sd_001")
+    "title"     : str (short, < 80 chars)
+    "category"  : str (one of CATEGORIES)
+    "action"    : str (imperative, specific, actionable)
+    "impact"    : int 1–5
+    "effort"    : int 1–5
+    "priority"  : float = impact / effort
+    "evidence"  : list of evidence dicts from the analysis
+    "detail"    : str (markdown, 2–4 sentences explaining why)
+  }
+
+Categories:
+  quick_win, content_gap, technical_seo, on_page, cannibalization,
+  ctr_optimization, decay_recovery
+"""
+
+import pathlib
+import sys
+
+_ROOT = pathlib.Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+from scripts.validate_icp import icp_relevance  # noqa: E402
+
+CATEGORIES = {
+    "quick_win",
+    "content_gap",
+    "technical_seo",
+    "on_page",
+    "cannibalization",
+    "ctr_optimization",
+    "decay_recovery",
+}
+
+# ICP relevance score below which keyword-centric recommendations are skipped.
+ICP_RELEVANCE_MIN = 0.0  # Allow all by default; excluded_terms still block.
+
+
+def _rec(
+    rec_id: str,
+    title: str,
+    category: str,
+    action: str,
+    impact: int,
+    effort: int,
+    evidence: list,
+    detail: str,
+) -> dict:
+    """Build a recommendation dict with computed priority."""
+    assert 1 <= impact <= 5, f"impact out of range: {impact}"
+    assert 1 <= effort <= 5, f"effort out of range: {effort}"
+    return {
+        "id": rec_id,
+        "title": title,
+        "category": category,
+        "action": action,
+        "impact": impact,
+        "effort": effort,
+        "priority": round(impact / effort, 3),
+        "evidence": evidence,
+        "detail": detail,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Per-analysis recommendation generators
+# ---------------------------------------------------------------------------
+
+def _from_striking_distance(findings: list[dict], icp: dict) -> list[dict]:
+    """Quick wins: optimize content just outside the top positions."""
+    recs = []
+    for i, f in enumerate(findings[:10]):  # Cap at 10 per category.
+        query = f.get("query", "")
+        if icp and icp_relevance(icp, query) <= 0.0:
+            continue  # Blocked by excluded_terms.
+
+        best_page = f.get("best_page", "unknown")
+        extra = f.get("estimated_extra_clicks", 0)
+        position = f.get("position", 0)
+
+        recs.append(_rec(
+            rec_id=f"sd_{i+1:03d}",
+            title=f'Optimize "{query}" from position {position} to top 3',
+            category="quick_win",
+            action=(
+                f'Improve the title, H1, and internal links for {best_page} '
+                f'to better target "{query}" — currently at position {position}, '
+                f"moving to top 3 could add ~{extra} clicks per period."
+            ),
+            impact=min(5, max(1, 3 + (extra // 50))),  # Scale impact by click potential.
+            effort=2,
+            evidence=[f],
+            detail=(
+                f'"{query}" ranks at position {position} with {f.get("impressions", 0)} impressions. '
+                f"At position 3, the benchmark CTR ({f.get('expected_ctr_p3', 0):.1%}) "
+                f"would yield ~{extra} extra clicks vs the current {f.get('clicks', 0)}. "
+                f"Focus on: include the exact query phrase in the H1, strengthen the opening paragraph, "
+                f"and add 2–3 internal links from topically relevant pages."
+            ),
+        ))
+    return recs
+
+
+def _from_cannibalization(findings: list[dict], icp: dict) -> list[dict]:
+    """Cannibalization: merge or differentiate competing pages."""
+    recs = []
+    for i, f in enumerate(findings[:8]):
+        query = f.get("query", "")
+        canonical = f.get("canonical", "unknown")
+        cannibalizers = f.get("cannibalizers", [])
+        n_pages = len(f.get("pages", []))
+
+        recs.append(_rec(
+            rec_id=f"can_{i+1:03d}",
+            title=f'Fix cannibalization: "{query}" served by {n_pages} pages',
+            category="cannibalization",
+            action=(
+                f'Consolidate "{query}" onto {canonical}. '
+                f"301-redirect or noindex {', '.join(cannibalizers[:2])} "
+                f"{'(and others) ' if len(cannibalizers) > 2 else ''}"
+                f"to eliminate ranking split."
+            ),
+            impact=3,
+            effort=2,
+            evidence=[f],
+            detail=(
+                f'{n_pages} pages compete for "{query}", splitting authority and confusing crawlers. '
+                f"The likely canonical (highest clicks) is {canonical}. "
+                f"Either 301-redirect the weaker pages into it, clearly differentiate their content "
+                f"to target distinct intent variants, or add canonical tags pointing to {canonical}."
+            ),
+        ))
+    return recs
+
+
+def _from_ctr_outliers(findings: list[dict], icp: dict) -> list[dict]:
+    """CTR optimization: rewrite titles and meta descriptions."""
+    recs = []
+    for i, f in enumerate(findings[:10]):
+        query = f.get("query", "")
+        if icp and icp_relevance(icp, query) <= 0.0:
+            continue
+
+        best_page = f.get("best_page", "unknown")
+        gap = f.get("click_gap", 0)
+        actual = f.get("actual_ctr", 0)
+        expected = f.get("expected_ctr", 0)
+        position = f.get("position", 0)
+
+        recs.append(_rec(
+            rec_id=f"ctr_{i+1:03d}",
+            title=f'Rewrite title/meta for "{query}" (CTR {actual:.1%} vs {expected:.1%} expected)',
+            category="ctr_optimization",
+            action=(
+                f"Rewrite the <title> and meta description of {best_page} "
+                f'to be more compelling for the query "{query}". '
+                f"Include a clear value proposition, the query phrase, and a call to action. "
+                f"Goal: lift CTR toward {expected:.1%} to recover ~{gap} clicks/period."
+            ),
+            impact=min(5, max(2, 2 + (gap // 30))),
+            effort=1,
+            evidence=[f],
+            detail=(
+                f'"{query}" at position {position} earns only {actual:.1%} CTR '
+                f"vs the {expected:.1%} benchmark ({f.get('ctr_ratio', 0):.2f}× ratio). "
+                f"This strongly suggests the snippet is unappealing. "
+                f"Test: (1) add a number or year to the title, (2) make the meta description answer "
+                f"the query intent directly, (3) A/B test with Search Console Impressions as signal."
+            ),
+        ))
+    return recs
+
+
+def _from_content_decay(findings: list[dict], icp: dict) -> list[dict]:
+    """Decay recovery: refresh or rebuild declining content."""
+    recs = []
+    for i, f in enumerate(findings[:8]):
+        url = f.get("url", f.get("subject", "unknown"))
+        clicks_decline = f.get("clicks_decline_pct", 0)
+        decay_type = f.get("type", "split")
+
+        recs.append(_rec(
+            rec_id=f"dec_{i+1:03d}",
+            title=f"Recover declining traffic on {url[:60]}",
+            category="decay_recovery",
+            action=(
+                f"Audit and refresh {url}: update statistics, add new sections covering "
+                f"emerging subtopics, strengthen internal links, and check for lost backlinks. "
+                f"Clicks down {clicks_decline:.0f}% in the {'analysis window' if decay_type == 'split' else 'prior period'}."
+            ),
+            impact=3,
+            effort=3,
+            evidence=[f],
+            detail=(
+                f"{url} shows a {clicks_decline:.1f}% click decline "
+                f"({'intra-window split' if decay_type == 'split' else 'period-over-period comparison'}). "
+                "Common causes: content became stale (update facts/dates), competing pages freshly published, "
+                "lost featured snippet, or algorithm update targeting thin content. "
+                "Start with a content audit: word count, outbound link freshness, on-page signals."
+            ),
+        ))
+    return recs
+
+
+def _from_onpage(findings: list[dict], icp: dict) -> list[dict]:
+    """On-page SEO fixes: title, meta, H1, schema, canonical."""
+    recs = []
+    for i, f in enumerate(findings):
+        issues = f.get("issues", [])
+        if not issues:
+            continue
+        url = f.get("url", "unknown")
+
+        # Categorize the severity of the finding.
+        is_critical = any(
+            kw in " ".join(issues).lower()
+            for kw in ["missing title", "noindex", "non-200", "http 4", "http 5"]
+        )
+        impact = 4 if is_critical else 2
+        effort = 1
+
+        recs.append(_rec(
+            rec_id=f"op_{i+1:03d}",
+            title=f"Fix {len(issues)} on-page issue(s) on {url[:50]}",
+            category="on_page",
+            action=(
+                f"Fix on {url}: {'; '.join(issues[:3])}"
+                + (f" (and {len(issues) - 3} more)" if len(issues) > 3 else "") + "."
+            ),
+            impact=impact,
+            effort=effort,
+            evidence=[{k: v for k, v in f.items() if k != "so_what"}],
+            detail=(
+                f"Crawl of {url} found {len(issues)} issue(s): {', '.join(issues)}. "
+                "Each issue reduces GSC ranking signals or user engagement. "
+                "Title and meta description issues directly affect CTR in search results. "
+                "Fix missing H1 and thin content issues to signal topical depth to crawlers."
+            ),
+        ))
+        if i >= 15:
+            break
+    return recs
+
+
+def _from_cwv(findings: list[dict] | None, icp: dict) -> list[dict]:
+    """Core Web Vitals: performance fixes for failing pages."""
+    if not findings:
+        return []
+    recs = []
+    for i, f in enumerate(findings):
+        issues = f.get("issues", [])
+        if not issues:
+            continue
+        url = f.get("url", "unknown")
+        score = f.get("performance_score", "?")
+
+        recs.append(_rec(
+            rec_id=f"cwv_{i+1:03d}",
+            title=f"Fix Core Web Vitals on {url[:50]} (score: {score})",
+            category="technical_seo",
+            action=(
+                f"Improve Core Web Vitals for {url}: {'; '.join(issues)}. "
+                f"Performance score: {score}/100. "
+                "Prioritize LCP and INP — these are Google ranking signals."
+            ),
+            impact=3,
+            effort=4,
+            evidence=[f],
+            detail=(
+                f"{url} fails CWV thresholds: {', '.join(issues)}. "
+                f"Lighthouse performance score: {score}/100. "
+                "LCP fix: ensure hero image is preloaded and server response time < 200ms. "
+                "CLS fix: set explicit width/height on images and avoid injecting content above the fold. "
+                "INP fix: defer non-critical JavaScript and break up long tasks."
+            ),
+        ))
+    return recs
+
+
+# ---------------------------------------------------------------------------
+# Main entry point
+# ---------------------------------------------------------------------------
+
+def generate_recommendations(analyses: dict, icp: dict | None = None) -> list[dict]:
+    """
+    Produce a sorted list of recommendations from all analysis outputs.
+
+    Parameters
+    ----------
+    analyses : Dict with keys matching the analysis module names:
+               striking_distance, cannibalization, ctr_outliers, content_decay,
+               onpage, core_web_vitals, wow.
+    icp      : Validated ICP dict (or None to skip ICP filtering).
+
+    Returns
+    -------
+    List of recommendation dicts sorted by priority descending.
+    """
+    all_recs: list[dict] = []
+    icp = icp or {}
+
+    all_recs.extend(_from_striking_distance(analyses.get("striking_distance", []), icp))
+    all_recs.extend(_from_cannibalization(analyses.get("cannibalization", []), icp))
+    all_recs.extend(_from_ctr_outliers(analyses.get("ctr_outliers", []), icp))
+    all_recs.extend(_from_content_decay(analyses.get("content_decay", []), icp))
+    all_recs.extend(_from_onpage(analyses.get("onpage", []), icp))
+    all_recs.extend(_from_cwv(analyses.get("core_web_vitals"), icp))
+
+    # Sort by priority descending, then by impact descending as tiebreaker.
+    all_recs.sort(key=lambda r: (r["priority"], r["impact"]), reverse=True)
+
+    return all_recs

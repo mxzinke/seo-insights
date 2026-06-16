@@ -1,0 +1,49 @@
+# Ideal Customer Profile (ICP) — all fields are required.
+# Copy this file, fill it in for your site, and pass it via --icp flag.
+# validate_icp.py will exit non-zero if any field is missing or still a placeholder.
+
+# Who is the target audience? Be specific: role, company type, stage.
+audience: "B2B SaaS growth teams and SEO leads at companies with 10-200 employees"
+
+# Two-letter ISO country code for the primary target market.
+country: "US"
+
+# BCP-47 language code for content.
+language: "en"
+
+# Primary search intent type for the audience.
+# One of: informational, navigational, commercial, transactional, mixed
+search_intent: "commercial"
+
+# One sentence: what problem does this product/site solve?
+problem_solved: "Eliminates guesswork from SEO by surfacing data-driven, prioritized action lists directly from Google Search Console."
+
+# One sentence: why should the audience choose this over alternatives?
+value_proposition: "Deterministic Python analysis — every recommendation is traceable to a GSC fact, no LLM hallucinations, no black-box scores."
+
+# Domains of your main competitors (used to contextualize keyword gaps).
+competitors:
+  - ahrefs.com
+  - semrush.com
+  - moz.com
+  - searchpilot.com
+
+# Theme keywords that define the core content pillars.
+# Keyword opportunities are scored higher when they align with these topics.
+priority_topics:
+  - seo analysis
+  - google search console
+  - keyword research
+  - content optimization
+  - technical seo
+  - core web vitals
+  - click-through rate
+
+# Terms to deprioritize regardless of traffic potential.
+# Typical use: consumer/noise queries unrelated to your B2B audience.
+excluded_terms:
+  - free seo tool
+  - seo for beginners
+  - youtube seo
+  - instagram seo
+  - tiktok

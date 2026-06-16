@@ -1,0 +1,14 @@
+[
+  {"keys": ["https://demo.example.com/"], "clicks": 1380, "impressions": 45200, "ctr": 0.0305, "position": 7.9},
+  {"keys": ["https://demo.example.com/features"], "clicks": 940, "impressions": 30200, "ctr": 0.0311, "position": 8.8},
+  {"keys": ["https://demo.example.com/blog/gsc-analysis"], "clicks": 780, "impressions": 24400, "ctr": 0.032, "position": 6.1},
+  {"keys": ["https://demo.example.com/blog/striking-distance"], "clicks": 590, "impressions": 21200, "ctr": 0.0278, "position": 10.8},
+  {"keys": ["https://demo.example.com/pricing"], "clicks": 420, "impressions": 16100, "ctr": 0.0261, "position": 12.5},
+  {"keys": ["https://demo.example.com/blog/cannibalization"], "clicks": 320, "impressions": 13400, "ctr": 0.0239, "position": 13.1},
+  {"keys": ["https://demo.example.com/blog/core-web-vitals"], "clicks": 245, "impressions": 10800, "ctr": 0.0227, "position": 13.7},
+  {"keys": ["https://demo.example.com/blog/content-decay"], "clicks": 390, "impressions": 14200, "ctr": 0.0275, "position": 11.8},
+  {"keys": ["https://demo.example.com/docs"], "clicks": 168, "impressions": 6900, "ctr": 0.0243, "position": 16.1},
+  {"keys": ["https://demo.example.com/about"], "clicks": 110, "impressions": 4600, "ctr": 0.0239, "position": 17.9},
+  {"keys": ["https://demo.example.com/blog/ctr-optimization"], "clicks": 88, "impressions": 4200, "ctr": 0.021, "position": 18.8},
+  {"keys": ["https://demo.example.com/blog/seo-python"], "clicks": 64, "impressions": 3300, "ctr": 0.0194, "position": 21.9}
+]
