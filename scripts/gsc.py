@@ -22,6 +22,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+import pathlib  # noqa: E402
+_ROOT = pathlib.Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+from scripts._net import _ALLOWLIST_HINT, _is_allowlist_block  # noqa: E402
+
 GSC_SEARCH_ANALYTICS_URL = (
     "https://www.googleapis.com/webmasters/v3/sites/{encoded_site}/searchAnalytics/query"
 )
@@ -46,6 +52,8 @@ def _post(url: str, body: dict, access_token: str, timeout: int = 30) -> dict:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return json.loads(resp.read())
     except urllib.error.HTTPError as exc:
+        if _is_allowlist_block(exc):
+            raise RuntimeError(_ALLOWLIST_HINT) from exc
         body_text = exc.read().decode(errors="replace")
         raise RuntimeError(
             f"GSC API error {exc.code} {exc.reason} for {url}\n{body_text}"
@@ -59,6 +67,8 @@ def _get(url: str, access_token: str, timeout: int = 15) -> dict:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return json.loads(resp.read())
     except urllib.error.HTTPError as exc:
+        if _is_allowlist_block(exc):
+            raise RuntimeError(_ALLOWLIST_HINT) from exc
         body_text = exc.read().decode(errors="replace")
         raise RuntimeError(
             f"GSC API GET error {exc.code} {exc.reason} for {url}\n{body_text}"

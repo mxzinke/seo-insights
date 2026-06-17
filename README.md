@@ -1,6 +1,6 @@
 # seo-insights
 
-A **Claude Code Plugin** (v0.2.0) that produces **deep, deterministic SEO analysis** from Google Search Console (GSC) data. Every number is computed in Python directly from your GSC export — no third-party SaaS, no black-box scoring, no hallucinated metrics. The output is a **prioritized list of concrete action recommendations**, each backed by traceable GSC evidence, not a data dump. Designed to be run weekly so that each run automatically enables week-over-week (WoW) comparison.
+A **Claude Code Plugin** (v0.3.0) that produces **deep, deterministic SEO analysis** from Google Search Console (GSC) data. Every number is computed in Python directly from your GSC export — no third-party SaaS, no black-box scoring, no hallucinated metrics. The output is a **prioritized list of concrete action recommendations**, each backed by traceable GSC evidence, not a data dump. Designed to be run weekly so that each run automatically enables week-over-week (WoW) comparison.
 
 Works in **Claude Code**: install via the plugin marketplace and the `seo-insights` skill activates whenever you ask about SEO, Search Console, keyword research, or traffic analysis.
 
@@ -138,7 +138,7 @@ The `scripts/run.sh` wrapper runs all four steps in sequence with a single comma
 
 ## As a Claude Code Plugin
 
-This repo is structured as a Claude Code plugin (v0.2.0). The plugin layout:
+This repo is structured as a Claude Code plugin (v0.3.0). The plugin layout:
 
 ```
 .claude-plugin/     # manifest (plugin.json) and marketplace.json

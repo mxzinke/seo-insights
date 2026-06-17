@@ -23,6 +23,19 @@ README instead — the analysis engine is identical; only the install and
   a **DataForSEO** key for organic keyword difficulty — both are optional; the
   plugin works without them (see README → free vs. paid layers).
 
+> ### ⚠️ Network access (read this first)
+> Cowork's code-execution sandbox blocks outbound traffic to non-allowlisted
+> domains via an egress proxy. This plugin **must** reach Google's APIs
+> (`oauth2.googleapis.com`, `accounts.google.com`, `www.googleapis.com`,
+> `googleads.googleapis.com`). Before setup, an org admin must enable
+> **Organization → Capabilities → Code execution → Allow network egress** and
+> set it to **All domains**, then **restart Claude Desktop / start a fresh
+> session**. (Due to current Cowork bugs the "Additional allowed domains" list is
+> ignored unless the mode is "All domains".) `/seo-setup` covers this as Step 0.
+> If you can't change org settings, run the analysis in **Claude Code** instead,
+> which has no egress sandbox. A 403 `blocked-by-allowlist` error means this
+> isn't configured.
+
 ---
 
 ## 1. Add this repo as a personal marketplace

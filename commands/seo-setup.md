@@ -16,6 +16,27 @@ Then proceed through the steps below in order, waiting for the user to confirm e
 
 ---
 
+## STEP 0 — Allow network access (Claude Cowork only)
+
+**Skip this step in Claude Code** (the local CLI has full network access).
+
+If the user is running in **Claude Cowork**, its code-execution sandbox blocks
+outbound traffic to all non-allowlisted domains through an egress proxy. SEO
+Insights must reach Google's API domains (`oauth2.googleapis.com`,
+`accounts.google.com`, `www.googleapis.com`, `googleads.googleapis.com`), so
+these must be allowed first — otherwise every step below fails with an HTTP 403
+`blocked-by-allowlist` error.
+
+Tell the user:
+
+1. Open **Claude → Settings/Admin → Organization → Capabilities → Code execution → Allow network egress** (an organization admin may be required).
+2. Set the egress mode to **All domains**. *(Important: due to current Cowork bugs, the "Additional allowed domains" list is ignored unless the mode is "All domains" — adding only the Google domains often does not take effect.)*
+3. **Restart Claude Desktop and start a fresh Cowork session** — egress changes only apply to new sessions.
+
+Ask: "Are you in Cowork or Claude Code? If Cowork, have you enabled network egress (All domains) and restarted?" Only continue once confirmed (or if they're in Claude Code). If a later step fails with a 403 `blocked-by-allowlist` error, return here.
+
+---
+
 ## STEP 1 — Create a Google Cloud project
 
 Tell the user:
@@ -86,21 +107,33 @@ Ask the user to paste their **Client ID** and **Client Secret**. Store these for
 
 ## STEP 5 — Authorize and get the refresh token
 
-Once you have the Client ID and Client Secret from the user, run:
+This uses Google's **localhost (loopback) redirect** flow. (Google disabled the
+old "out-of-band" copy-paste flow in 2022 — a Desktop-app OAuth client like the
+one created in Step 4 must use a localhost redirect, which this handles.)
+
+**Preferred — automatic (no copy-paste):** run
+
+`!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py login --client-id <CLIENT_ID> --client-secret <CLIENT_SECRET> --open`
+
+This opens a consent URL and starts a tiny local listener that captures the
+authorization code automatically. Tell the user:
+
+> "A browser tab will open. Sign in as the Google account that owns your Search Console property. You'll see a 'Google hasn't verified this app' warning — click **Advanced** then **Go to … (unsafe)**; this is safe because you are the only user of your own app. Grant the permission. The tab will say 'authorization received' — you're done, come back here."
+
+The command then prints the `GSC_REFRESH_TOKEN`. Store it for Step 7.
+
+**Fallback — manual (if the automatic listener can't capture, e.g. the browser is on another machine):** run
 
 `!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py consent --client-id <CLIENT_ID>`
 
-(Replace `<CLIENT_ID>` with the value the user provided.)
-
-This will print an authorization URL. Tell the user:
-
-> "Please open this URL in your browser — make sure you're signed in as the Google account that owns your Search Console property. You'll see a 'Google hasn't verified this app' warning — click **Advanced** then **Go to [app name] (unsafe)**. This is safe because you are the only user of this app. Grant the permission and paste the authorization code here."
-
-After the user pastes the code, run:
+Tell the user to open the printed URL, grant access; the browser will then try to
+load `http://localhost/?code=…` and show a "can't reach this page" error — **that
+is expected**. Ask them to copy the value of the `code=` parameter from the
+address bar. Then run:
 
 `!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py exchange --client-id <CLIENT_ID> --client-secret <CLIENT_SECRET> --code <CODE>`
 
-This will print the `GSC_REFRESH_TOKEN`. Store it — you'll write it to the config file in Step 7.
+This prints the `GSC_REFRESH_TOKEN`. Store it for Step 7.
 
 > **OAuth verification note:** For single-person/single-site use, your app can remain in testing mode forever. The "unverified app" screen is normal for a private tool you control. Only if you were distributing this tool to many external users would you need to go through Google's OAuth app verification process.
 
