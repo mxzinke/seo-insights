@@ -49,6 +49,15 @@ if GSC credentials are not yet configured (via the SessionStart hook).
 
 Then just ask Claude: *"Run an SEO analysis for my site"* and the skill takes over.
 
+### Plugin install (Claude Cowork)
+
+In **Cowork** (Claude Desktop app): open **Customize → Plugins → Personal
+plugins → `+` → Add marketplace → Add from a repository**, enter
+`mxzinke/seo-insights`, then **Install** the *SEO Insights* plugin. Run `/setup`
+to configure, then `/analyze`.
+
+→ **Full step-by-step Cowork guide: [docs/USING-WITH-COWORK.md](docs/USING-WITH-COWORK.md)**
+
 ### Manual / developer usage (no plugin install required)
 
 ```bash
