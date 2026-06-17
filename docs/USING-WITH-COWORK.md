@@ -43,7 +43,7 @@ computer.
 ## 2. Install the plugin
 
 In the same **Plugins** view, find **SEO Insights** and click **Install**.
-This loads the skill, the `/seo-setup`, `/seo-audience`, `/seo-analyze`, and
+This loads the skill, the `/seo-setup`, `/define-seo-audience`, `/seo-analyze`, and
 `/seo-keywords-research` commands, the Haiku keyword-curator sub-agent, and a
 session-start check.
 
@@ -59,9 +59,9 @@ files for you (you never hand-edit JSON):
 Credentials are written to a local, git-ignored `config/gsc.env` on your
 machine and never leave it.
 
-## 4. Define your audience — `/seo-audience`
+## 4. Define your audience — `/define-seo-audience`
 
-Type `/seo-audience`. Claude interviews you with a few targeted questions to
+Type `/define-seo-audience`. Claude interviews you with a few targeted questions to
 pin down your Ideal Customer Profile (who, country/language, intent, problem,
 value proposition, competitors). **The audience must be 100 % clear** — it's
 what makes keyword relevance meaningful. The result is saved as

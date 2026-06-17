@@ -19,7 +19,7 @@ If you have the SEO Insights plugin installed in Claude Code, the assistant can 
 
 After setup is complete, run:
 ```
-/seo-audience
+/define-seo-audience
 ```
 The assistant will interview you about your target audience and write your ICP config file. Then:
 ```

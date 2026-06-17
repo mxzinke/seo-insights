@@ -26,7 +26,7 @@ If credentials are missing, stop and direct the user to `/seo-setup`.
 
 If no ICP files exist, stop and tell the user:
 
-> "Keyword scoring requires an audience profile. Please run `/seo-audience` first so I know who you're targeting — this makes the opportunities far more relevant."
+> "Keyword scoring requires an audience profile. Please run `/define-seo-audience` first so I know who you're targeting — this makes the opportunities far more relevant."
 
 If multiple ICPs exist, ask which site to use. Then validate:
 

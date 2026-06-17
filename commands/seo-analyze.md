@@ -30,7 +30,7 @@ Look for ICP files in `${CLAUDE_PLUGIN_ROOT}/config/`:
 
 If no ICP files exist (output is `NO_ICP_FILES`), stop and tell the user:
 
-> "No audience profile found. Please run `/seo-audience` first — I'll interview you about your target audience, which makes the keyword scoring and content recommendations much more useful."
+> "No audience profile found. Please run `/define-seo-audience` first — I'll interview you about your target audience, which makes the keyword scoring and content recommendations much more useful."
 
 If one or more ICP files exist, and there is only one, use it. If there are multiple, ask the user which site they want to analyze.
 
@@ -38,7 +38,7 @@ Then validate the chosen ICP:
 
 `!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/validate_icp.py ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml`
 
-If validation fails, point the user to `/seo-audience` to fix it.
+If validation fails, point the user to `/define-seo-audience` to fix it.
 
 ---
 
@@ -57,7 +57,7 @@ Run:
 If the pipeline exits with an error, read the error output carefully and explain what went wrong in plain language. Common issues:
 - **Auth failure:** Suggest re-running `/seo-setup` Step 9 to test the refresh token.
 - **Network timeout:** Suggest retrying; GSC API is occasionally slow.
-- **ICP error:** Point to `/seo-audience`.
+- **ICP error:** Point to `/define-seo-audience`.
 
 ---
 

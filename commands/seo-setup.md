@@ -181,7 +181,7 @@ If it prints `access_token=ya29.a0...`, authentication is working. Tell the user
 > "Setup complete! Your credentials are working.
 >
 > **Next steps:**
-> 1. Run `/seo-audience` so I can learn about your target customers — this makes keyword scoring much more accurate.
+> 1. Run `/define-seo-audience` so I can learn about your target customers — this makes keyword scoring much more accurate.
 > 2. Then run `/seo-analyze` to run the full analysis and get your prioritized SEO action plan."
 
 If the token refresh fails, walk the user through re-running Steps 4–5 to get a fresh authorization code and refresh token.

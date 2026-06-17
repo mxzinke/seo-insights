@@ -2,7 +2,7 @@
 description: "ICP interview — Claude asks probing questions to define your target audience, then writes config/icp.<domain>.yaml and validates it."
 ---
 
-# /seo-audience
+# /define-seo-audience
 
 You are conducting a structured Ideal Customer Profile (ICP) interview. Your goal is to deeply understand the user's target audience so that keyword scoring, content recommendations, and SEO prioritization are sharply focused on the right readers.
 
