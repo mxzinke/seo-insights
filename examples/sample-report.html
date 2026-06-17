@@ -336,6 +336,107 @@
     .badge-cat-decay        { background: #f5f0fd;  color: #4a1a8c; border-color: #cdb8f0; }
     .badge-cat-technical    { background: #f0f5fd;  color: #1a3a7c; border-color: #b8ccf0; }
     .badge-cat-content-gap  { background: #f0faf7;  color: #1a5a4a; border-color: #b8e0d4; }
+    .badge-cat-keyword      { background: #fef3e7;  color: #7a3a00; border-color: #f0c080; }
+
+    /* ============================================================
+       KEYWORD OPPORTUNITIES TABLE
+    ============================================================ */
+    .kw-intent-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .kw-intent-transactional  { background: #fdf1f1; color: var(--color-red);   border: 1px solid #f0c0c0; }
+    .kw-intent-commercial     { background: #fef8ec; color: var(--color-amber); border: 1px solid #f0d8a0; }
+    .kw-intent-informational  { background: #e8f8ee; color: var(--color-green); border: 1px solid #b8e8cc; }
+    .kw-intent-navigational   { background: #e8f0fd; color: #1a3fa3;            border: 1px solid #b8ccf6; }
+    .kw-intent-unknown        { background: var(--color-bg); color: var(--color-text-faint); border: 1px solid var(--color-border); }
+
+    .opp-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .opp-bar {
+      flex: 1;
+      height: 6px;
+      border-radius: 100px;
+      background: var(--color-border);
+      overflow: hidden;
+      min-width: 60px;
+    }
+    .opp-bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, #1a7f4f, #2d5be3);
+    }
+    .opp-score-num {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--color-text);
+      min-width: 32px;
+      text-align: right;
+    }
+
+    .kw-vol-null {
+      color: var(--color-text-faint);
+      font-style: italic;
+      font-size: 11.5px;
+    }
+
+    .kw-source-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .kw-source-gsc          { background: #e8f8ee; color: var(--color-green); }
+    .kw-source-ads          { background: #fef8ec; color: var(--color-amber); }
+    .kw-source-autocomplete { background: #f0f5fd; color: #1a3a7c; }
+
+    .kw-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .kw-filter-select {
+      font-size: 12.5px;
+      font-family: var(--font-sans);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      background: var(--color-surface);
+      color: var(--color-text);
+      padding: 6px 10px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color var(--transition-base);
+    }
+    .kw-filter-select:focus { border-color: var(--color-accent-mid); }
+
+    .kw-free-mode-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--color-amber-bg);
+      border: 1px solid #f0d8a0;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      color: var(--color-amber);
+      margin-bottom: 16px;
+    }
 
     .badge-impact-high   { background: #e8f8ee; color: var(--color-green); border-color: #b8e8cc; }
     .badge-impact-medium { background: #fef8ec; color: var(--color-amber); border-color: #f0d8a0; }
@@ -1124,6 +1225,7 @@
       <ul class="nav-links">
         <li><a class="nav-link" href="#section-recs">Action Plan</a></li>
         <li><a class="nav-link" href="#section-perf">Performance</a></li>
+        <li><a class="nav-link" href="#section-keywords">Keywords</a></li>
         <li><a class="nav-link" href="#section-explore">Explore Data</a></li>
         <li><a class="nav-link" href="#section-appendix">Appendix</a></li>
       </ul>
@@ -1139,16 +1241,16 @@
       <div class="header-eyebrow">SEO Insights Report</div>
       <h1 class="header-domain">demo.example.com</h1>
       <p class="header-meta">
-        Analysis window: <time>2026-03-17</time> – <time>2026-06-14</time>
+        Analysis window: <time>2026-03-18</time> – <time>2026-06-15</time>
         (90 days)
         
-          &nbsp;·&nbsp; vs prior: 2025-12-17 – 2026-03-16
+          &nbsp;·&nbsp; vs prior: 2025-12-18 – 2026-03-17
         
-        &nbsp;·&nbsp; Generated 2026-06-16
+        &nbsp;·&nbsp; Generated 2026-06-17
       </p>
       <div class="header-verdict">
         <span class="verdict-dot"></span>
-        24 priority actions identified — 10 quick wins
+        29 priority actions identified — 10 quick wins
       </div>
     </header>
 
@@ -1161,7 +1263,7 @@
         <h2 class="section-title" id="recs-heading">Prioritized Recommendations</h2>
         <p class="section-subtitle">
           Sorted by impact-to-effort ratio. Quick wins are highlighted.
-          24 total actions across 6 categories.
+          29 total actions across 7 categories.
         </p>
       </div>
 
@@ -2855,6 +2957,266 @@
               <div class="rec-rank" aria-label="Priority 21">21</div>
               <div class="rec-header-content">
                 <div class="rec-badges">
+                  <span class="badge badge-cat-content-gap"
+                        title="content_gap">
+                    Content Gap
+                  </span>
+                  <span class="badge badge-impact-high"
+                        title="Impact: 4/5">
+                    Impact: High
+                  </span>
+                  <span class="badge badge-effort-medium"
+                        title="Effort: 3/5">
+                    Effort: Medium
+                  </span>
+                </div>
+                <h3 class="rec-title">Content gap: create content targeting &#34;google search console setup&#34;</h3>
+              </div>
+            </div>
+
+            <p class="rec-action">Create a dedicated page or article targeting &#34;google search console setup&#34; (4,400 avg monthly searches, competition: LOW (18/100)). Intent: unknown. We currently have no ranking for this keyword.</p>
+
+            <blockquote class="rec-detail">
+              &#34;google search console setup&#34; has an opportunity score of 82/100 with 4,400 avg monthly searches and competition: LOW (18/100). We have zero presence for this keyword — creating relevant content aligned with unknown intent could capture this demand. ICP relevance: 0.14. Source: keyword research pipeline (no numbers invented by model).
+            </blockquote>
+
+            
+            <button class="rec-evidence-toggle"
+                    aria-expanded="false"
+                    aria-controls="evidence-kw_gap_001">
+              <span class="toggle-chevron">▾</span>
+              Show supporting data (1 row)
+            </button>
+
+            <div class="rec-evidence-body" id="evidence-kw_gap_001" role="region">
+              
+              <div style="margin-top: 8px;">
+                
+
+                
+              </div>
+              
+            </div>
+            
+          </div>
+        </article>
+        
+        <article class="rec-card "
+                 role="listitem"
+                 data-animate="true">
+          <div class="rec-card-inner">
+            <div class="rec-card-top">
+              <div class="rec-rank" aria-label="Priority 22">22</div>
+              <div class="rec-header-content">
+                <div class="rec-badges">
+                  <span class="badge badge-cat-content-gap"
+                        title="content_gap">
+                    Content Gap
+                  </span>
+                  <span class="badge badge-impact-high"
+                        title="Impact: 4/5">
+                    Impact: High
+                  </span>
+                  <span class="badge badge-effort-medium"
+                        title="Effort: 3/5">
+                    Effort: Medium
+                  </span>
+                </div>
+                <h3 class="rec-title">Content gap: create content targeting &#34;seo content decay&#34;</h3>
+              </div>
+            </div>
+
+            <p class="rec-action">Create a dedicated page or article targeting &#34;seo content decay&#34; (720 avg monthly searches, competition: LOW (11/100)). Intent: unknown. We currently have no ranking for this keyword.</p>
+
+            <blockquote class="rec-detail">
+              &#34;seo content decay&#34; has an opportunity score of 79/100 with 720 avg monthly searches and competition: LOW (11/100). We have zero presence for this keyword — creating relevant content aligned with unknown intent could capture this demand. ICP relevance: 0.43. Source: keyword research pipeline (no numbers invented by model).
+            </blockquote>
+
+            
+            <button class="rec-evidence-toggle"
+                    aria-expanded="false"
+                    aria-controls="evidence-kw_gap_002">
+              <span class="toggle-chevron">▾</span>
+              Show supporting data (1 row)
+            </button>
+
+            <div class="rec-evidence-body" id="evidence-kw_gap_002" role="region">
+              
+              <div style="margin-top: 8px;">
+                
+
+                
+              </div>
+              
+            </div>
+            
+          </div>
+        </article>
+        
+        <article class="rec-card "
+                 role="listitem"
+                 data-animate="true">
+          <div class="rec-card-inner">
+            <div class="rec-card-top">
+              <div class="rec-rank" aria-label="Priority 23">23</div>
+              <div class="rec-header-content">
+                <div class="rec-badges">
+                  <span class="badge badge-cat-content-gap"
+                        title="content_gap">
+                    Content Gap
+                  </span>
+                  <span class="badge badge-impact-high"
+                        title="Impact: 4/5">
+                    Impact: High
+                  </span>
+                  <span class="badge badge-effort-medium"
+                        title="Effort: 3/5">
+                    Effort: Medium
+                  </span>
+                </div>
+                <h3 class="rec-title">Content gap: create content targeting &#34;seo keyword cannibalization fix&#34;</h3>
+              </div>
+            </div>
+
+            <p class="rec-action">Create a dedicated page or article targeting &#34;seo keyword cannibalization fix&#34; (590 avg monthly searches, competition: LOW (8/100)). Intent: unknown. We currently have no ranking for this keyword.</p>
+
+            <blockquote class="rec-detail">
+              &#34;seo keyword cannibalization fix&#34; has an opportunity score of 79/100 with 590 avg monthly searches and competition: LOW (8/100). We have zero presence for this keyword — creating relevant content aligned with unknown intent could capture this demand. ICP relevance: 0.43. Source: keyword research pipeline (no numbers invented by model).
+            </blockquote>
+
+            
+            <button class="rec-evidence-toggle"
+                    aria-expanded="false"
+                    aria-controls="evidence-kw_gap_003">
+              <span class="toggle-chevron">▾</span>
+              Show supporting data (1 row)
+            </button>
+
+            <div class="rec-evidence-body" id="evidence-kw_gap_003" role="region">
+              
+              <div style="margin-top: 8px;">
+                
+
+                
+              </div>
+              
+            </div>
+            
+          </div>
+        </article>
+        
+        <article class="rec-card "
+                 role="listitem"
+                 data-animate="true">
+          <div class="rec-card-inner">
+            <div class="rec-card-top">
+              <div class="rec-rank" aria-label="Priority 24">24</div>
+              <div class="rec-header-content">
+                <div class="rec-badges">
+                  <span class="badge badge-cat-content-gap"
+                        title="content_gap">
+                    Content Gap
+                  </span>
+                  <span class="badge badge-impact-high"
+                        title="Impact: 4/5">
+                    Impact: High
+                  </span>
+                  <span class="badge badge-effort-medium"
+                        title="Effort: 3/5">
+                    Effort: Medium
+                  </span>
+                </div>
+                <h3 class="rec-title">Content gap: create content targeting &#34;core web vitals optimization&#34;</h3>
+              </div>
+            </div>
+
+            <p class="rec-action">Create a dedicated page or article targeting &#34;core web vitals optimization&#34; (5,400 avg monthly searches, competition: MEDIUM (42/100)). Intent: unknown. We currently have no ranking for this keyword.</p>
+
+            <blockquote class="rec-detail">
+              &#34;core web vitals optimization&#34; has an opportunity score of 78/100 with 5,400 avg monthly searches and competition: MEDIUM (42/100). We have zero presence for this keyword — creating relevant content aligned with unknown intent could capture this demand. ICP relevance: 0.29. Source: keyword research pipeline (no numbers invented by model).
+            </blockquote>
+
+            
+            <button class="rec-evidence-toggle"
+                    aria-expanded="false"
+                    aria-controls="evidence-kw_gap_004">
+              <span class="toggle-chevron">▾</span>
+              Show supporting data (1 row)
+            </button>
+
+            <div class="rec-evidence-body" id="evidence-kw_gap_004" role="region">
+              
+              <div style="margin-top: 8px;">
+                
+
+                
+              </div>
+              
+            </div>
+            
+          </div>
+        </article>
+        
+        <article class="rec-card "
+                 role="listitem"
+                 data-animate="true">
+          <div class="rec-card-inner">
+            <div class="rec-card-top">
+              <div class="rec-rank" aria-label="Priority 25">25</div>
+              <div class="rec-header-content">
+                <div class="rec-badges">
+                  <span class="badge badge-cat-content-gap"
+                        title="content_gap">
+                    Content Gap
+                  </span>
+                  <span class="badge badge-impact-high"
+                        title="Impact: 4/5">
+                    Impact: High
+                  </span>
+                  <span class="badge badge-effort-medium"
+                        title="Effort: 3/5">
+                    Effort: Medium
+                  </span>
+                </div>
+                <h3 class="rec-title">Content gap: create content targeting &#34;page speed seo impact&#34;</h3>
+              </div>
+            </div>
+
+            <p class="rec-action">Create a dedicated page or article targeting &#34;page speed seo impact&#34; (2,100 avg monthly searches, competition: LOW (27/100)). Intent: unknown. We currently have no ranking for this keyword.</p>
+
+            <blockquote class="rec-detail">
+              &#34;page speed seo impact&#34; has an opportunity score of 78/100 with 2,100 avg monthly searches and competition: LOW (27/100). We have zero presence for this keyword — creating relevant content aligned with unknown intent could capture this demand. ICP relevance: 0.29. Source: keyword research pipeline (no numbers invented by model).
+            </blockquote>
+
+            
+            <button class="rec-evidence-toggle"
+                    aria-expanded="false"
+                    aria-controls="evidence-kw_gap_005">
+              <span class="toggle-chevron">▾</span>
+              Show supporting data (1 row)
+            </button>
+
+            <div class="rec-evidence-body" id="evidence-kw_gap_005" role="region">
+              
+              <div style="margin-top: 8px;">
+                
+
+                
+              </div>
+              
+            </div>
+            
+          </div>
+        </article>
+        
+        <article class="rec-card "
+                 role="listitem"
+                 data-animate="true">
+          <div class="rec-card-inner">
+            <div class="rec-card-top">
+              <div class="rec-rank" aria-label="Priority 26">26</div>
+              <div class="rec-header-content">
+                <div class="rec-badges">
                   <span class="badge badge-cat-decay"
                         title="decay_recovery">
                     Decay Recovery
@@ -2933,7 +3295,7 @@
                  data-animate="true">
           <div class="rec-card-inner">
             <div class="rec-card-top">
-              <div class="rec-rank" aria-label="Priority 22">22</div>
+              <div class="rec-rank" aria-label="Priority 27">27</div>
               <div class="rec-header-content">
                 <div class="rec-badges">
                   <span class="badge badge-cat-decay"
@@ -3014,7 +3376,7 @@
                  data-animate="true">
           <div class="rec-card-inner">
             <div class="rec-card-top">
-              <div class="rec-rank" aria-label="Priority 23">23</div>
+              <div class="rec-rank" aria-label="Priority 28">28</div>
               <div class="rec-header-content">
                 <div class="rec-badges">
                   <span class="badge badge-cat-technical"
@@ -3095,7 +3457,7 @@
                  data-animate="true">
           <div class="rec-card-inner">
             <div class="rec-card-top">
-              <div class="rec-rank" aria-label="Priority 24">24</div>
+              <div class="rec-rank" aria-label="Priority 29">29</div>
               <div class="rec-header-content">
                 <div class="rec-badges">
                   <span class="badge badge-cat-technical"
@@ -3185,7 +3547,7 @@
       <div class="section-header">
         <div class="section-label">Performance</div>
         <h2 class="section-title" id="perf-heading">At a Glance</h2>
-        <p class="section-subtitle">2026-03-17 – 2026-06-14 vs prior period</p>
+        <p class="section-subtitle">2026-03-18 – 2026-06-15 vs prior period</p>
       </div>
 
       <!-- KPI Cards -->
@@ -3314,7 +3676,92 @@
     </section>
 
     <!-- ======================================================
-         SECTION 3: EXPLORE THE DATA
+         SECTION 3: KEYWORD OPPORTUNITIES
+    ====================================================== -->
+    <section class="section" id="section-keywords" aria-labelledby="keywords-heading">
+      <div class="section-header">
+        <div class="section-label">Keyword Research</div>
+        <h2 class="section-title" id="keywords-heading">Keyword Opportunities</h2>
+        <p class="section-subtitle">
+          Sorted by opportunity score. GSC data is always real; volume data requires Google Ads API.
+          <strong>48 keywords analysed.</strong>
+        </p>
+      </div>
+
+      
+
+      <!-- Source note / free-mode indicator -->
+      
+      <div class="kw-free-mode-note">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 7v4M8 5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Google Ads volumes: ON (demo fixture). Active sources: GSC (always on), Google Ads keyword ideas, Google Autocomplete.
+      </div>
+      
+
+      <!-- Filters -->
+      <div class="kw-filter-bar print-hide">
+        <div class="itbl-search-wrap" style="max-width:260px;">
+          <svg class="itbl-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input type="search" class="itbl-search" id="kw-search" placeholder="Filter keywords…" aria-label="Filter keywords">
+        </div>
+        <select class="kw-filter-select" id="kw-intent-filter" aria-label="Filter by intent">
+          <option value="">All intents</option>
+          <option value="informational">Informational</option>
+          <option value="commercial">Commercial</option>
+          <option value="transactional">Transactional</option>
+          <option value="navigational">Navigational</option>
+          <option value="unknown">Unknown</option>
+        </select>
+        <select class="kw-filter-select" id="kw-action-filter" aria-label="Filter by action">
+          <option value="">All actions</option>
+          <option value="content_gap">Content Gap</option>
+          <option value="optimize_ranking">Optimize Ranking</option>
+          <option value="optimize_conversion">Optimize Conversion</option>
+          <option value="monitor">Monitor</option>
+        </select>
+        <select class="kw-filter-select" id="kw-source-filter" aria-label="Filter by source">
+          <option value="">All sources</option>
+          <option value="gsc">GSC</option>
+          <option value="ads">Google Ads</option>
+          <option value="autocomplete">Autocomplete</option>
+        </select>
+        <span class="itbl-meta" id="kw-meta"></span>
+      </div>
+
+      <!-- Table -->
+      <div class="itbl-wrap">
+        <div class="itbl-scroll">
+          <table class="itbl" id="tbl-keywords" aria-label="Keyword opportunities table">
+            <thead>
+              <tr>
+                <th data-col="keyword"             data-type="str"  style="min-width:200px;">Keyword</th>
+                <th data-col="intent"              data-type="str"  style="text-align:center; min-width:120px;">Intent</th>
+                <th data-col="search_volume"       data-type="num"  style="text-align:right; min-width:90px;">Volume</th>
+                <th data-col="competition"         data-type="str"  style="text-align:center; min-width:100px;">Competition</th>
+                <th data-col="our_current_position" data-type="num" style="text-align:right; min-width:80px;">Our Pos.</th>
+                <th data-col="recommended_action"  data-type="str"  style="min-width:120px;">Action</th>
+                <th data-col="opportunity_score"   data-type="num"  style="min-width:140px;" class="sort-desc">Opportunity</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-keywords"></tbody>
+          </table>
+        </div>
+        <div class="itbl-show-more" id="showmore-keywords">
+          <button class="itbl-show-btn" data-table="keywords">Show all keywords</button>
+        </div>
+      </div>
+
+      
+    </section>
+
+    <!-- ======================================================
+         SECTION 4: EXPLORE THE DATA
     ====================================================== -->
     <section class="section" id="section-explore" aria-labelledby="explore-heading">
       <div class="section-header">
@@ -4246,7 +4693,7 @@
     ====================================================== -->
     <footer class="site-footer">
       <span>SEO Insights · demo.example.com</span>
-      <span>Generated 2026-06-16</span>
+      <span>Generated 2026-06-17</span>
     </footer>
 
   </div><!-- /.page-wrap -->
@@ -4266,7 +4713,7 @@
     const clicksByDate   = [{"date": "2026-03-18", "clicks": 48, "impressions": 1820}, {"date": "2026-03-19", "clicks": 52, "impressions": 1940}, {"date": "2026-03-20", "clicks": 61, "impressions": 2180}, {"date": "2026-03-21", "clicks": 44, "impressions": 1760}, {"date": "2026-03-22", "clicks": 38, "impressions": 1510}, {"date": "2026-03-23", "clicks": 29, "impressions": 1140}, {"date": "2026-03-24", "clicks": 31, "impressions": 1220}, {"date": "2026-03-25", "clicks": 55, "impressions": 2050}, {"date": "2026-03-26", "clicks": 63, "impressions": 2300}, {"date": "2026-03-27", "clicks": 58, "impressions": 2140}, {"date": "2026-03-28", "clicks": 49, "impressions": 1890}, {"date": "2026-03-29", "clicks": 42, "impressions": 1650}, {"date": "2026-03-30", "clicks": 35, "impressions": 1380}, {"date": "2026-03-31", "clicks": 37, "impressions": 1430}, {"date": "2026-04-01", "clicks": 60, "impressions": 2210}, {"date": "2026-04-02", "clicks": 66, "impressions": 2420}, {"date": "2026-04-03", "clicks": 54, "impressions": 2080}, {"date": "2026-04-04", "clicks": 51, "impressions": 1970}, {"date": "2026-04-05", "clicks": 43, "impressions": 1700}, {"date": "2026-04-06", "clicks": 34, "impressions": 1340}, {"date": "2026-04-07", "clicks": 36, "impressions": 1420}, {"date": "2026-04-08", "clicks": 59, "impressions": 2190}, {"date": "2026-04-09", "clicks": 67, "impressions": 2480}, {"date": "2026-04-10", "clicks": 55, "impressions": 2100}, {"date": "2026-04-11", "clicks": 50, "impressions": 1940}, {"date": "2026-04-12", "clicks": 43, "impressions": 1700}, {"date": "2026-04-13", "clicks": 32, "impressions": 1270}, {"date": "2026-04-14", "clicks": 34, "impressions": 1340}, {"date": "2026-04-15", "clicks": 55, "impressions": 2070}, {"date": "2026-04-16", "clicks": 57, "impressions": 2140}, {"date": "2026-04-17", "clicks": 48, "impressions": 1890}, {"date": "2026-04-18", "clicks": 46, "impressions": 1810}, {"date": "2026-04-19", "clicks": 41, "impressions": 1640}, {"date": "2026-04-20", "clicks": 32, "impressions": 1280}, {"date": "2026-04-21", "clicks": 31, "impressions": 1230}, {"date": "2026-04-22", "clicks": 50, "impressions": 1960}, {"date": "2026-04-23", "clicks": 56, "impressions": 2130}, {"date": "2026-04-24", "clicks": 49, "impressions": 1910}, {"date": "2026-04-25", "clicks": 45, "impressions": 1780}, {"date": "2026-04-26", "clicks": 40, "impressions": 1590}, {"date": "2026-04-27", "clicks": 31, "impressions": 1240}, {"date": "2026-04-28", "clicks": 29, "impressions": 1160}, {"date": "2026-04-29", "clicks": 46, "impressions": 1820}, {"date": "2026-04-30", "clicks": 51, "impressions": 2000}, {"date": "2026-05-01", "clicks": 44, "impressions": 1740}, {"date": "2026-05-02", "clicks": 40, "impressions": 1590}, {"date": "2026-05-03", "clicks": 34, "impressions": 1360}, {"date": "2026-05-04", "clicks": 26, "impressions": 1040}, {"date": "2026-05-05", "clicks": 28, "impressions": 1120}, {"date": "2026-05-06", "clicks": 42, "impressions": 1680}, {"date": "2026-05-07", "clicks": 47, "impressions": 1870}, {"date": "2026-05-08", "clicks": 40, "impressions": 1600}, {"date": "2026-05-09", "clicks": 37, "impressions": 1480}, {"date": "2026-05-10", "clicks": 31, "impressions": 1240}, {"date": "2026-05-11", "clicks": 23, "impressions": 920}, {"date": "2026-05-12", "clicks": 25, "impressions": 1000}, {"date": "2026-05-13", "clicks": 37, "impressions": 1480}, {"date": "2026-05-14", "clicks": 42, "impressions": 1680}, {"date": "2026-05-15", "clicks": 36, "impressions": 1440}, {"date": "2026-05-16", "clicks": 33, "impressions": 1320}, {"date": "2026-05-17", "clicks": 27, "impressions": 1080}, {"date": "2026-05-18", "clicks": 19, "impressions": 760}, {"date": "2026-05-19", "clicks": 21, "impressions": 840}, {"date": "2026-05-20", "clicks": 32, "impressions": 1280}, {"date": "2026-05-21", "clicks": 36, "impressions": 1440}, {"date": "2026-05-22", "clicks": 30, "impressions": 1200}, {"date": "2026-05-23", "clicks": 27, "impressions": 1080}, {"date": "2026-05-24", "clicks": 21, "impressions": 840}, {"date": "2026-05-25", "clicks": 14, "impressions": 560}, {"date": "2026-05-26", "clicks": 16, "impressions": 640}, {"date": "2026-05-27", "clicks": 25, "impressions": 1000}, {"date": "2026-05-28", "clicks": 29, "impressions": 1160}, {"date": "2026-05-29", "clicks": 22, "impressions": 880}, {"date": "2026-05-30", "clicks": 20, "impressions": 800}, {"date": "2026-05-31", "clicks": 15, "impressions": 600}, {"date": "2026-06-01", "clicks": 10, "impressions": 400}, {"date": "2026-06-02", "clicks": 12, "impressions": 480}, {"date": "2026-06-03", "clicks": 18, "impressions": 720}, {"date": "2026-06-04", "clicks": 22, "impressions": 880}, {"date": "2026-06-05", "clicks": 16, "impressions": 640}, {"date": "2026-06-06", "clicks": 13, "impressions": 520}, {"date": "2026-06-07", "clicks": 8, "impressions": 320}, {"date": "2026-06-08", "clicks": 6, "impressions": 240}, {"date": "2026-06-09", "clicks": 9, "impressions": 360}, {"date": "2026-06-10", "clicks": 13, "impressions": 520}, {"date": "2026-06-11", "clicks": 10, "impressions": 400}, {"date": "2026-06-12", "clicks": 8, "impressions": 320}, {"date": "2026-06-13", "clicks": 5, "impressions": 200}];
     const topPages       = [{"page": "https://demo.example.com/", "clicks": 1240, "impressions": 42300, "position": 8.2}, {"page": "https://demo.example.com/features", "clicks": 820, "impressions": 28400, "position": 9.1}, {"page": "https://demo.example.com/blog/gsc-analysis", "clicks": 680, "impressions": 22100, "position": 6.4}, {"page": "https://demo.example.com/blog/striking-distance", "clicks": 430, "impressions": 18700, "position": 11.2}, {"page": "https://demo.example.com/pricing", "clicks": 390, "impressions": 15400, "position": 12.8}, {"page": "https://demo.example.com/blog/cannibalization", "clicks": 280, "impressions": 12300, "position": 13.5}, {"page": "https://demo.example.com/blog/core-web-vitals", "clicks": 210, "impressions": 9800, "position": 14.1}, {"page": "https://demo.example.com/blog/content-decay", "clicks": 185, "impressions": 8400, "position": 15.3}, {"page": "https://demo.example.com/docs", "clicks": 142, "impressions": 6200, "position": 16.8}, {"page": "https://demo.example.com/about", "clicks": 98, "impressions": 4100, "position": 18.2}];
     const positionDist   = [{"bucket": "1-3", "count": 1}, {"bucket": "4-10", "count": 15}, {"bucket": "11-20", "count": 12}, {"bucket": "21-50", "count": 0}, {"bucket": "51+", "count": 0}];
-    const recsByCat      = [{"category": "quick_win", "count": 8}, {"category": "cannibalization", "count": 6}, {"category": "on_page", "count": 4}, {"category": "ctr_optimization", "count": 2}, {"category": "decay_recovery", "count": 2}, {"category": "technical_seo", "count": 2}];
+    const recsByCat      = [{"category": "quick_win", "count": 8}, {"category": "cannibalization", "count": 6}, {"category": "content_gap", "count": 5}, {"category": "on_page", "count": 4}, {"category": "ctr_optimization", "count": 2}, {"category": "decay_recovery", "count": 2}, {"category": "technical_seo", "count": 2}];
 
     
     const pageDeltaData  = [{"clicks_delta_pct": -10.1, "current_clicks": 1240, "current_position": 8.2, "position_delta": 0.3, "prior_clicks": 1380, "prior_position": 7.9, "url": "https://demo.example.com/"}, {"clicks_delta_pct": -12.8, "current_clicks": 820, "current_position": 9.1, "position_delta": 0.3, "prior_clicks": 940, "prior_position": 8.8, "url": "https://demo.example.com/features"}, {"clicks_delta_pct": -12.8, "current_clicks": 680, "current_position": 6.4, "position_delta": 0.3, "prior_clicks": 780, "prior_position": 6.1, "url": "https://demo.example.com/blog/gsc-analysis"}, {"clicks_delta_pct": -27.1, "current_clicks": 430, "current_position": 11.2, "position_delta": 0.4, "prior_clicks": 590, "prior_position": 10.8, "url": "https://demo.example.com/blog/striking-distance"}, {"clicks_delta_pct": -7.1, "current_clicks": 390, "current_position": 12.8, "position_delta": 0.3, "prior_clicks": 420, "prior_position": 12.5, "url": "https://demo.example.com/pricing"}, {"clicks_delta_pct": -12.5, "current_clicks": 280, "current_position": 13.5, "position_delta": 0.4, "prior_clicks": 320, "prior_position": 13.1, "url": "https://demo.example.com/blog/cannibalization"}, {"clicks_delta_pct": -14.3, "current_clicks": 210, "current_position": 14.1, "position_delta": 0.4, "prior_clicks": 245, "prior_position": 13.7, "url": "https://demo.example.com/blog/core-web-vitals"}, {"clicks_delta_pct": -52.6, "current_clicks": 185, "current_position": 15.3, "position_delta": 3.5, "prior_clicks": 390, "prior_position": 11.8, "url": "https://demo.example.com/blog/content-decay"}, {"clicks_delta_pct": -15.5, "current_clicks": 142, "current_position": 16.8, "position_delta": 0.7, "prior_clicks": 168, "prior_position": 16.1, "url": "https://demo.example.com/docs"}, {"clicks_delta_pct": -10.9, "current_clicks": 98, "current_position": 18.2, "position_delta": 0.3, "prior_clicks": 110, "prior_position": 17.9, "url": "https://demo.example.com/about"}];
@@ -4280,6 +4727,9 @@
     const exploreTimeseries = [{"date": "2026-03-18", "clicks": 48, "impressions": 1820, "ctr": 2.64, "position": 14.1}, {"date": "2026-03-19", "clicks": 52, "impressions": 1940, "ctr": 2.68, "position": 13.9}, {"date": "2026-03-20", "clicks": 61, "impressions": 2180, "ctr": 2.8, "position": 14.0}, {"date": "2026-03-21", "clicks": 44, "impressions": 1760, "ctr": 2.5, "position": 14.3}, {"date": "2026-03-22", "clicks": 38, "impressions": 1510, "ctr": 2.52, "position": 14.5}, {"date": "2026-03-23", "clicks": 29, "impressions": 1140, "ctr": 2.54, "position": 14.8}, {"date": "2026-03-24", "clicks": 31, "impressions": 1220, "ctr": 2.54, "position": 14.6}, {"date": "2026-03-25", "clicks": 55, "impressions": 2050, "ctr": 2.68, "position": 14.2}, {"date": "2026-03-26", "clicks": 63, "impressions": 2300, "ctr": 2.74, "position": 13.8}, {"date": "2026-03-27", "clicks": 58, "impressions": 2140, "ctr": 2.71, "position": 14.0}, {"date": "2026-03-28", "clicks": 49, "impressions": 1890, "ctr": 2.59, "position": 14.2}, {"date": "2026-03-29", "clicks": 42, "impressions": 1650, "ctr": 2.55, "position": 14.4}, {"date": "2026-03-30", "clicks": 35, "impressions": 1380, "ctr": 2.54, "position": 14.6}, {"date": "2026-03-31", "clicks": 37, "impressions": 1430, "ctr": 2.59, "position": 14.5}, {"date": "2026-04-01", "clicks": 60, "impressions": 2210, "ctr": 2.71, "position": 14.1}, {"date": "2026-04-02", "clicks": 66, "impressions": 2420, "ctr": 2.73, "position": 13.7}, {"date": "2026-04-03", "clicks": 54, "impressions": 2080, "ctr": 2.6, "position": 14.0}, {"date": "2026-04-04", "clicks": 51, "impressions": 1970, "ctr": 2.59, "position": 14.1}, {"date": "2026-04-05", "clicks": 43, "impressions": 1700, "ctr": 2.53, "position": 14.3}, {"date": "2026-04-06", "clicks": 34, "impressions": 1340, "ctr": 2.54, "position": 14.5}, {"date": "2026-04-07", "clicks": 36, "impressions": 1420, "ctr": 2.54, "position": 14.5}, {"date": "2026-04-08", "clicks": 59, "impressions": 2190, "ctr": 2.69, "position": 14.0}, {"date": "2026-04-09", "clicks": 67, "impressions": 2480, "ctr": 2.7, "position": 13.6}, {"date": "2026-04-10", "clicks": 55, "impressions": 2100, "ctr": 2.62, "position": 13.9}, {"date": "2026-04-11", "clicks": 50, "impressions": 1940, "ctr": 2.58, "position": 14.2}, {"date": "2026-04-12", "clicks": 43, "impressions": 1700, "ctr": 2.53, "position": 14.3}, {"date": "2026-04-13", "clicks": 32, "impressions": 1270, "ctr": 2.52, "position": 14.6}, {"date": "2026-04-14", "clicks": 34, "impressions": 1340, "ctr": 2.54, "position": 14.6}, {"date": "2026-04-15", "clicks": 55, "impressions": 2070, "ctr": 2.66, "position": 14.1}, {"date": "2026-04-16", "clicks": 57, "impressions": 2140, "ctr": 2.66, "position": 13.9}, {"date": "2026-04-17", "clicks": 48, "impressions": 1890, "ctr": 2.54, "position": 14.2}, {"date": "2026-04-18", "clicks": 46, "impressions": 1810, "ctr": 2.54, "position": 14.3}, {"date": "2026-04-19", "clicks": 41, "impressions": 1640, "ctr": 2.5, "position": 14.5}, {"date": "2026-04-20", "clicks": 32, "impressions": 1280, "ctr": 2.5, "position": 14.7}, {"date": "2026-04-21", "clicks": 31, "impressions": 1230, "ctr": 2.52, "position": 14.7}, {"date": "2026-04-22", "clicks": 50, "impressions": 1960, "ctr": 2.55, "position": 14.2}, {"date": "2026-04-23", "clicks": 56, "impressions": 2130, "ctr": 2.63, "position": 13.9}, {"date": "2026-04-24", "clicks": 49, "impressions": 1910, "ctr": 2.57, "position": 14.2}, {"date": "2026-04-25", "clicks": 45, "impressions": 1780, "ctr": 2.53, "position": 14.4}, {"date": "2026-04-26", "clicks": 40, "impressions": 1590, "ctr": 2.52, "position": 14.5}, {"date": "2026-04-27", "clicks": 31, "impressions": 1240, "ctr": 2.5, "position": 14.7}, {"date": "2026-04-28", "clicks": 29, "impressions": 1160, "ctr": 2.5, "position": 14.8}, {"date": "2026-04-29", "clicks": 46, "impressions": 1820, "ctr": 2.53, "position": 14.4}, {"date": "2026-04-30", "clicks": 51, "impressions": 2000, "ctr": 2.55, "position": 14.1}, {"date": "2026-05-01", "clicks": 44, "impressions": 1740, "ctr": 2.53, "position": 14.3}, {"date": "2026-05-02", "clicks": 40, "impressions": 1590, "ctr": 2.52, "position": 14.5}, {"date": "2026-05-03", "clicks": 34, "impressions": 1360, "ctr": 2.5, "position": 14.6}, {"date": "2026-05-04", "clicks": 26, "impressions": 1040, "ctr": 2.5, "position": 14.9}, {"date": "2026-05-05", "clicks": 28, "impressions": 1120, "ctr": 2.5, "position": 14.8}, {"date": "2026-05-06", "clicks": 42, "impressions": 1680, "ctr": 2.5, "position": 14.4}, {"date": "2026-05-07", "clicks": 47, "impressions": 1870, "ctr": 2.51, "position": 14.2}, {"date": "2026-05-08", "clicks": 40, "impressions": 1600, "ctr": 2.5, "position": 14.5}, {"date": "2026-05-09", "clicks": 37, "impressions": 1480, "ctr": 2.5, "position": 14.6}, {"date": "2026-05-10", "clicks": 31, "impressions": 1240, "ctr": 2.5, "position": 14.7}, {"date": "2026-05-11", "clicks": 23, "impressions": 920, "ctr": 2.5, "position": 15.0}, {"date": "2026-05-12", "clicks": 25, "impressions": 1000, "ctr": 2.5, "position": 15.0}, {"date": "2026-05-13", "clicks": 37, "impressions": 1480, "ctr": 2.5, "position": 14.6}, {"date": "2026-05-14", "clicks": 42, "impressions": 1680, "ctr": 2.5, "position": 14.4}, {"date": "2026-05-15", "clicks": 36, "impressions": 1440, "ctr": 2.5, "position": 14.6}, {"date": "2026-05-16", "clicks": 33, "impressions": 1320, "ctr": 2.5, "position": 14.7}, {"date": "2026-05-17", "clicks": 27, "impressions": 1080, "ctr": 2.5, "position": 14.9}, {"date": "2026-05-18", "clicks": 19, "impressions": 760, "ctr": 2.5, "position": 15.2}, {"date": "2026-05-19", "clicks": 21, "impressions": 840, "ctr": 2.5, "position": 15.1}, {"date": "2026-05-20", "clicks": 32, "impressions": 1280, "ctr": 2.5, "position": 14.8}, {"date": "2026-05-21", "clicks": 36, "impressions": 1440, "ctr": 2.5, "position": 14.6}, {"date": "2026-05-22", "clicks": 30, "impressions": 1200, "ctr": 2.5, "position": 14.8}, {"date": "2026-05-23", "clicks": 27, "impressions": 1080, "ctr": 2.5, "position": 15.0}, {"date": "2026-05-24", "clicks": 21, "impressions": 840, "ctr": 2.5, "position": 15.1}, {"date": "2026-05-25", "clicks": 14, "impressions": 560, "ctr": 2.5, "position": 15.4}, {"date": "2026-05-26", "clicks": 16, "impressions": 640, "ctr": 2.5, "position": 15.3}, {"date": "2026-05-27", "clicks": 25, "impressions": 1000, "ctr": 2.5, "position": 15.0}, {"date": "2026-05-28", "clicks": 29, "impressions": 1160, "ctr": 2.5, "position": 14.9}, {"date": "2026-05-29", "clicks": 22, "impressions": 880, "ctr": 2.5, "position": 15.1}, {"date": "2026-05-30", "clicks": 20, "impressions": 800, "ctr": 2.5, "position": 15.2}, {"date": "2026-05-31", "clicks": 15, "impressions": 600, "ctr": 2.5, "position": 15.4}, {"date": "2026-06-01", "clicks": 10, "impressions": 400, "ctr": 2.5, "position": 15.6}, {"date": "2026-06-02", "clicks": 12, "impressions": 480, "ctr": 2.5, "position": 15.5}, {"date": "2026-06-03", "clicks": 18, "impressions": 720, "ctr": 2.5, "position": 15.3}, {"date": "2026-06-04", "clicks": 22, "impressions": 880, "ctr": 2.5, "position": 15.1}, {"date": "2026-06-05", "clicks": 16, "impressions": 640, "ctr": 2.5, "position": 15.3}, {"date": "2026-06-06", "clicks": 13, "impressions": 520, "ctr": 2.5, "position": 15.5}, {"date": "2026-06-07", "clicks": 8, "impressions": 320, "ctr": 2.5, "position": 15.8}, {"date": "2026-06-08", "clicks": 6, "impressions": 240, "ctr": 2.5, "position": 16.0}, {"date": "2026-06-09", "clicks": 9, "impressions": 360, "ctr": 2.5, "position": 15.7}, {"date": "2026-06-10", "clicks": 13, "impressions": 520, "ctr": 2.5, "position": 15.5}, {"date": "2026-06-11", "clicks": 10, "impressions": 400, "ctr": 2.5, "position": 15.7}, {"date": "2026-06-12", "clicks": 8, "impressions": 320, "ctr": 2.5, "position": 15.8}, {"date": "2026-06-13", "clicks": 5, "impressions": 200, "ctr": 2.5, "position": 16.1}];
     const exploreCtrScatter = [{"query": "youtube seo 2025", "position": 6.1, "ctr": 0.01, "impressions": 12000, "clicks": 1}, {"query": "free seo tool online", "position": 4.2, "ctr": 0.04, "impressions": 8200, "clicks": 3}, {"query": "instagram seo tips", "position": 5.3, "ctr": 0.04, "impressions": 5400, "clicks": 2}, {"query": "google search console analysis", "position": 3.2, "ctr": 6.49, "impressions": 4810, "clicks": 312}, {"query": "seo insights tool", "position": 4.1, "ctr": 5.13, "impressions": 3920, "clicks": 201}, {"query": "how to improve ctr google search", "position": 3.5, "ctr": 0.21, "impressions": 3800, "clicks": 8}, {"query": "seo data analysis", "position": 5.3, "ctr": 4.11, "impressions": 3210, "clicks": 132}, {"query": "what is striking distance seo", "position": 2.8, "ctr": 0.17, "impressions": 2900, "clicks": 5}, {"query": "gsc keyword research", "position": 6.7, "ctr": 3.45, "impressions": 2840, "clicks": 98}, {"query": "keyword cannibalization checker", "position": 7.2, "ctr": 3.94, "impressions": 2210, "clicks": 87}, {"query": "search analytics api", "position": 6.1, "ctr": 4.19, "impressions": 2100, "clicks": 88}, {"query": "technical seo audit", "position": 8.1, "ctr": 3.84, "impressions": 1980, "clicks": 76}, {"query": "search console ctr optimization", "position": 9.4, "ctr": 3.09, "impressions": 1750, "clicks": 54}, {"query": "gsc data python", "position": 7.8, "ctr": 3.81, "impressions": 1680, "clicks": 64}, {"query": "content decay seo", "position": 10.8, "ctr": 2.65, "impressions": 1620, "clicks": 43}, {"query": "core web vitals checker", "position": 11.2, "ctr": 2.53, "impressions": 1540, "clicks": 39}, {"query": "keyword ranking tracker", "position": 9.0, "ctr": 3.59, "impressions": 1420, "clicks": 51}, {"query": "seo analysis python", "position": 12.1, "ctr": 2.46, "impressions": 1380, "clicks": 34}, {"query": "seo monitoring tool", "position": 9.5, "ctr": 3.59, "impressions": 1310, "clicks": 47}, {"query": "google search console api python", "position": 13.0, "ctr": 2.17, "impressions": 1290, "clicks": 28}, {"query": "b2b seo strategy", "position": 11.0, "ctr": 3.06, "impressions": 1240, "clicks": 38}, {"query": "striking distance keywords", "position": 14.3, "ctr": 1.86, "impressions": 1180, "clicks": 22}, {"query": "saas seo", "position": 12.5, "ctr": 2.64, "impressions": 1100, "clicks": 29}, {"query": "seo recommendations tool", "position": 15.0, "ctr": 1.65, "impressions": 1090, "clicks": 18}, {"query": "website seo report", "position": 16.2, "ctr": 1.43, "impressions": 980, "clicks": 14}, {"query": "click through rate seo", "position": 13.8, "ctr": 2.42, "impressions": 950, "clicks": 23}, {"query": "meta description optimization", "position": 17.5, "ctr": 1.26, "impressions": 870, "clicks": 11}, {"query": "page title seo best practices", "position": 18.1, "ctr": 1.18, "impressions": 760, "clicks": 9}];
     const exploreBenchmark  = [{"position": 1, "expected_ctr": 28.4}, {"position": 2, "expected_ctr": 14.8}, {"position": 3, "expected_ctr": 10.3}, {"position": 4, "expected_ctr": 7.3}, {"position": 5, "expected_ctr": 5.3}, {"position": 6, "expected_ctr": 4.0}, {"position": 7, "expected_ctr": 3.1}, {"position": 8, "expected_ctr": 2.5}, {"position": 9, "expected_ctr": 2.1}, {"position": 10, "expected_ctr": 1.8}, {"position": 11, "expected_ctr": 1.5}, {"position": 12, "expected_ctr": 1.3}, {"position": 13, "expected_ctr": 1.2}, {"position": 14, "expected_ctr": 1.1}, {"position": 15, "expected_ctr": 1.0}, {"position": 16, "expected_ctr": 0.9}, {"position": 17, "expected_ctr": 0.8}, {"position": 18, "expected_ctr": 0.7}, {"position": 19, "expected_ctr": 0.7}, {"position": 20, "expected_ctr": 0.6}];
+
+    // Keyword opportunities (all figures from Python pipeline)
+    const keywordOpportunities = [{"keyword": "google search console setup", "source": "ads", "search_volume": 4400, "competition": "LOW", "competition_index": 18, "trend": [4200, 4300, 4500, 4600, 4400, 4200, 3900, 3500, 3900, 4100, 4400, 4500], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 81.88, "recommended_action": "content_gap"}, {"keyword": "seo content decay", "source": "ads", "search_volume": 720, "competition": "LOW", "competition_index": 11, "trend": [680, 700, 730, 750, 730, 710, 680, 620, 660, 700, 720, 740], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.4286, "opportunity_score": 78.94, "recommended_action": "content_gap"}, {"keyword": "seo keyword cannibalization fix", "source": "ads", "search_volume": 590, "competition": "LOW", "competition_index": 8, "trend": [550, 570, 600, 620, 600, 590, 560, 510, 540, 570, 590, 610], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.4286, "opportunity_score": 78.86, "recommended_action": "content_gap"}, {"keyword": "core web vitals optimization", "source": "ads", "search_volume": 5400, "competition": "MEDIUM", "competition_index": 42, "trend": [5000, 5200, 5500, 5800, 5600, 5400, 5000, 4500, 5000, 5200, 5400, 5600], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 78.16, "recommended_action": "content_gap"}, {"keyword": "page speed seo impact", "source": "ads", "search_volume": 2100, "competition": "LOW", "competition_index": 27, "trend": [2000, 2100, 2200, 2300, 2200, 2100, 1900, 1700, 1900, 2000, 2100, 2200], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 77.97, "recommended_action": "content_gap"}, {"keyword": "content optimization guide", "source": "ads", "search_volume": 880, "competition": "LOW", "competition_index": 14, "trend": [820, 860, 900, 940, 900, 860, 800, 720, 800, 840, 880, 920], "intent": "informational", "intent_evidence": "anleitung/guide", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 76.17, "recommended_action": "content_gap"}, {"keyword": "click through rate improvement", "source": "ads", "search_volume": 1200, "competition": "LOW", "competition_index": 22, "trend": [1100, 1200, 1300, 1300, 1200, 1100, 1000, 900, 1000, 1100, 1200, 1300], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 75.46, "recommended_action": "content_gap"}, {"keyword": "technical seo audit checklist", "source": "ads", "search_volume": 3600, "competition": "MEDIUM", "competition_index": 48, "trend": [3400, 3500, 3700, 3800, 3600, 3500, 3200, 2900, 3200, 3400, 3600, 3700], "intent": "informational", "intent_evidence": "checklist", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 74.97, "recommended_action": "content_gap"}, {"keyword": "google ads keyword planner alternative", "source": "ads", "search_volume": 1100, "competition": "MEDIUM", "competition_index": 44, "trend": [1000, 1050, 1100, 1150, 1100, 1050, 970, 870, 970, 1020, 1100, 1150], "intent": "commercial", "intent_evidence": "alternative", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 71.03, "recommended_action": "content_gap"}, {"keyword": "keyword research tool free", "source": "ads", "search_volume": 14800, "competition": "HIGH", "competition_index": 91, "trend": [14000, 14500, 15000, 15500, 15000, 14800, 13500, 12000, 13500, 14000, 14800, 15200], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 70.11, "recommended_action": "content_gap"}, {"keyword": "how to improve seo ranking", "source": "ads", "search_volume": 12100, "competition": "HIGH", "competition_index": 89, "trend": [11500, 12000, 12500, 12800, 12200, 11800, 11000, 9800, 11000, 11500, 12100, 12500], "intent": "commercial", "intent_evidence": "ranking", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 69.77, "recommended_action": "content_gap"}, {"keyword": "google search console alternative", "source": "ads", "search_volume": 1900, "competition": "MEDIUM", "competition_index": 55, "trend": [1700, 1800, 1900, 2000, 2100, 1900, 1700, 1500, 1800, 1900, 2000, 2100], "intent": "commercial", "intent_evidence": "alternative", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 69.13, "recommended_action": "content_gap"}, {"keyword": "seo reporting software", "source": "ads", "search_volume": 1600, "competition": "MEDIUM", "competition_index": 61, "trend": [1500, 1600, 1700, 1700, 1600, 1600, 1400, 1200, 1400, 1500, 1600, 1700], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 68.34, "recommended_action": "content_gap"}, {"keyword": "best seo tools for small business", "source": "ads", "search_volume": 2900, "competition": "HIGH", "competition_index": 78, "trend": [2700, 2900, 3100, 3000, 2900, 2800, 2500, 2200, 2500, 2700, 2900, 3000], "intent": "commercial", "intent_evidence": "beste/top", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 66.57, "recommended_action": "content_gap"}, {"keyword": "seo analysis tool", "source": "ads", "search_volume": 2400, "competition": "HIGH", "competition_index": 82, "trend": [2200, 2300, 2400, 2500, 2600, 2400, 2200, 1900, 2100, 2300, 2400, 2500], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 64.78, "recommended_action": "content_gap"}, {"keyword": "content optimization for seo", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.4286, "opportunity_score": 51.79, "recommended_action": "monitor"}, {"keyword": "seo analysis python script", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 50.36, "recommended_action": "monitor"}, {"keyword": "seo analysis free tool", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 50.36, "recommended_action": "monitor"}, {"keyword": "seo analysis report example", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "informational", "intent_evidence": "beispiel/example", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 50.36, "recommended_action": "monitor"}, {"keyword": "keyword research without paid tools", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 50.36, "recommended_action": "monitor"}, {"keyword": "keyword research spreadsheet template", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 50.36, "recommended_action": "monitor"}, {"keyword": "technical seo checklist 2025", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "informational", "intent_evidence": "checklist", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 50.36, "recommended_action": "monitor"}, {"keyword": "technical seo audit template", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 50.36, "recommended_action": "monitor"}, {"keyword": "click through rate google search console", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.2857, "opportunity_score": 50.36, "recommended_action": "monitor"}, {"keyword": "google search console impressions but no clicks", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 48.93, "recommended_action": "monitor"}, {"keyword": "google search console not showing data", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 48.93, "recommended_action": "monitor"}, {"keyword": "google search console api python example", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "informational", "intent_evidence": "beispiel/example", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 48.93, "recommended_action": "monitor"}, {"keyword": "content optimization checklist", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "informational", "intent_evidence": "checklist", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 48.93, "recommended_action": "monitor"}, {"keyword": "core web vitals lcp fix", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 48.93, "recommended_action": "monitor"}, {"keyword": "core web vitals cls score", "source": "autocomplete", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": null, "icp_relevance": 0.1429, "opportunity_score": 48.93, "recommended_action": "monitor"}, {"keyword": "what is striking distance seo", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "informational", "intent_evidence": "was ist / what is", "our_current_position": 2.8, "icp_relevance": 0.2857, "opportunity_score": 43.49, "recommended_action": "optimize_ranking"}, {"keyword": "how to improve ctr google search", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "informational", "intent_evidence": "wie/how", "our_current_position": 3.5, "icp_relevance": 0.1429, "opportunity_score": 41.6, "recommended_action": "optimize_ranking"}, {"keyword": "technical seo audit", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 8.1, "icp_relevance": 0.2857, "opportunity_score": 39.96, "recommended_action": "optimize_ranking"}, {"keyword": "content decay seo", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 10.8, "icp_relevance": 0.4286, "opportunity_score": 39.59, "recommended_action": "optimize_ranking"}, {"keyword": "b2b seo strategy", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 11.0, "icp_relevance": 0.4286, "opportunity_score": 39.45, "recommended_action": "optimize_ranking"}, {"keyword": "search console ctr optimization", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 9.4, "icp_relevance": 0.2857, "opportunity_score": 39.09, "recommended_action": "optimize_ranking"}, {"keyword": "seo monitoring tool", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 9.5, "icp_relevance": 0.2857, "opportunity_score": 39.02, "recommended_action": "optimize_ranking"}, {"keyword": "keyword ranking tracker", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "commercial", "intent_evidence": "ranking", "our_current_position": 9.0, "icp_relevance": 0.1429, "opportunity_score": 37.93, "recommended_action": "optimize_conversion"}, {"keyword": "click through rate seo", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 13.8, "icp_relevance": 0.4286, "opportunity_score": 37.59, "recommended_action": "optimize_ranking"}, {"keyword": "seo analysis python", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 12.1, "icp_relevance": 0.2857, "opportunity_score": 37.29, "recommended_action": "optimize_ranking"}, {"keyword": "saas seo", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 12.5, "icp_relevance": 0.2857, "opportunity_score": 37.02, "recommended_action": "optimize_ranking"}, {"keyword": "core web vitals checker", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 11.2, "icp_relevance": 0.1429, "opportunity_score": 36.46, "recommended_action": "optimize_ranking"}, {"keyword": "website seo report", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "navigational", "intent_evidence": "homepage", "our_current_position": 16.2, "icp_relevance": 0.4286, "opportunity_score": 35.99, "recommended_action": "optimize_ranking"}, {"keyword": "seo recommendations tool", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 15.0, "icp_relevance": 0.2857, "opportunity_score": 35.36, "recommended_action": "optimize_ranking"}, {"keyword": "google search console api python", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 13.0, "icp_relevance": 0.1429, "opportunity_score": 35.26, "recommended_action": "optimize_ranking"}, {"keyword": "striking distance keywords", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 14.3, "icp_relevance": 0.1429, "opportunity_score": 34.4, "recommended_action": "optimize_ranking"}, {"keyword": "page title seo best practices", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "commercial", "intent_evidence": "beste/top", "our_current_position": 18.1, "icp_relevance": 0.2857, "opportunity_score": 33.29, "recommended_action": "optimize_ranking"}, {"keyword": "meta description optimization", "source": "gsc", "search_volume": null, "competition": null, "competition_index": null, "trend": [], "intent": "unknown", "intent_evidence": "", "our_current_position": 17.5, "icp_relevance": 0.1429, "opportunity_score": 32.26, "recommended_action": "optimize_ranking"}];
 
     /* ----------------------------------------------------------
        Colour palette
@@ -5120,6 +5570,214 @@
     }
 
     /* ----------------------------------------------------------
+       Keyword Opportunities table
+    ---------------------------------------------------------- */
+
+    const INTENT_LABELS = {
+      informational: 'Informational',
+      commercial:    'Commercial',
+      transactional: 'Transactional',
+      navigational:  'Navigational',
+      unknown:       'Unknown',
+    };
+
+    const ACTION_LABELS = {
+      content_gap:          'Create content',
+      optimize_ranking:     'Optimize ranking',
+      optimize_conversion:  'Optimize conversion',
+      monitor:              'Monitor',
+    };
+
+    const COMP_LABELS = {
+      LOW:    { label: 'Low',    cls: 'tag-green' },
+      MEDIUM: { label: 'Medium', cls: 'tag-amber' },
+      HIGH:   { label: 'High',   cls: 'tag-red' },
+    };
+
+    let kwState = {
+      sortCol: 'opportunity_score',
+      sortDir: -1,
+      filter: '',
+      intentFilter: '',
+      actionFilter: '',
+      sourceFilter: '',
+      showAll: false,
+    };
+
+    function renderKwIntentBadge(intent) {
+      const label = INTENT_LABELS[intent] || intent;
+      return `<span class="kw-intent-badge kw-intent-${intent}">${_esc(label)}</span>`;
+    }
+
+    function renderKwOppBar(score) {
+      const pct = Math.min(100, Math.max(0, score));
+      return `<div class="opp-bar-wrap">
+        <div class="opp-bar"><div class="opp-bar-fill" style="width:${pct}%"></div></div>
+        <span class="opp-score-num">${score.toFixed(0)}</span>
+      </div>`;
+    }
+
+    function renderKwRow(kw) {
+      const volStr = kw.search_volume != null
+        ? _fmtN(kw.search_volume)
+        : '<span class="kw-vol-null">n/a</span>';
+
+      const compInfo = kw.competition ? (COMP_LABELS[kw.competition] || {label: kw.competition, cls: 'tag-neu'}) : null;
+      const compStr  = compInfo
+        ? `<span class="tag ${compInfo.cls}">${compInfo.label}${kw.competition_index != null ? ' (' + kw.competition_index + ')' : ''}</span>`
+        : '<span class="text-faint">—</span>';
+
+      const posStr = kw.our_current_position != null
+        ? kw.our_current_position.toFixed(1)
+        : '<span class="text-faint">—</span>';
+
+      const actionLabel = ACTION_LABELS[kw.recommended_action] || kw.recommended_action || '—';
+
+      const srcCls = 'kw-source-' + (kw.source || 'gsc');
+      const srcLabel = kw.source === 'ads' ? 'Ads' : kw.source === 'autocomplete' ? 'Suggest' : 'GSC';
+
+      return `<tr>
+        <td class="cell-main" title="${_esc(kw.keyword)}">${_esc(kw.keyword)}
+          <span class="kw-source-badge ${srcCls}" style="margin-left:6px;">${srcLabel}</span>
+        </td>
+        <td style="text-align:center;">${renderKwIntentBadge(kw.intent || 'unknown')}</td>
+        <td class="cell-num">${volStr}</td>
+        <td style="text-align:center;">${compStr}</td>
+        <td class="cell-num">${posStr}</td>
+        <td><span style="font-size:12px; color:var(--color-text-muted);">${_esc(actionLabel)}</span></td>
+        <td>${renderKwOppBar(kw.opportunity_score || 0)}</td>
+      </tr>`;
+    }
+
+    function filterAndSortKeywords() {
+      let rows = keywordOpportunities || [];
+
+      // Text filter
+      if (kwState.filter) {
+        rows = rows.filter(r => (r.keyword || '').toLowerCase().includes(kwState.filter));
+      }
+      // Intent filter
+      if (kwState.intentFilter) {
+        rows = rows.filter(r => r.intent === kwState.intentFilter);
+      }
+      // Action filter
+      if (kwState.actionFilter) {
+        rows = rows.filter(r => r.recommended_action === kwState.actionFilter);
+      }
+      // Source filter
+      if (kwState.sourceFilter) {
+        rows = rows.filter(r => r.source === kwState.sourceFilter);
+      }
+
+      // Sort
+      const col = kwState.sortCol;
+      rows = [...rows].sort((a, b) => {
+        const av = a[col]; const bv = b[col];
+        if (av == null && bv == null) return 0;
+        if (av == null) return kwState.sortDir;   // nulls last
+        if (bv == null) return -kwState.sortDir;
+        if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * kwState.sortDir;
+        return String(av).localeCompare(String(bv)) * kwState.sortDir;
+      });
+
+      return rows;
+    }
+
+    function renderKwTable() {
+      const tbody = document.getElementById('tbody-keywords');
+      if (!tbody) return;
+
+      const sorted = filterAndSortKeywords();
+      const total  = sorted.length;
+      const shown  = kwState.showAll ? sorted : sorted.slice(0, PAGE_SIZE);
+
+      tbody.innerHTML = shown.map(renderKwRow).join('');
+
+      // Meta
+      const metaEl = document.getElementById('kw-meta');
+      if (metaEl) {
+        const hasFilter = kwState.filter || kwState.intentFilter || kwState.actionFilter || kwState.sourceFilter;
+        metaEl.textContent = hasFilter
+          ? `${total} of ${keywordOpportunities.length} keywords`
+          : `${keywordOpportunities.length} keywords`;
+      }
+
+      // Show-more
+      const smWrap = document.getElementById('showmore-keywords');
+      if (smWrap) {
+        if (!kwState.showAll && total > PAGE_SIZE) {
+          smWrap.style.display = 'flex';
+          const btn = smWrap.querySelector('.itbl-show-btn');
+          if (btn) btn.textContent = `Show all ${total} keywords`;
+        } else {
+          smWrap.style.display = 'none';
+        }
+      }
+    }
+
+    function initKwTable() {
+      if (!keywordOpportunities || !keywordOpportunities.length) return;
+
+      // Search input
+      const searchEl = document.getElementById('kw-search');
+      if (searchEl) {
+        searchEl.addEventListener('input', () => {
+          kwState.filter = searchEl.value.toLowerCase().trim();
+          kwState.showAll = false;
+          renderKwTable();
+        });
+      }
+
+      // Filter selects
+      ['kw-intent-filter', 'kw-action-filter', 'kw-source-filter'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('change', () => {
+          if (id === 'kw-intent-filter')  kwState.intentFilter  = el.value;
+          if (id === 'kw-action-filter')  kwState.actionFilter  = el.value;
+          if (id === 'kw-source-filter')  kwState.sourceFilter  = el.value;
+          kwState.showAll = false;
+          renderKwTable();
+        });
+      });
+
+      // Column sort headers
+      const tableEl = document.getElementById('tbl-keywords');
+      if (tableEl) {
+        tableEl.querySelectorAll('th[data-col]').forEach(th => {
+          th.addEventListener('click', () => {
+            const col = th.dataset.col;
+            if (kwState.sortCol === col) {
+              kwState.sortDir *= -1;
+            } else {
+              kwState.sortCol = col;
+              kwState.sortDir = th.dataset.type === 'num' ? -1 : 1;
+            }
+            tableEl.querySelectorAll('th[data-col]').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+            th.classList.add(kwState.sortDir === 1 ? 'sort-asc' : 'sort-desc');
+            renderKwTable();
+          });
+        });
+        // Initial sort indicator
+        const initTh = tableEl.querySelector('th[data-col="opportunity_score"]');
+        if (initTh) initTh.classList.add('sort-desc');
+      }
+
+      // Show-more button
+      const smWrap = document.getElementById('showmore-keywords');
+      if (smWrap) {
+        const btn = smWrap.querySelector('.itbl-show-btn');
+        if (btn) btn.addEventListener('click', () => {
+          kwState.showAll = true;
+          renderKwTable();
+          smWrap.style.display = 'none';
+        });
+      }
+
+      renderKwTable();
+    }
+
+    /* ----------------------------------------------------------
        Boot
     ---------------------------------------------------------- */
     document.addEventListener('DOMContentLoaded', function () {
@@ -5140,6 +5798,9 @@
 
       // Interactive tables
       tableDefs.forEach(initTable);
+
+      // Keyword opportunities table
+      initKwTable();
     });
 
   }());

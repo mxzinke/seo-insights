@@ -94,12 +94,34 @@ for i, rec in enumerate(recs[:5], 1):
 
 print()
 print("  All contract keys present:", end=" ")
-required_keys = {"meta", "icp", "summary", "recommendations", "analyses", "charts", "explore"}
+required_keys = {"meta", "icp", "summary", "recommendations", "analyses", "charts", "explore", "keywords"}
 missing = required_keys - set(data.keys())
 if missing:
     print(f"MISSING: {missing}", file=sys.stderr)
     sys.exit(1)
 print("YES")
+
+# Validate keyword research section
+keywords = data.get("keywords", {})
+kw_opps = keywords.get("opportunities", [])
+print(f"  Keywords section enabled: {keywords.get('enabled', False)}")
+print(f"  Keyword opportunities: {len(kw_opps)}")
+print(f"  Source note: {keywords.get('source_note', 'N/A')}")
+if kw_opps:
+    top_kw = kw_opps[0]
+    print(f"  Top keyword: {top_kw.get('keyword')!r}")
+    print(f"    Intent: {top_kw.get('intent')}")
+    print(f"    Score: {top_kw.get('opportunity_score')}")
+    print(f"    Source: {top_kw.get('source')}")
+    # Determinism check: opportunity_score must be a number from the pipeline
+    assert isinstance(top_kw.get('opportunity_score'), (int, float)), \
+        "FAIL: opportunity_score must be a number"
+    assert top_kw.get('source') in ('gsc', 'ads', 'autocomplete'), \
+        f"FAIL: unexpected source: {top_kw.get('source')}"
+    print("  Determinism check: opportunity_score is numeric from pipeline: OK")
+
+if not kw_opps:
+    print("WARNING: No keyword opportunities generated (check ICP + demo fixtures)", file=sys.stderr)
 
 print()
 print("  Validation PASSED")

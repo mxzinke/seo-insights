@@ -43,6 +43,7 @@ CATEGORIES = {
     "cannibalization",
     "ctr_optimization",
     "decay_recovery",
+    "keyword_opportunity",
 }
 
 # ICP relevance score below which keyword-centric recommendations are skipped.
@@ -298,6 +299,115 @@ def _from_onpage(findings: list[dict], icp: dict) -> list[dict]:
     return recs
 
 
+def _from_keywords(keywords_result: dict, icp: dict) -> list[dict]:
+    """
+    Keyword opportunity recommendations from keyword research results.
+
+    Only surfaces strong signals:
+      - content_gap: high opportunity_score + no current rank (position is null)
+      - optimize_ranking: high opportunity_score + we rank 8–20
+    ICP relevance gate: icp_relevance must be > 0.
+    """
+    if not keywords_result or not keywords_result.get("enabled"):
+        return []
+
+    opportunities = keywords_result.get("opportunities", [])
+    recs = []
+    content_gap_count = 0
+    optimize_count = 0
+
+    for kw in opportunities:
+        if content_gap_count >= 5 and optimize_count >= 5:
+            break
+
+        keyword = kw.get("keyword", "")
+        score = kw.get("opportunity_score", 0)
+        icp_rel = kw.get("icp_relevance", 0.0)
+        position = kw.get("our_current_position")
+        action = kw.get("recommended_action", "monitor")
+        volume = kw.get("search_volume")  # may be None (free layer)
+        intent = kw.get("intent", "unknown")
+        competition = kw.get("competition")
+        comp_index = kw.get("competition_index")
+
+        # ICP gate
+        if icp_rel <= 0.0:
+            continue
+
+        # Only surface strong opportunities
+        if score < 40:
+            continue
+
+        # Build evidence dict — all figures come from the keyword research pipeline
+        evidence = {
+            "keyword": keyword,
+            "opportunity_score": score,
+            "icp_relevance": icp_rel,
+            "intent": intent,
+            "our_current_position": position,
+            "search_volume": volume,
+            "competition": competition,
+            "competition_index": comp_index,
+        }
+
+        if action == "content_gap" and content_gap_count < 5:
+            content_gap_count += 1
+            vol_note = f"{volume:,} avg monthly searches" if volume else "volume unavailable (free mode)"
+            comp_note = (
+                f"competition: {competition} ({comp_index}/100)"
+                if competition and comp_index is not None
+                else "competition data unavailable"
+            )
+            recs.append(_rec(
+                rec_id=f"kw_gap_{content_gap_count:03d}",
+                title=f'Content gap: create content targeting "{keyword}"',
+                category="content_gap",
+                action=(
+                    f'Create a dedicated page or article targeting "{keyword}" '
+                    f"({vol_note}, {comp_note}). "
+                    f"Intent: {intent}. We currently have no ranking for this keyword."
+                ),
+                impact=min(5, max(2, round(score / 20))),
+                effort=3,
+                evidence=[evidence],
+                detail=(
+                    f'"{keyword}" has an opportunity score of {score:.0f}/100 '
+                    f"with {vol_note} and {comp_note}. "
+                    f"We have zero presence for this keyword — creating relevant content "
+                    f"aligned with {intent} intent could capture this demand. "
+                    f"ICP relevance: {icp_rel:.2f}. "
+                    f"Source: keyword research pipeline (no numbers invented by model)."
+                ),
+            ))
+        elif action in ("optimize_ranking", "optimize_conversion") and optimize_count < 5:
+            if position is None or position < 8 or position > 30:
+                continue
+            optimize_count += 1
+            vol_note = f"{volume:,} avg monthly searches" if volume else "volume unavailable"
+            recs.append(_rec(
+                rec_id=f"kw_opt_{optimize_count:03d}",
+                title=f'Improve ranking for "{keyword}" (pos {position:.1f})',
+                category="keyword_opportunity",
+                action=(
+                    f'Strengthen content targeting "{keyword}": '
+                    f"update the page at position {position:.1f}, add internal links, "
+                    f"expand semantic coverage ({vol_note})."
+                ),
+                impact=min(5, max(2, round(score / 20))),
+                effort=2,
+                evidence=[evidence],
+                detail=(
+                    f'"{keyword}" ranks at position {position:.1f} with {vol_note}. '
+                    f"Opportunity score: {score:.0f}/100. "
+                    f"Improving this ranking toward the top 3 could meaningfully increase "
+                    f"clicks given the search volume. ICP relevance: {icp_rel:.2f}. "
+                    f"Source: keyword research pipeline (all figures from Python pipeline)."
+                ),
+            ))
+
+    return recs
+
+
 def _from_cwv(findings: list[dict] | None, icp: dict) -> list[dict]:
     """Core Web Vitals: performance fixes for failing pages."""
     if not findings:
@@ -337,16 +447,21 @@ def _from_cwv(findings: list[dict] | None, icp: dict) -> list[dict]:
 # Main entry point
 # ---------------------------------------------------------------------------
 
-def generate_recommendations(analyses: dict, icp: dict | None = None) -> list[dict]:
+def generate_recommendations(
+    analyses: dict,
+    icp: dict | None = None,
+    keywords_result: dict | None = None,
+) -> list[dict]:
     """
     Produce a sorted list of recommendations from all analysis outputs.
 
     Parameters
     ----------
-    analyses : Dict with keys matching the analysis module names:
-               striking_distance, cannibalization, ctr_outliers, content_decay,
-               onpage, core_web_vitals, wow.
-    icp      : Validated ICP dict (or None to skip ICP filtering).
+    analyses         : Dict with keys matching the analysis module names:
+                       striking_distance, cannibalization, ctr_outliers, content_decay,
+                       onpage, core_web_vitals, wow.
+    icp              : Validated ICP dict (or None to skip ICP filtering).
+    keywords_result  : Output from keywords.research.run_research() (optional).
 
     Returns
     -------
@@ -361,6 +476,7 @@ def generate_recommendations(analyses: dict, icp: dict | None = None) -> list[di
     all_recs.extend(_from_content_decay(analyses.get("content_decay", []), icp))
     all_recs.extend(_from_onpage(analyses.get("onpage", []), icp))
     all_recs.extend(_from_cwv(analyses.get("core_web_vitals"), icp))
+    all_recs.extend(_from_keywords(keywords_result or {}, icp))
 
     # Sort by priority desc, then impact desc, then absolute click opportunity
     # desc — so among equally efficient actions, the biggest real win surfaces

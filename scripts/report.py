@@ -98,6 +98,7 @@ def prepare_template_context(data: dict) -> dict:
     charts = data.get("charts", {})
     icp = data.get("icp") or {}
     explore = data.get("explore") or {}
+    keywords_data = data.get("keywords") or {"enabled": False, "source_note": "", "opportunities": []}
 
     wow = summary.get("wow") or {}
 
@@ -106,13 +107,14 @@ def prepare_template_context(data: dict) -> dict:
 
     # Category display names and order
     category_meta = {
-        "quick_win":        {"label": "Quick Win",         "icon": "⚡", "order": 0},
-        "ctr_optimization": {"label": "CTR Optimization",  "icon": "↑",  "order": 1},
-        "on_page":          {"label": "On-Page",           "icon": "📝", "order": 2},
-        "cannibalization":  {"label": "Cannibalization",   "icon": "⚔",  "order": 3},
-        "decay_recovery":   {"label": "Decay Recovery",    "icon": "📉", "order": 4},
-        "technical_seo":    {"label": "Technical SEO",     "icon": "⚙",  "order": 5},
-        "content_gap":      {"label": "Content Gap",       "icon": "🔍", "order": 6},
+        "quick_win":            {"label": "Quick Win",            "icon": "⚡", "order": 0},
+        "ctr_optimization":     {"label": "CTR Optimization",     "icon": "↑",  "order": 1},
+        "on_page":              {"label": "On-Page",              "icon": "📝", "order": 2},
+        "cannibalization":      {"label": "Cannibalization",      "icon": "⚔",  "order": 3},
+        "decay_recovery":       {"label": "Decay Recovery",       "icon": "📉", "order": 4},
+        "technical_seo":        {"label": "Technical SEO",        "icon": "⚙",  "order": 5},
+        "content_gap":          {"label": "Content Gap",          "icon": "🔍", "order": 6},
+        "keyword_opportunity":  {"label": "Keyword Opportunity",  "icon": "🔑", "order": 7},
     }
 
     # Impact labels
@@ -311,14 +313,21 @@ def prepare_template_context(data: dict) -> dict:
 
         # Helpers
         "category_meta": {
-            "quick_win":        {"label": "Quick Win",         "css": "cat-quick-win"},
-            "ctr_optimization": {"label": "CTR Optimization",  "css": "cat-ctr"},
-            "on_page":          {"label": "On-Page",           "css": "cat-onpage"},
-            "cannibalization":  {"label": "Cannibalization",   "css": "cat-cannibalization"},
-            "decay_recovery":   {"label": "Decay Recovery",    "css": "cat-decay"},
-            "technical_seo":    {"label": "Technical SEO",     "css": "cat-technical"},
-            "content_gap":      {"label": "Content Gap",       "css": "cat-content-gap"},
+            "quick_win":           {"label": "Quick Win",           "css": "cat-quick-win"},
+            "ctr_optimization":    {"label": "CTR Optimization",    "css": "cat-ctr"},
+            "on_page":             {"label": "On-Page",             "css": "cat-onpage"},
+            "cannibalization":     {"label": "Cannibalization",     "css": "cat-cannibalization"},
+            "decay_recovery":      {"label": "Decay Recovery",      "css": "cat-decay"},
+            "technical_seo":       {"label": "Technical SEO",       "css": "cat-technical"},
+            "content_gap":         {"label": "Content Gap",         "css": "cat-content-gap"},
+            "keyword_opportunity": {"label": "Keyword Opportunity", "css": "cat-keyword"},
         },
+
+        # Keyword opportunities for the dedicated section
+        "keywords_json": json.dumps(keywords_data.get("opportunities", [])[:100]),
+        "keywords_enabled": keywords_data.get("enabled", False),
+        "keywords_source_note": keywords_data.get("source_note", ""),
+        "keywords_count": len(keywords_data.get("opportunities", [])),
     }
 
 

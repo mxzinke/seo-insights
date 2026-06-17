@@ -18,14 +18,17 @@ description: >
 ## Philosophy
 
 Every number in the output is computed **deterministically in Python** from
-raw Google Search Console data. No numbers are invented or estimated by an
-LLM. The LLM role is narration only: reading `report_data.json` and
-presenting findings in plain language. Never invent click counts, positions,
-CTR values, or growth percentages — they must come from the JSON.
+raw data sources (Google Search Console, Google Ads API, rule-based
+classifiers). No numbers are invented or estimated by an LLM. The LLM role
+is narration only: reading `report_data.json` and presenting findings in
+plain language. Never invent click counts, positions, volumes, scores, or
+growth percentages — they must come from the JSON.
 
 The output is a **prioritized action plan**, not a data dump. Lead with the
 highest-priority recommendations and their GSC evidence. Bury raw tables in
 the appendix.
+
+See `DETERMINISM.md` for the formal guarantee and audit checklist.
 
 > **Script location:** All Python scripts and shell scripts live at
 > `${CLAUDE_PLUGIN_ROOT}/scripts/`. Config files are at
@@ -108,7 +111,7 @@ What the pipeline does, in order:
 1. **validate_icp** — confirms the ICP is complete (gate re-run for safety).
 2. **fetch** — pulls the current 90-day window + the equal-length prior
    window from GSC into `data/<domain>/<date>/` and `data/<domain>/<date>/prior/`.
-3. **build_report_data** — runs 7 analysis modules and emits `report_data.json`:
+3. **build_report_data** — runs all analysis modules and emits `report_data.json`:
    - Striking-distance quick wins (positions 4–20, high impressions)
    - Keyword cannibalization (multiple pages competing for same query)
    - CTR outliers (actual CTR vs. position-curve expected CTR)
@@ -116,7 +119,62 @@ What the pipeline does, in order:
    - On-page crawl (missing titles, thin content, meta issues)
    - Core Web Vitals (LCP / CLS / INP via PageSpeed Insights API)
    - Week-over-week comparison (current window vs. prior window)
-4. **report** — renders `report.html` (self-contained, offline-readable).
+   - **Keyword research** (see Step 2b below) — integrated into `report_data.json` as `keywords`.
+4. **report** — renders `report.html` with a "Keyword Opportunities" section.
+
+---
+
+## STEP 2b — Keyword Research (requires valid ICP; no extra credentials needed for free layer)
+
+Keyword research runs automatically as part of `build_report_data.py` when an ICP is
+provided. It answers: which new keywords are relevant, how much search volume they
+have, how contested they are, and what search intent they signal.
+
+**Three data sources, in order of richness:**
+
+| Source | Credentials needed | Data provided |
+|---|---|---|
+| GSC opportunities | GSC only (always runs) | keywords we already rank for badly or with low CTR |
+| Google Ads API | `GOOGLE_ADS_DEVELOPER_TOKEN` + `GOOGLE_ADS_CUSTOMER_ID` | avg monthly volume, competition index (0–100), 12-month trend |
+| Google Autocomplete | none (best-effort) | keyword idea expansion — text only, no volume |
+
+**Configuring Google Ads (optional):**
+
+Add these keys to `config/gsc.env`:
+```
+GOOGLE_ADS_DEVELOPER_TOKEN=<your token>
+GOOGLE_ADS_CUSTOMER_ID=<account id>
+GOOGLE_ADS_LOGIN_CUSTOMER_ID=<manager id, if applicable>
+```
+
+The OAuth refresh token must also have `https://www.googleapis.com/auth/adwords` scope.
+If absent, the pipeline runs in free mode (GSC + autocomplete) and marks volumes as
+unavailable in the report.
+
+**Opportunity score (deterministic, no LLM):**
+
+```
+opportunity_score = volume_score (40 pts)
+                  + competition_score (25 pts)
+                  + gap_score (25 pts)
+                  + icp_score (10 pts)
+```
+
+All inputs come from API data or from the Python classifier. See `DETERMINISM.md`.
+
+**Demo mode:**
+
+```bash
+bash scripts/demo.sh   # uses tests/fixtures/keyword_ideas_fixture.json
+```
+
+The `keywords` key in `report_data.json` contains:
+- `enabled` : bool
+- `source_note` : which sources were active
+- `opportunities` : list sorted by `opportunity_score` desc
+
+The HTML report shows a sortable/filterable **Keyword Opportunities** table
+in its own section (accessible from the sticky nav under "Keywords").
 
 ---
 
@@ -187,7 +245,8 @@ Next run (next week):
 | Full pipeline (demo) | `bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.example.yaml --demo` |
 | Validate ICP only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/validate_icp.py ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml` |
 | Fetch data only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/fetch.py --days 90` |
-| Build report_data only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/build_report_data.py --data-dir ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date>` |
+| Build report_data only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/build_report_data.py --data-dir ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date> --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml` |
+| Keyword research only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/keywords/research.py --data-dir ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date> --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml --demo` |
 | Render HTML only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/report.py ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date>/report_data.json` |
 | OAuth consent URL | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py consent --client-id <id>` |
 | Exchange auth code | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py exchange --client-id <id> --client-secret <s> --code <c>` |

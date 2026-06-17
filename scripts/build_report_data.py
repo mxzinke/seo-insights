@@ -36,6 +36,7 @@ import scripts.analyze.content_decay as mod_decay        # noqa: E402
 import scripts.analyze.onpage_crawl as mod_onpage        # noqa: E402
 import scripts.analyze.core_web_vitals as mod_cwv        # noqa: E402
 import scripts.analyze.wow_compare as mod_wow            # noqa: E402
+import scripts.keywords.research as mod_keywords         # noqa: E402
 
 
 def load_json(path: pathlib.Path) -> list | dict | None:
@@ -302,6 +303,7 @@ def build_report_data(
     icp_path: pathlib.Path | None = None,
     api_key: str | None = None,
     demo: bool = False,
+    cfg: dict | None = None,
 ) -> dict:
     """
     Run all analyses and assemble the complete report_data dict.
@@ -311,7 +313,8 @@ def build_report_data(
     data_dir  : Path to the run directory (contains summary.json, queries.json, etc.)
     icp_path  : Optional path to a validated ICP YAML file.
     api_key   : Optional PageSpeed Insights API key.
-    demo      : If True, skip live HTTP requests in onpage/CWV.
+    demo      : If True, skip live HTTP requests in onpage/CWV and keyword APIs.
+    cfg       : Config dict for optional Google Ads credentials.
     """
     print(f"[build] Data directory: {data_dir}")
 
@@ -354,6 +357,29 @@ def build_report_data(
     print("[build] Running: WoW comparison …")
     wow = mod_wow.analyze(data_dir)
 
+    # --- Keyword research (runs after GSC analyses so position data is available) ---
+    print("[build] Running: keyword research …")
+    keywords_result = {"enabled": False, "source_note": "Keyword research: ICP required", "opportunities": []}
+    if icp:
+        try:
+            keywords_result = mod_keywords.run_research(
+                data_dir=data_dir,
+                icp=icp,
+                cfg=cfg or {},
+                demo=demo,
+                verbose=False,
+            )
+            print(f"[build] Keyword research: {len(keywords_result.get('opportunities', []))} opportunities.")
+        except Exception as exc:
+            print(f"[build] WARNING: keyword research failed (non-fatal): {exc}", file=sys.stderr)
+            keywords_result = {
+                "enabled": False,
+                "source_note": f"Keyword research failed: {exc}",
+                "opportunities": [],
+            }
+    else:
+        print("[build] Skipping keyword research (no ICP configured).")
+
     analyses = {
         "striking_distance": sd,
         "cannibalization": can,
@@ -371,7 +397,7 @@ def build_report_data(
 
     # --- Generate recommendations ---
     print("[build] Generating recommendations …")
-    recommendations = generate_recommendations(analyses, icp)
+    recommendations = generate_recommendations(analyses, icp, keywords_result)
     print(f"[build] {len(recommendations)} recommendations generated.")
 
     # --- Build summary, charts, and explore data ---
@@ -410,6 +436,7 @@ def build_report_data(
         "analyses": analyses,
         "charts": charts,
         "explore": explore,
+        "keywords": keywords_result,
     }
 
     return report_data
@@ -440,11 +467,12 @@ def main():
 
     # Try to load API key from config if not given on CLI.
     api_key = args.pagespeed_key
-    if not api_key and not args.demo:
+    cfg: dict = {}
+    if not args.demo:
         try:
             from scripts.config_loader import load_config  # noqa: PLC0415
             cfg = load_config(require_all=False)
-            api_key = cfg.get("PAGESPEED_API_KEY") or None
+            api_key = api_key or cfg.get("PAGESPEED_API_KEY") or None
         except Exception:
             pass
 
@@ -453,6 +481,7 @@ def main():
         icp_path=icp_path,
         api_key=api_key,
         demo=args.demo,
+        cfg=cfg,
     )
 
     out_path = pathlib.Path(args.output) if args.output else data_dir / "report_data.json"
