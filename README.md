@@ -1,8 +1,8 @@
 # seo-insights
 
-A **Claude Code Plugin** (v0.3.0) that produces **deep, deterministic SEO analysis** from Google Search Console (GSC) data. Every number is computed in Python directly from your GSC export — no third-party SaaS, no black-box scoring, no hallucinated metrics. The output is a **prioritized list of concrete action recommendations**, each backed by traceable GSC evidence, not a data dump. Designed to be run weekly so that each run automatically enables week-over-week (WoW) comparison.
+A **Claude plugin** (v0.3.0) — works in both **Claude Code** and **Claude Cowork** — that produces **deep, deterministic SEO analysis** from Google Search Console (GSC) data. Every number is computed in Python directly from your GSC export — no third-party SaaS, no black-box scoring, no hallucinated metrics. The output is a **prioritized list of concrete action recommendations**, each backed by traceable GSC evidence, not a data dump. Designed to be run weekly so that each run automatically enables week-over-week (WoW) comparison.
 
-Works in **Claude Code**: install via the plugin marketplace and the `seo-insights` skill activates whenever you ask about SEO, Search Console, keyword research, or traffic analysis.
+Install via the plugin marketplace; the `seo-insights` skill activates whenever you ask about SEO, Search Console, keyword research, or traffic analysis.
 
 ---
 
@@ -51,10 +51,26 @@ Then just ask Claude: *"Run an SEO analysis for my site"* and the skill takes ov
 
 ### Plugin install (Claude Cowork)
 
-In **Cowork** (Claude Desktop app): open **Customize → Plugins → Personal
-plugins → `+` → Add marketplace → Add from a repository**, enter
-`mxzinke/seo-insights`, then **Install** the *SEO Insights* plugin. Run `/seo-setup`
-to configure, then `/seo-analyze`.
+Cowork's plugin features run in the **Claude Desktop app** (not browser/mobile).
+
+1. **Allow network access (Cowork only).** Cowork's sandbox blocks outbound
+   traffic by default; this plugin must reach Google's APIs. An org admin opens
+   **Settings → Organization → Capabilities → Code execution → Allow network
+   egress**, sets it to **All domains**, then **restarts Claude Desktop / starts
+   a fresh session**. (A 403 `blocked-by-allowlist` error means this step is
+   missing. No admin access? Run in Claude Code instead — no egress sandbox.)
+2. **Add the marketplace.** In the **Cowork** tab → **Customize → Plugins →
+   Personal plugins → `+` → Add marketplace → Add from a repository**, enter
+   `mxzinke/seo-insights`.
+3. **Install** the *SEO Insights* plugin from that marketplace.
+4. **Configure:** run `/seo-setup` — Claude walks you through Google OAuth (and
+   optional Google Ads / DataForSEO keys) and writes the config for you.
+5. **Define your audience:** run `/define-seo-audience` (a short ICP interview).
+6. **Analyze:** run `/seo-analyze` for the prioritized action plan + interactive
+   report, and `/seo-keywords-research` for AI-curated keyword opportunities.
+
+Each run is stored in `data/<domain>/<date>/`, so running weekly gives automatic
+week-over-week comparison.
 
 → **Full step-by-step Cowork guide: [docs/USING-WITH-COWORK.md](docs/USING-WITH-COWORK.md)**
 
