@@ -65,20 +65,23 @@ session-start check.
 Type `/seo-setup`. Claude walks you through, step by step, and writes the config
 files for you (you never hand-edit JSON):
 
+- **Choosing a persistent workspace folder** on your Mac (e.g. `~/seo-insights`)
+  where credentials and reports will live across sessions — this is Step 0.5 of
+  the wizard and is essential in Cowork.
 - Creating a Google Cloud OAuth client and authorizing Search Console access.
 - *(Optional)* enabling the Google Ads API + Developer Token for search volume.
 - *(Optional)* adding a DataForSEO key for organic keyword difficulty.
 
-Credentials are written to a local, git-ignored `config/gsc.env` on your
-machine and never leave it.
+Credentials are written to `<workspace>/config/gsc.env` — a folder on your Mac
+that survives Cowork session resets. They are never committed to any repository.
 
 ## 4. Define your audience — `/define-seo-audience`
 
 Type `/define-seo-audience`. Claude interviews you with a few targeted questions to
 pin down your Ideal Customer Profile (who, country/language, intent, problem,
 value proposition, competitors). **The audience must be 100 % clear** — it's
-what makes keyword relevance meaningful. The result is saved as
-`config/icp.<domain>.yaml`.
+what makes keyword relevance meaningful. The result is saved to your persistent
+workspace at `<workspace>/config/icp.<domain>.yaml`.
 
 ## 5. Run the analysis — `/seo-analyze`
 
@@ -107,27 +110,41 @@ from the scripts — never invented by the model (see `DETERMINISM.md`).
 
 ## Where results live & weekly comparison
 
-Every run writes a dated folder under `data/<domain>/<YYYY-MM-DD>/` in the
-plugin's working directory on your machine:
+Every run writes a dated folder inside your **persistent workspace** — the
+folder you chose in `/seo-setup` Step 0.5 (e.g. `~/seo-insights`):
 
 ```
-data/example.com/2026-06-17/
-  report.html          ← the interactive report
-  report_data.json     ← the underlying data
-  queries.json …       ← raw Search Console pulls
+~/seo-insights/
+  config/
+    gsc.env                    ← your GSC credentials (one-time setup)
+    icp.<domain>.yaml          ← your audience profile
+  data/
+    example.com/
+      2026-06-17/
+        report.html            ← the interactive report
+        report_data.json       ← the underlying data
+        queries.json …         ← raw Search Console pulls
 ```
+
+The workspace folder is chosen **once** during `/seo-setup` and remembered via a
+tiny pointer file at `~/.seo-insights/home`. Every future Cowork session — even
+after Claude Desktop restarts — reads that pointer and writes to the same folder
+automatically. You can also override the workspace location at any time by
+setting the `SEO_INSIGHTS_HOME` environment variable.
 
 Because each run is its own dated folder, **running the analysis again next week
 automatically produces a week-over-week comparison** — keep the folders and
 Claude will diff against the most recent prior run. This is the "store last
-week's results" mechanism: just don't delete the folders.
+week's results" mechanism: just don't delete the workspace folder.
 
 ---
 
 ## Credentials & privacy
 
-- `config/gsc.env` (Google + optional API keys) and `config/icp.*.yaml` are
-  **git-ignored** and stay on your machine.
+- `<workspace>/config/gsc.env` (Google + optional API keys) and
+  `<workspace>/config/icp.*.yaml` are stored in your personal workspace folder
+  on your Mac — they are **never** inside the plugin directory or any git
+  repository, and never leave your machine.
 - The plugin only talks to Google's APIs (and DataForSEO, if you opt in). No
   data is sent to any third-party file host.
 
@@ -135,8 +152,9 @@ week's results" mechanism: just don't delete the folders.
 
 - **"Plugin/Customize not available"** → you're in the browser or mobile. Use
   the **Claude Desktop app**.
-- **Session-start nudge to run `/seo-setup`** → `config/gsc.env` is missing or
-  incomplete. Run `/seo-setup`.
+- **Session-start nudge to run `/seo-setup`** → `gsc.env` is missing or
+  incomplete in your persistent workspace. Run `/seo-setup` (Step 0.5 will
+  re-establish the workspace if needed).
 - **Search Console auth fails (403)** → the access token expired; re-run the
   auth step in `/seo-setup` (or `python3 scripts/auth.py refresh`).
 - **Volumes show "n/a"** → no Google Ads Developer Token configured. That's the

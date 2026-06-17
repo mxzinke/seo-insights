@@ -69,8 +69,9 @@ Cowork's plugin features run in the **Claude Desktop app** (not browser/mobile).
 6. **Analyze:** run `/seo-analyze` for the prioritized action plan + interactive
    report, and `/seo-keywords-research` for AI-curated keyword opportunities.
 
-Each run is stored in `data/<domain>/<date>/`, so running weekly gives automatic
-week-over-week comparison.
+Each run is stored in `<workspace>/data/<domain>/<date>/` (your persistent
+workspace folder, set up once in `/seo-setup`), so running weekly gives automatic
+week-over-week comparison and results survive Cowork session resets.
 
 → **Full step-by-step Cowork guide: [docs/USING-WITH-COWORK.md](docs/USING-WITH-COWORK.md)**
 
@@ -105,7 +106,7 @@ No GSC account or API key needed.
    bash scripts/run.sh --icp config/icp.mysite.yaml
    ```
    The script prints the path to `report.html` when done.
-4. **Run weekly** — each run creates `data/<domain>/<YYYY-MM-DD>/`, enabling automatic WoW comparison on the next run.
+4. **Run weekly** — each run creates `<workspace>/data/<domain>/<YYYY-MM-DD>/`, enabling automatic WoW comparison on the next run.
 
 ---
 
@@ -117,8 +118,8 @@ GSC API
   ▼
 scripts/fetch.py
   Pulls current window (default: last 90 days) + equal-length prior window
-  → data/<domain>/<date>/        (queries, pages, dates, countries, devices)
-  → data/<domain>/<date>/prior/  (same structure, prior period)
+  → <workspace>/data/<domain>/<date>/        (queries, pages, dates, countries, devices)
+  → <workspace>/data/<domain>/<date>/prior/  (same structure, prior period)
   │
   ▼
 scripts/build_report_data.py
@@ -126,12 +127,12 @@ scripts/build_report_data.py
     striking_distance · cannibalization · ctr_outliers
     content_decay · onpage_crawl · core_web_vitals · wow_compare
   Scores and ranks recommendations
-  → data/<domain>/<date>/report_data.json
+  → <workspace>/data/<domain>/<date>/report_data.json
   │
   ▼
 scripts/report.py
   Renders Jinja2 template with Chart.js charts
-  → data/<domain>/<date>/report.html  (self-contained, no server needed)
+  → <workspace>/data/<domain>/<date>/report.html  (self-contained, no server needed)
   │
   ▼
 Claude (LLM narration only)

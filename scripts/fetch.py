@@ -40,6 +40,7 @@ if str(_ROOT) not in sys.path:
 from scripts.config_loader import load_config  # noqa: E402
 from scripts.auth import get_access_token      # noqa: E402
 import scripts.gsc as gsc                      # noqa: E402
+from scripts.workspace import data_root as _workspace_data_root  # noqa: E402
 
 # GSC reports data with ~2 day lag; we pull up to yesterday - 2 by default.
 GSC_LAG_DAYS = 2
@@ -179,11 +180,15 @@ def main():
     parser.add_argument("--verbose", "-v", action="store_true")
     parser.add_argument("--demo", action="store_true",
                         help="Use fixture files instead of live GSC (no credentials needed).")
+    parser.add_argument("--data-root", default=None,
+                        help="Override the data root directory (default: workspace data_root()).")
     args = parser.parse_args()
 
     run_date = str(datetime.date.today())
 
     if args.demo:
+        # Demo mode always writes repo-locally so it never pollutes the user's
+        # persistent workspace and demo.sh stays fully self-contained.
         out_dir = run_demo(run_date, args.days)
         print(f"[fetch] Demo data written to: {out_dir}")
         return
@@ -205,7 +210,13 @@ def main():
     print(f"[fetch] Current window: {start} → {end}")
     print(f"[fetch] Prior window:   {prior_start} → {prior_end}")
 
-    out_dir = _ROOT / "data" / domain / run_date
+    # Resolve output base: explicit --data-root > workspace > (implicit fallback)
+    if args.data_root:
+        data_base = pathlib.Path(args.data_root).resolve()
+    else:
+        data_base = _workspace_data_root()
+
+    out_dir = data_base / domain / run_date
     print(f"[fetch] Output: {out_dir}")
 
     # Fetch and save current window.

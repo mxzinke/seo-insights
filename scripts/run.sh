@@ -105,12 +105,40 @@ echo ""
 # ── Resolve the data directory written by fetch ──────────────────────────────
 # fetch.py writes to data/<domain>/<today>/ for live runs, data/_demo/<today>/ for demo.
 if $DEMO; then
+  # Demo always writes repo-locally so it never pollutes the persistent workspace.
   DATA_DIR="$PROJECT_ROOT/data/_demo/$TODAY"
 else
-  # Read GSC_SITE_URL from the config file to derive the domain directory name.
-  RESOLVED_CONFIG="${CONFIG_PATH:-$PROJECT_ROOT/config/gsc.env}"
+  # For live runs, derive data root from the persistent workspace.
+  # SEO_INSIGHTS_HOME overrides; otherwise workspace.py resolves it.
+  DATA_ROOT=$(python3 "$SCRIPT_DIR/workspace.py" show 2>/dev/null \
+    | grep '^Workspace home' | awk '{print $NF}')
+  if [[ -z "$DATA_ROOT" ]]; then
+    # Fallback: use repo-local data/ (matches legacy behaviour)
+    DATA_ROOT="$PROJECT_ROOT/data"
+  else
+    DATA_ROOT="$DATA_ROOT/data"
+  fi
+
+  # Read GSC_SITE_URL to derive the domain directory name.
+  # Prefer --config flag; otherwise let workspace.py / config_loader decide.
+  if [[ -n "$CONFIG_PATH" ]]; then
+    RESOLVED_CONFIG="$CONFIG_PATH"
+  else
+    # Ask workspace.py for the config path.
+    RESOLVED_CONFIG=$(python3 -c "
+import sys; sys.path.insert(0, '$PROJECT_ROOT')
+from scripts.workspace import config_path
+print(config_path())
+" 2>/dev/null)
+    # Legacy fallback if workspace hasn't been configured yet.
+    if [[ -z "$RESOLVED_CONFIG" || ! -f "$RESOLVED_CONFIG" ]]; then
+      RESOLVED_CONFIG="$PROJECT_ROOT/config/gsc.env"
+    fi
+  fi
+
   if [[ ! -f "$RESOLVED_CONFIG" ]]; then
     echo "ERROR: Config file not found: $RESOLVED_CONFIG" >&2
+    echo "  Run /seo-setup to configure your credentials." >&2
     exit 1
   fi
   SITE_URL=$(grep -E '^GSC_SITE_URL=' "$RESOLVED_CONFIG" | head -1 | cut -d= -f2-)
@@ -124,7 +152,7 @@ else
   DOMAIN="${DOMAIN#http://}"
   DOMAIN="${DOMAIN%/}"
   DOMAIN="${DOMAIN//\//_}"
-  DATA_DIR="$PROJECT_ROOT/data/$DOMAIN/$TODAY"
+  DATA_DIR="$DATA_ROOT/$DOMAIN/$TODAY"
 fi
 
 if [[ ! -d "$DATA_DIR" ]]; then

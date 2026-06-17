@@ -37,6 +37,64 @@ Ask: "Are you in Cowork or Claude Code? If Cowork, have you enabled network egre
 
 ---
 
+## STEP 0.5 — Choose your persistent workspace folder
+
+**This step is critical for Claude Cowork users** and good practice for Claude
+Code users too.
+
+Explain to the user:
+
+> "SEO Insights stores your credentials and analysis results in a folder on
+> your Mac (or local machine). In Claude Cowork, the plugin runs inside a
+> sandbox that is discarded after each chat session — so if we write files
+> there, they are lost the next time you open Claude. We need a stable folder
+> **outside** the sandbox, somewhere on your regular filesystem (e.g. in your
+> home directory), so your credentials and weekly reports persist across every
+> future session."
+
+Ask:
+
+> "Where would you like to store your SEO Insights workspace? I recommend
+> `~/seo-insights` (a folder called `seo-insights` in your home directory).
+> You can also enter any other absolute path. Press Enter to accept the default
+> or type a custom path."
+
+Once the user confirms a path (use `~/seo-insights` if they just press Enter),
+run:
+
+```
+!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/workspace.py set <path>
+```
+
+For example, for the default:
+
+```
+!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/workspace.py set ~/seo-insights
+```
+
+This command:
+- Creates the folder and its `config/` and `data/` subdirectories on the user's machine.
+- Writes the absolute path to `~/.seo-insights/home` — a tiny pointer file that every future session reads to find the workspace, even when the plugin sandbox resets.
+
+Tell the user:
+
+> "Your workspace is now set up. All credentials and analysis results will be
+> stored there. Every future chat session — including after Cowork restarts —
+> will automatically find this folder via the pointer file `~/.seo-insights/home`.
+> You can also override it at any time by setting the `SEO_INSIGHTS_HOME`
+> environment variable."
+
+Verify the workspace was created:
+
+```
+!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/workspace.py show
+```
+
+Confirm the output shows the expected path and that `config/gsc.env exists: False`
+(it doesn't exist yet — we'll create it in Step 7).
+
+---
+
 ## STEP 1 — Create a Google Cloud project
 
 Tell the user:
@@ -168,9 +226,19 @@ Store the `GSC_SITE_URL` value.
 
 ---
 
-## STEP 7 — Write config/gsc.env
+## STEP 7 — Write credentials to the persistent workspace
 
-Now write the config file. Create `${CLAUDE_PLUGIN_ROOT}/config/gsc.env` with the values collected:
+Now write the config file to the persistent workspace (established in Step 0.5).
+
+First, resolve the workspace config path:
+
+```
+!python3 -c "import sys; sys.path.insert(0,'${CLAUDE_PLUGIN_ROOT}'); from scripts.workspace import config_path; print(config_path())"
+```
+
+This prints the full path, e.g. `/Users/you/seo-insights/config/gsc.env`.
+
+Write the credentials to that path with the values collected:
 
 ```
 GSC_CLIENT_ID=<collected value>
@@ -183,7 +251,9 @@ GOOGLE_ADS_CUSTOMER_ID=
 GOOGLE_ADS_LOGIN_CUSTOMER_ID=
 ```
 
-Use the Write tool to create this file. Tell the user: "I've written your credentials to `config/gsc.env`. This file is listed in `.gitignore` and will never be committed to any repository."
+Use the Write tool to create this file at the resolved workspace config path (NOT inside the plugin directory). Tell the user:
+
+> "I've written your credentials to your persistent workspace at `<resolved path>/config/gsc.env`. This file lives in your home directory, not inside the plugin cache — so it will survive Cowork session restarts. It is never committed to any repository."
 
 ---
 
@@ -202,7 +272,7 @@ If the user enabled the Google Ads API and wants keyword volume data, explain:
 >
 > If you're not ready for this now, that's fine — the tool runs in free mode using GSC data and Google Autocomplete for keyword ideas. You can always add the Ads credentials later by editing `config/gsc.env`."
 
-If they provide Ads credentials, update `config/gsc.env` with the values. Also remind them that the OAuth refresh token must include the `adwords` scope — if they only authorized the GSC scope earlier, they'll need to re-run the consent/exchange flow.
+If they provide Ads credentials, update the workspace `gsc.env` (at the path printed by `workspace.py show`) with the values. Also remind them that the OAuth refresh token must include the `adwords` scope — if they only authorized the GSC scope earlier, they'll need to re-run the consent/exchange flow.
 
 ---
 

@@ -31,9 +31,24 @@ the appendix.
 See `DETERMINISM.md` for the formal guarantee and audit checklist.
 
 > **Script location:** All Python scripts and shell scripts live at
-> `${CLAUDE_PLUGIN_ROOT}/scripts/`. Config files are at
-> `${CLAUDE_PLUGIN_ROOT}/config/`. Use `${CLAUDE_PLUGIN_ROOT}` as the base
-> path when invoking any command below.
+> `${CLAUDE_PLUGIN_ROOT}/scripts/`. Use `${CLAUDE_PLUGIN_ROOT}` as the base
+> path when invoking scripts.
+
+> **Persistent workspace:** Credentials (`gsc.env`), ICP files, and all dated
+> results are stored in the **persistent workspace** — a stable folder on the
+> user's machine that survives Cowork session resets. The workspace home is
+> resolved in this order:
+>   1. `SEO_INSIGHTS_HOME` environment variable
+>   2. `~/.seo-insights/home` pointer file (written by `/seo-setup`)
+>   3. `~/seo-insights` (default)
+>
+> Run `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/workspace.py show` to see the
+> current workspace path and whether credentials exist.
+>
+> **NEVER** store credentials or analysis data inside the plugin directory
+> (`${CLAUDE_PLUGIN_ROOT}/config/` or `${CLAUDE_PLUGIN_ROOT}/data/`). In
+> Cowork, that directory is ephemeral and is discarded between sessions. All
+> writes go to the persistent workspace instead.
 
 ---
 
@@ -43,10 +58,18 @@ Before any keyword or content analysis, a valid Ideal Customer Profile (ICP)
 must exist. The ICP defines who the site serves; without it, keyword scoring
 and content recommendations are meaningless.
 
-**Check:** Does `${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml` exist and pass validation?
+**Check:** Does the ICP file exist in the persistent workspace and pass validation?
+
+First, resolve the workspace config directory:
 
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/validate_icp.py ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml
+python3 -c "import sys; sys.path.insert(0,'${CLAUDE_PLUGIN_ROOT}'); from scripts.workspace import config_dir; print(config_dir())"
+```
+
+This prints the config directory (e.g. `/Users/you/seo-insights/config`). The ICP file lives at `<config_dir>/icp.<domain>.yaml`.
+
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/validate_icp.py <workspace_config_dir>/icp.<domain>.yaml
 ```
 
 If the file is missing or validation fails, **interview the user** to fill it
@@ -61,14 +84,21 @@ in. Use `${CLAUDE_PLUGIN_ROOT}/config/icp.example.yaml` as the template. Ask spe
 7. What are the 5–10 core topic pillars?
 8. What terms should be excluded (noise queries unrelated to the audience)?
 
-Save the answers to `${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml`. Run `validate_icp.py` again.
+Save the answers to `<workspace_config_dir>/icp.<domain>.yaml` (in the persistent workspace, NOT inside the plugin directory). Run `validate_icp.py` again.
 Do not proceed to Step 1 until validation exits 0.
 
 ---
 
 ## STEP 1 — Ensure Authentication
 
-Check that `${CLAUDE_PLUGIN_ROOT}/config/gsc.env` exists and contains valid credentials:
+Check that the persistent workspace `gsc.env` exists and contains valid credentials.
+Resolve the path first:
+
+```bash
+python3 ${CLAUDE_PLUGIN_ROOT}/scripts/workspace.py show
+```
+
+The workspace config file (e.g. `~/seo-insights/config/gsc.env`) must contain:
 
 ```
 GSC_CLIENT_ID=...
@@ -77,8 +107,9 @@ GSC_REFRESH_TOKEN=...
 GSC_SITE_URL=sc-domain:example.com
 ```
 
-If the refresh token has expired or `config/gsc.env` is missing, direct the
-user to `${CLAUDE_PLUGIN_ROOT}/SETUP.md` for the OAuth setup flow, then run:
+If the refresh token has expired or the config file is missing, direct the
+user to run `/seo-setup` for the OAuth setup flow (which will also re-establish
+the workspace), then run:
 
 ```bash
 python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py refresh
@@ -92,13 +123,17 @@ this command means auth is OK; an error means the token is stale).
 ## STEP 2 — Run the Pipeline
 
 Run the one-command pipeline. This is safe to run repeatedly; each run
-creates a new dated directory (`${CLAUDE_PLUGIN_ROOT}/data/<domain>/<YYYY-MM-DD>/`).
+creates a new dated directory inside the persistent workspace
+(`<workspace>/data/<domain>/<YYYY-MM-DD>/`).
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml [--days 90] [--pagespeed-key <key>]
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp <workspace_config_dir>/icp.<domain>.yaml [--days 90] [--pagespeed-key <key>]
 ```
 
-For demo mode (no credentials required):
+Where `<workspace_config_dir>` is the path printed by `workspace.py show`
+(e.g. `~/seo-insights/config`).
+
+For demo mode (no credentials required — writes repo-locally, NOT to workspace):
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.example.yaml --demo
@@ -216,11 +251,14 @@ in its own section (accessible from the sticky nav under "Keywords"):
 
 ## STEP 3 — Read and Present the Action Plan
 
-Read `report_data.json`:
+Read `report_data.json` from the persistent workspace:
 
 ```python
-import json
-data = json.load(open("${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date>/report_data.json"))
+import json, sys
+sys.path.insert(0, "${CLAUDE_PLUGIN_ROOT}")
+from scripts.workspace import data_root
+path = data_root() / "<domain>" / "<date>" / "report_data.json"
+data = json.load(open(path))
 recs = data["recommendations"]   # already sorted by priority (descending)
 summary = data["summary"]        # clicks, impressions, ctr, position, wow deltas
 ```
@@ -261,15 +299,19 @@ the full interactive report (charts, appendix tables for all analyses).
 
 ## STEP 4 — Week-over-Week Note
 
-Remind the user that the dated `data/<domain>/<date>/` directory is kept
-locally. The next weekly run will automatically use the current window as
-the "prior" baseline for WoW comparison, enabling trend tracking without
-any additional configuration.
+Remind the user that the dated `data/<domain>/<date>/` directory is kept in
+the persistent workspace (e.g. `~/seo-insights/data/<domain>/<date>/`). The
+next weekly run will automatically use the current window as the "prior"
+baseline for WoW comparison, enabling trend tracking without any additional
+configuration — as long as the workspace folder is preserved.
 
 ```
 Next run (next week):
-  bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml
+  bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp <workspace_config_dir>/icp.<domain>.yaml
 ```
+
+The workspace folder survives Cowork session resets because it lives on the
+user's local machine, not in the plugin sandbox.
 
 ---
 
@@ -277,14 +319,18 @@ Next run (next week):
 
 | Task | Command |
 |---|---|
-| Full pipeline (real data) | `bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml` |
+| Show workspace path | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/workspace.py show` |
+| Set workspace path | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/workspace.py set ~/seo-insights` |
+| Full pipeline (real data) | `bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp <workspace>/config/icp.<domain>.yaml` |
 | Full pipeline (demo) | `bash ${CLAUDE_PLUGIN_ROOT}/scripts/run.sh --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.example.yaml --demo` |
-| Validate ICP only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/validate_icp.py ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml` |
+| Validate ICP only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/validate_icp.py <workspace>/config/icp.<domain>.yaml` |
 | Fetch data only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/fetch.py --days 90` |
-| Build report_data only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/build_report_data.py --data-dir ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date> --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml` |
-| Keyword research only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/keywords/research.py --data-dir ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date> --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml --demo` |
-| Render HTML only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/report.py ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date>/report_data.json` |
+| Build report_data only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/build_report_data.py --data-dir <workspace>/data/<domain>/<date> --icp <workspace>/config/icp.<domain>.yaml` |
+| Keyword research only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/keywords/research.py --data-dir <workspace>/data/<domain>/<date> --icp <workspace>/config/icp.<domain>.yaml --demo` |
+| Render HTML only | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/report.py <workspace>/data/<domain>/<date>/report_data.json` |
 | OAuth consent URL | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py consent --client-id <id>` |
 | Exchange auth code | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py exchange --client-id <id> --client-secret <s> --code <c>` |
 | Refresh access token | `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py refresh` |
 | Run demo pipeline | `bash ${CLAUDE_PLUGIN_ROOT}/scripts/demo.sh` |
+
+(`<workspace>` = result of `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/workspace.py show`)
