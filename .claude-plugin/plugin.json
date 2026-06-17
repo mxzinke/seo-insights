@@ -1,7 +1,7 @@
 {
   "name": "seo-insights",
   "displayName": "SEO Insights",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Deep, deterministic SEO analysis from Google Search Console — turns GSC data into a prioritized, evidence-backed action plan with an interactive report.",
   "author": { "name": "Maximilian Pfennig" },
   "homepage": "https://github.com/mxzinke/seo-insights",
