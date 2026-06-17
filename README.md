@@ -1,8 +1,8 @@
 # seo-insights
 
-A Claude Skill that produces **deep, deterministic SEO analysis** from Google Search Console (GSC) data. Every number is computed in Python directly from your GSC export — no third-party SaaS, no black-box scoring, no hallucinated metrics. The output is a **prioritized list of concrete action recommendations**, each backed by traceable GSC evidence, not a data dump. Designed to be run weekly so that each run automatically enables week-over-week (WoW) comparison.
+A **Claude Code Plugin** (v0.2.0) that produces **deep, deterministic SEO analysis** from Google Search Console (GSC) data. Every number is computed in Python directly from your GSC export — no third-party SaaS, no black-box scoring, no hallucinated metrics. The output is a **prioritized list of concrete action recommendations**, each backed by traceable GSC evidence, not a data dump. Designed to be run weekly so that each run automatically enables week-over-week (WoW) comparison.
 
-Works in both **Claude Code** and **Claude Cowork**: drop the repo in your project, point Claude at `SKILL.md`, and let it guide you through the analysis interactively.
+Works in **Claude Code**: install via the plugin marketplace and the `seo-insights` skill activates whenever you ask about SEO, Search Console, keyword research, or traffic analysis.
 
 ---
 
@@ -34,18 +34,39 @@ See [examples/sample-report.html](examples/sample-report.html) for a full intera
 
 ## Quickstart
 
-### Demo mode (no credentials required)
+### Plugin install (recommended — Claude Code)
 
 ```bash
-git clone https://github.com/yourname/seo-insights
+# 1. Add the plugin from the marketplace
+/plugin marketplace add mxzinke/seo-insights
+
+# 2. Install the seo-insights skill
+/plugin install seo-insights@seo-insights
+```
+
+Once installed, Claude will automatically prompt you to run `/seo-insights:setup`
+if GSC credentials are not yet configured (via the SessionStart hook).
+
+Then just ask Claude: *"Run an SEO analysis for my site"* and the skill takes over.
+
+### Manual / developer usage (no plugin install required)
+
+```bash
+git clone https://github.com/mxzinke/seo-insights
 cd seo-insights
 pip install -r requirements.txt
+```
+
+**Demo mode (no credentials required):**
+
+```bash
 bash scripts/demo.sh
 ```
 
-This runs the full pipeline on synthetic fixture data and validates the output. No GSC account or API key needed.
+This runs the full pipeline on synthetic fixture data and validates the output.
+No GSC account or API key needed.
 
-### Real data
+**Real data:**
 
 1. **Set up GSC OAuth** — follow [SETUP.md](SETUP.md) (5–10 minutes, one-time).
 2. **Fill in your ICP** — copy the template and describe your audience:
@@ -106,14 +127,28 @@ The `scripts/run.sh` wrapper runs all four steps in sequence with a single comma
 
 ---
 
-## As a Claude Skill
+## As a Claude Code Plugin
 
-This repo ships with `SKILL.md` — a machine-readable skill definition that Claude Code and Claude Cowork can use to orchestrate the full analysis interactively. Claude will:
+This repo is structured as a Claude Code plugin (v0.2.0). The plugin layout:
 
-1. Ensure a valid ICP exists (interviewing you if needed).
-2. Check auth and guide you through setup if needed.
-3. Run the pipeline.
-4. Read `report_data.json` and present a prioritized action plan.
+```
+.claude-plugin/     # manifest (plugin.json) and marketplace.json
+skills/seo-insights/SKILL.md   # skill definition (triggers, orchestration steps)
+commands/           # slash commands (setup-wizard etc. — added separately)
+agents/             # sub-agents (added separately)
+hooks/hooks.json    # SessionStart hook: checks GSC config, nudges to /seo-insights:setup
+scripts/            # Python pipeline (auth, fetch, analyze, report)
+config/             # gsc.env (gitignored) + icp.*.yaml (gitignored) + examples
+```
+
+When installed, Claude will:
+
+1. On session start: check whether GSC credentials are configured (hook).
+2. On SEO-related requests: activate the `seo-insights` skill automatically.
+3. Ensure a valid ICP exists (interviewing you if needed).
+4. Check auth and guide you through setup if needed.
+5. Run the pipeline via `scripts/run.sh`.
+6. Read `report_data.json` and present a prioritized action plan.
 
 ---
 

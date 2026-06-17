@@ -1,0 +1,12 @@
+{
+  "name": "seo-insights",
+  "owner": { "name": "Maximilian Pfennig" },
+  "plugins": [
+    {
+      "name": "seo-insights",
+      "source": "./",
+      "description": "Deep, deterministic SEO analysis from Google Search Console.",
+      "version": "0.2.0"
+    }
+  ]
+}
