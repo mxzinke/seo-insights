@@ -6,7 +6,7 @@ README instead — the analysis engine is identical; only the install and
 "where Claude runs" differ.
 
 > **In one line:** add this repo as a personal marketplace in Cowork, install
-> the plugin, run `/setup`, then `/analyze`. Claude does the rest and hands you
+> the plugin, run `/seo-setup`, then `/seo-analyze`. Claude does the rest and hands you
 > an interactive HTML report.
 
 ---
@@ -43,13 +43,13 @@ computer.
 ## 2. Install the plugin
 
 In the same **Plugins** view, find **SEO Insights** and click **Install**.
-This loads the skill, the `/setup`, `/define-audience`, `/analyze`, and
-`/keyword-research` commands, the Haiku keyword-curator sub-agent, and a
+This loads the skill, the `/seo-setup`, `/seo-audience`, `/seo-analyze`, and
+`/seo-keywords` commands, the Haiku keyword-curator sub-agent, and a
 session-start check.
 
-## 3. Run the guided setup — `/setup`
+## 3. Run the guided setup — `/seo-setup`
 
-Type `/setup`. Claude walks you through, step by step, and writes the config
+Type `/seo-setup`. Claude walks you through, step by step, and writes the config
 files for you (you never hand-edit JSON):
 
 - Creating a Google Cloud OAuth client and authorizing Search Console access.
@@ -59,17 +59,17 @@ files for you (you never hand-edit JSON):
 Credentials are written to a local, git-ignored `config/gsc.env` on your
 machine and never leave it.
 
-## 4. Define your audience — `/define-audience`
+## 4. Define your audience — `/seo-audience`
 
-Type `/define-audience`. Claude interviews you with a few targeted questions to
+Type `/seo-audience`. Claude interviews you with a few targeted questions to
 pin down your Ideal Customer Profile (who, country/language, intent, problem,
 value proposition, competitors). **The audience must be 100 % clear** — it's
 what makes keyword relevance meaningful. The result is saved as
 `config/icp.<domain>.yaml`.
 
-## 5. Run the analysis — `/analyze`
+## 5. Run the analysis — `/seo-analyze`
 
-Type `/analyze` (or just ask: *"run the weekly SEO analysis for example.com"*).
+Type `/seo-analyze` (or just ask: *"run the weekly SEO analysis for example.com"*).
 Claude:
 
 1. Pulls Search Console data and runs all deterministic analyses
@@ -81,9 +81,9 @@ Claude:
 Open the generated `report.html` in your browser for the full interactive
 cockpit (sortable tables, charts, keyword opportunities).
 
-## 6. Keyword research — `/keyword-research`
+## 6. Keyword research — `/seo-keywords`
 
-Type `/keyword-research`. Claude gathers candidate keywords (Search Console +
+Type `/seo-keywords`. Claude gathers candidate keywords (Search Console +
 Google Ads ideas + autocomplete), then the **Haiku keyword-curator sub-agent**
 judges which are genuinely relevant to *your* audience (with understanding — not
 string matching) and classifies intent. Only relevant keywords appear in the
@@ -122,9 +122,9 @@ week's results" mechanism: just don't delete the folders.
 
 - **"Plugin/Customize not available"** → you're in the browser or mobile. Use
   the **Claude Desktop app**.
-- **Session-start nudge to run `/setup`** → `config/gsc.env` is missing or
-  incomplete. Run `/setup`.
+- **Session-start nudge to run `/seo-setup`** → `config/gsc.env` is missing or
+  incomplete. Run `/seo-setup`.
 - **Search Console auth fails (403)** → the access token expired; re-run the
-  auth step in `/setup` (or `python3 scripts/auth.py refresh`).
+  auth step in `/seo-setup` (or `python3 scripts/auth.py refresh`).
 - **Volumes show "n/a"** → no Google Ads Developer Token configured. That's the
-  free mode; add the token via `/setup` for real volume data.
+  free mode; add the token via `/seo-setup` for real volume data.

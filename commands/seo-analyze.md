@@ -2,7 +2,7 @@
 description: "Run the full SEO analysis pipeline — validates config, fetches GSC data, runs all analyses, and presents a prioritized action plan with the HTML report path."
 ---
 
-# /seo-insights:analyze
+# /seo-analyze
 
 You are running the full SEO Insights analysis pipeline. Follow these steps in order. Do not skip any gate — each check exists to prevent confusing errors.
 
@@ -18,7 +18,7 @@ Check whether `${CLAUDE_PLUGIN_ROOT}/config/gsc.env` exists and contains the fou
 
 If credentials are missing or incomplete, stop and tell the user:
 
-> "Your Google Search Console credentials aren't configured yet. Please run `/seo-insights:setup` first — I'll walk you through the whole process."
+> "Your Google Search Console credentials aren't configured yet. Please run `/seo-setup` first — I'll walk you through the whole process."
 
 Do not proceed until credentials are confirmed.
 
@@ -30,7 +30,7 @@ Look for ICP files in `${CLAUDE_PLUGIN_ROOT}/config/`:
 
 If no ICP files exist (output is `NO_ICP_FILES`), stop and tell the user:
 
-> "No audience profile found. Please run `/seo-insights:define-audience` first — I'll interview you about your target audience, which makes the keyword scoring and content recommendations much more useful."
+> "No audience profile found. Please run `/seo-audience` first — I'll interview you about your target audience, which makes the keyword scoring and content recommendations much more useful."
 
 If one or more ICP files exist, and there is only one, use it. If there are multiple, ask the user which site they want to analyze.
 
@@ -38,7 +38,7 @@ Then validate the chosen ICP:
 
 `!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/validate_icp.py ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml`
 
-If validation fails, point the user to `/seo-insights:define-audience` to fix it.
+If validation fails, point the user to `/seo-audience` to fix it.
 
 ---
 
@@ -55,9 +55,9 @@ Run:
 (Replace `<domain>` with the actual domain from the ICP filename.)
 
 If the pipeline exits with an error, read the error output carefully and explain what went wrong in plain language. Common issues:
-- **Auth failure:** Suggest re-running `/seo-insights:setup` Step 9 to test the refresh token.
+- **Auth failure:** Suggest re-running `/seo-setup` Step 9 to test the refresh token.
 - **Network timeout:** Suggest retrying; GSC API is occasionally slow.
-- **ICP error:** Point to `/seo-insights:define-audience`.
+- **ICP error:** Point to `/seo-audience`.
 
 ---
 
@@ -102,9 +102,9 @@ If `keywords.enabled` is true in the JSON, briefly summarize:
 - The top 3 by `opportunity_score` (keyword, intent, score, volume if available), with `relevance_reason` if present
 - Note whether Ads data was used (from `keywords.source_note`)
 
-If `relevance_reviewed` is false, note: "AI relevance review hasn't run yet — run `/seo-insights:keyword-research` for a fully audience-filtered list."
+If `relevance_reviewed` is false, note: "AI relevance review hasn't run yet — run `/seo-keywords` for a fully audience-filtered list."
 
-Tell the user they can run `/seo-insights:keyword-research` for a full keyword-focused breakdown with AI audience-relevance judgment.
+Tell the user they can run `/seo-keywords` for a full keyword-focused breakdown with AI audience-relevance judgment.
 
 ### 3d. Report path
 

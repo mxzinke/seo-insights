@@ -11,7 +11,7 @@ REQUIRED_KEYS=("GSC_CLIENT_ID" "GSC_CLIENT_SECRET" "GSC_REFRESH_TOKEN" "GSC_SITE
 
 # If config file is missing — nudge and exit cleanly.
 if [[ ! -f "$CONFIG_FILE" ]]; then
-  echo "[seo-insights] GSC credentials not configured. Run /seo-insights:setup to get started."
+  echo "[seo-insights] GSC credentials not configured. Run /seo-setup to get started."
   exit 0
 fi
 
@@ -25,7 +25,7 @@ for key in "${REQUIRED_KEYS[@]}"; do
 done
 
 if [[ ${#missing[@]} -gt 0 ]]; then
-  echo "[seo-insights] GSC config incomplete (missing: ${missing[*]}). Run /seo-insights:setup to configure."
+  echo "[seo-insights] GSC config incomplete (missing: ${missing[*]}). Run /seo-setup to configure."
 fi
 
 # Always exit 0 — never block the session.

@@ -2,7 +2,7 @@
 description: "Run or refresh the keyword research module, apply AI audience-relevance judgment via the keyword-curator sub-agent, and present the top AI-filtered keyword opportunities ranked by opportunity score, intent, volume, and competition."
 ---
 
-# /seo-insights:keyword-research
+# /seo-keywords
 
 You are running the keyword research module in isolation. This gives a focused view of keyword opportunities without re-running the full analysis pipeline.
 
@@ -18,7 +18,7 @@ You are running the keyword research module in isolation. This gives a focused v
 
 `!bash ${CLAUDE_PLUGIN_ROOT}/scripts/check_setup.sh`
 
-If credentials are missing, stop and direct the user to `/seo-insights:setup`.
+If credentials are missing, stop and direct the user to `/seo-setup`.
 
 ### 1b. Find and validate the ICP
 
@@ -26,7 +26,7 @@ If credentials are missing, stop and direct the user to `/seo-insights:setup`.
 
 If no ICP files exist, stop and tell the user:
 
-> "Keyword scoring requires an audience profile. Please run `/seo-insights:define-audience` first so I know who you're targeting — this makes the opportunities far more relevant."
+> "Keyword scoring requires an audience profile. Please run `/seo-audience` first so I know who you're targeting — this makes the opportunities far more relevant."
 
 If multiple ICPs exist, ask which site to use. Then validate:
 

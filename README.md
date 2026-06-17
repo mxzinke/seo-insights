@@ -44,7 +44,7 @@ See [examples/sample-report.html](examples/sample-report.html) for a full intera
 /plugin install seo-insights@seo-insights
 ```
 
-Once installed, Claude will automatically prompt you to run `/seo-insights:setup`
+Once installed, Claude will automatically prompt you to run `/seo-setup`
 if GSC credentials are not yet configured (via the SessionStart hook).
 
 Then just ask Claude: *"Run an SEO analysis for my site"* and the skill takes over.
@@ -53,8 +53,8 @@ Then just ask Claude: *"Run an SEO analysis for my site"* and the skill takes ov
 
 In **Cowork** (Claude Desktop app): open **Customize → Plugins → Personal
 plugins → `+` → Add marketplace → Add from a repository**, enter
-`mxzinke/seo-insights`, then **Install** the *SEO Insights* plugin. Run `/setup`
-to configure, then `/analyze`.
+`mxzinke/seo-insights`, then **Install** the *SEO Insights* plugin. Run `/seo-setup`
+to configure, then `/seo-analyze`.
 
 → **Full step-by-step Cowork guide: [docs/USING-WITH-COWORK.md](docs/USING-WITH-COWORK.md)**
 
@@ -145,7 +145,7 @@ This repo is structured as a Claude Code plugin (v0.2.0). The plugin layout:
 skills/seo-insights/SKILL.md   # skill definition (triggers, orchestration steps)
 commands/           # slash commands (setup-wizard etc. — added separately)
 agents/             # sub-agents (added separately)
-hooks/hooks.json    # SessionStart hook: checks GSC config, nudges to /seo-insights:setup
+hooks/hooks.json    # SessionStart hook: checks GSC config, nudges to /seo-setup
 scripts/            # Python pipeline (auth, fetch, analyze, report)
 config/             # gsc.env (gitignored) + icp.*.yaml (gitignored) + examples
 ```

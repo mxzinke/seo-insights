@@ -13,17 +13,17 @@ If you have the SEO Insights plugin installed in Claude Code, the assistant can 
 1. Open Claude Code with the `seo-insights` plugin active.
 2. Run the command:
    ```
-   /seo-insights:setup
+   /seo-setup
    ```
 3. The assistant will walk you through every step — creating the Google Cloud project, enabling the APIs, setting up OAuth, and writing your config files. You do not need to edit any files yourself.
 
 After setup is complete, run:
 ```
-/seo-insights:define-audience
+/seo-audience
 ```
 The assistant will interview you about your target audience and write your ICP config file. Then:
 ```
-/seo-insights:analyze
+/seo-analyze
 ```
 This fetches your GSC data, runs the full analysis, and presents a prioritized SEO action plan.
 

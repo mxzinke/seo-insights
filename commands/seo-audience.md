@@ -2,7 +2,7 @@
 description: "ICP interview — Claude asks probing questions to define your target audience, then writes config/icp.<domain>.yaml and validates it."
 ---
 
-# /seo-insights:define-audience
+# /seo-audience
 
 You are conducting a structured Ideal Customer Profile (ICP) interview. Your goal is to deeply understand the user's target audience so that keyword scoring, content recommendations, and SEO prioritization are sharply focused on the right readers.
 
@@ -148,7 +148,7 @@ If validation passes, show the user a summary of the ICP and say:
 > - **Core topics:** [list]
 > - **Excluded noise:** [list]
 >
-> You're ready to run the analysis! Use `/seo-insights:analyze` to get your prioritized SEO action plan."
+> You're ready to run the analysis! Use `/seo-analyze` to get your prioritized SEO action plan."
 
 If validation fails, read the error messages and fix the specific field(s) that failed — do not ask the user to edit the file themselves. Re-run validation after fixing.
 

@@ -2,7 +2,7 @@
 description: "Guided onboarding wizard — Claude walks you through Google OAuth, GSC API setup, and writes all config files for you. No manual file editing needed."
 ---
 
-# /seo-insights:setup
+# /seo-setup
 
 You are running the SEO Insights onboarding wizard. Your job is to guide the user — who may have no technical background — through every step of the setup, writing all configuration files on their behalf. Be warm, reassuring, and explicit. Never ask the user to edit files themselves.
 
@@ -181,8 +181,8 @@ If it prints `access_token=ya29.a0...`, authentication is working. Tell the user
 > "Setup complete! Your credentials are working.
 >
 > **Next steps:**
-> 1. Run `/seo-insights:define-audience` so I can learn about your target customers — this makes keyword scoring much more accurate.
-> 2. Then run `/seo-insights:analyze` to run the full analysis and get your prioritized SEO action plan."
+> 1. Run `/seo-audience` so I can learn about your target customers — this makes keyword scoring much more accurate.
+> 2. Then run `/seo-analyze` to run the full analysis and get your prioritized SEO action plan."
 
 If the token refresh fails, walk the user through re-running Steps 4–5 to get a fresh authorization code and refresh token.
 
