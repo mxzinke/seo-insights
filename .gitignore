@@ -35,3 +35,4 @@ config/icp.*.yaml
 # DataForSEO credentials — never commit these
 dataforseo/.dataforseo.env
 dataforseo/*.env
+tests/fixtures/current/keywords.json
