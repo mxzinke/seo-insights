@@ -1,0 +1,84 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "1.1234 sec.",
+  "cost": 0.0006,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-maps-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.9876 sec.",
+      "cost": 0.0006,
+      "result_count": 1,
+      "path": ["v3", "serp", "google", "maps", "live", "advanced"],
+      "data": {
+        "keyword": "seo agentur berlin",
+        "location_code": 2276,
+        "language_code": "de"
+      },
+      "result": [
+        {
+          "keyword": "seo agentur berlin",
+          "type": "maps",
+          "se_domain": "google.de",
+          "location_code": 2276,
+          "language_code": "de",
+          "check_url": "https://www.google.de/maps/search/seo+agentur+berlin",
+          "datetime": "2026-06-17 10:00:00 +00:00",
+          "items_count": 3,
+          "items": [
+            {
+              "type": "maps_search",
+              "rank_group": 1,
+              "rank_absolute": 1,
+              "domain": "beispielagentur-berlin.de",
+              "title": "Beispiel SEO Agentur Berlin",
+              "url": "https://beispielagentur-berlin.de",
+              "rating": {
+                "rating_type": "Max5",
+                "value": 4.8,
+                "votes_count": 127,
+                "rating_max": 5
+              },
+              "snippet": "Professionelle SEO-Beratung und Umsetzung in Berlin.",
+              "address": "Unter den Linden 1, 10117 Berlin",
+              "phone": "+49 30 12345678",
+              "place_id": "ChIJ_demo_place_001",
+              "cid": "1234567890",
+              "feature_id": "0x47a8445c8cb0d382:0x112",
+              "is_claimed": true,
+              "categories": ["SEO-Agentur", "Marketing-Agentur"],
+              "work_hours": {
+                "work_hours_raw": "Mo-Fr: 09:00-18:00"
+              }
+            },
+            {
+              "type": "maps_search",
+              "rank_group": 2,
+              "rank_absolute": 2,
+              "domain": "digitalagentur-demo.de",
+              "title": "Digital & SEO Demo GmbH",
+              "url": "https://digitalagentur-demo.de",
+              "rating": {
+                "rating_type": "Max5",
+                "value": 4.6,
+                "votes_count": 89,
+                "rating_max": 5
+              },
+              "snippet": "Full-Service Digitalagentur mit SEO-Schwerpunkt.",
+              "address": "Friedrichstraße 100, 10117 Berlin",
+              "phone": "+49 30 98765432",
+              "place_id": "ChIJ_demo_place_002",
+              "is_claimed": true,
+              "categories": ["SEO-Agentur"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

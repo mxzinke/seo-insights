@@ -1,0 +1,110 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.3456 sec.",
+  "cost": 0.0,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-onpage-task-post-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.2345 sec.",
+      "cost": 0.0,
+      "result_count": 1,
+      "path": ["v3", "on_page", "task_post"],
+      "data": {
+        "target": "example.de",
+        "max_crawl_pages": 10,
+        "enable_javascript": false,
+        "load_resources": false
+      },
+      "result": [
+        {
+          "task_id": "demo-onpage-task-0001",
+          "status_code": 20000
+        }
+      ]
+    }
+  ],
+  "_demo_pages": [
+    {
+      "url": "https://example.de/",
+      "status_code": 200,
+      "location": null,
+      "meta": {
+        "title": "Example SEO Tools – Kostenlose SEO Analyse",
+        "description": "Analysieren Sie Ihre Website kostenlos mit unseren SEO-Tools.",
+        "title_length": 50,
+        "description_length": 65,
+        "htags": {
+          "h1": ["Kostenlose SEO Analyse"],
+          "h2": ["Features", "Preise", "Kontakt"],
+          "h3": ["Keyword-Analyse", "Backlink-Check", "Site-Audit"]
+        }
+      },
+      "content": {
+        "plain_text_size": 4200,
+        "plain_text_word_count": 720,
+        "automated_readability_index": 14.2,
+        "coleman_liau_readability_index": 13.8,
+        "links_count": 42,
+        "internal_links_count": 28,
+        "external_links_count": 14,
+        "images_count": 8,
+        "images_without_alt_attributes_count": 2
+      },
+      "page_timing": {
+        "time_to_interactive": 2.3,
+        "dom_complete": 3.1,
+        "largest_contentful_paint": 1.8,
+        "cumulative_layout_shift": 0.05
+      },
+      "checks": {
+        "title": true,
+        "description": true,
+        "h1": true,
+        "canonical": true,
+        "no_duplicate_meta_tags": true,
+        "seo_friendly_url": true,
+        "has_robots_txt": true,
+        "has_sitemap_xml": true,
+        "has_ssl": true
+      }
+    },
+    {
+      "url": "https://example.de/seo-tools/",
+      "status_code": 200,
+      "location": null,
+      "meta": {
+        "title": "SEO Tools Übersicht",
+        "description": null,
+        "title_length": 19,
+        "description_length": 0,
+        "htags": {
+          "h1": ["SEO Tools im Überblick"],
+          "h2": ["Kostenlose Tools", "Premium Tools"]
+        }
+      },
+      "content": {
+        "plain_text_size": 2100,
+        "plain_text_word_count": 380,
+        "links_count": 18,
+        "internal_links_count": 14,
+        "external_links_count": 4,
+        "images_count": 3,
+        "images_without_alt_attributes_count": 0
+      },
+      "checks": {
+        "title": true,
+        "description": false,
+        "h1": true,
+        "canonical": true,
+        "no_duplicate_meta_tags": true,
+        "seo_friendly_url": true
+      }
+    }
+  ]
+}

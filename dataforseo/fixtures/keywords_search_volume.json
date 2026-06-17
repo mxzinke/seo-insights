@@ -1,0 +1,123 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.5432 sec.",
+  "cost": 0.002,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-kw-volume-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.4567 sec.",
+      "cost": 0.002,
+      "result_count": 1,
+      "path": ["v3", "keywords_data", "google_ads", "search_volume", "live"],
+      "data": {
+        "keywords": ["seo tools kostenlos", "keyword recherche", "backlink analyse", "seo audit", "ranking verbessern"],
+        "location_code": 2276,
+        "language_code": "de"
+      },
+      "result": [
+        {
+          "location_code": 2276,
+          "language_code": "de",
+          "items_count": 5,
+          "items": [
+            {
+              "se_type": "google",
+              "keyword": "seo tools kostenlos",
+              "location_code": 2276,
+              "language_code": "de",
+              "search_partners": false,
+              "competition": "HIGH",
+              "competition_index": 61,
+              "search_volume": 2900,
+              "low_top_of_page_bid": 0.72,
+              "high_top_of_page_bid": 3.20,
+              "cpc": 1.85,
+              "monthly_searches": [
+                {"year": 2026, "month": 5, "search_volume": 3100},
+                {"year": 2026, "month": 4, "search_volume": 2700},
+                {"year": 2026, "month": 3, "search_volume": 2900},
+                {"year": 2026, "month": 2, "search_volume": 2600},
+                {"year": 2026, "month": 1, "search_volume": 2800},
+                {"year": 2025, "month": 12, "search_volume": 2400}
+              ]
+            },
+            {
+              "se_type": "google",
+              "keyword": "keyword recherche",
+              "location_code": 2276,
+              "language_code": "de",
+              "search_partners": false,
+              "competition": "MEDIUM",
+              "competition_index": 45,
+              "search_volume": 1600,
+              "low_top_of_page_bid": 0.90,
+              "high_top_of_page_bid": 4.50,
+              "cpc": 2.10,
+              "monthly_searches": [
+                {"year": 2026, "month": 5, "search_volume": 1700},
+                {"year": 2026, "month": 4, "search_volume": 1500}
+              ]
+            },
+            {
+              "se_type": "google",
+              "keyword": "backlink analyse",
+              "location_code": 2276,
+              "language_code": "de",
+              "search_partners": false,
+              "competition": "HIGH",
+              "competition_index": 52,
+              "search_volume": 880,
+              "low_top_of_page_bid": 1.20,
+              "high_top_of_page_bid": 6.80,
+              "cpc": 3.20,
+              "monthly_searches": [
+                {"year": 2026, "month": 5, "search_volume": 900},
+                {"year": 2026, "month": 4, "search_volume": 860}
+              ]
+            },
+            {
+              "se_type": "google",
+              "keyword": "seo audit",
+              "location_code": 2276,
+              "language_code": "de",
+              "search_partners": false,
+              "competition": "HIGH",
+              "competition_index": 72,
+              "search_volume": 3600,
+              "low_top_of_page_bid": 2.10,
+              "high_top_of_page_bid": 9.40,
+              "cpc": 4.50,
+              "monthly_searches": [
+                {"year": 2026, "month": 5, "search_volume": 3800},
+                {"year": 2026, "month": 4, "search_volume": 3500}
+              ]
+            },
+            {
+              "se_type": "google",
+              "keyword": "ranking verbessern",
+              "location_code": 2276,
+              "language_code": "de",
+              "search_partners": false,
+              "competition": "LOW",
+              "competition_index": 30,
+              "search_volume": 480,
+              "low_top_of_page_bid": 0.40,
+              "high_top_of_page_bid": 2.10,
+              "cpc": 1.20,
+              "monthly_searches": [
+                {"year": 2026, "month": 5, "search_volume": 500},
+                {"year": 2026, "month": 4, "search_volume": 460}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

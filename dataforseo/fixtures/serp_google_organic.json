@@ -1,0 +1,135 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "1.4567 sec.",
+  "cost": 0.002,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-serp-organic-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "1.2345 sec.",
+      "cost": 0.002,
+      "result_count": 1,
+      "path": ["v3", "serp", "google", "organic", "live", "advanced"],
+      "data": {
+        "keyword": "seo tools kostenlos",
+        "location_code": 2276,
+        "language_code": "de",
+        "device": "desktop",
+        "os": "windows"
+      },
+      "result": [
+        {
+          "keyword": "seo tools kostenlos",
+          "type": "organic",
+          "se_domain": "google.de",
+          "location_code": 2276,
+          "language_code": "de",
+          "check_url": "https://www.google.de/search?q=seo+tools+kostenlos",
+          "datetime": "2026-06-17 10:00:00 +00:00",
+          "spell": null,
+          "refinement_chips": null,
+          "item_types": ["organic", "people_also_ask", "related_searches"],
+          "se_results_count": 42300000,
+          "items_count": 10,
+          "items": [
+            {
+              "type": "organic",
+              "rank_group": 1,
+              "rank_absolute": 1,
+              "position": "left",
+              "xpath": "//*[@id='rso']/div[1]",
+              "domain": "ahrefs.com",
+              "title": "Die 13 besten kostenlosen SEO-Tools (die wirklich gut sind)",
+              "description": "Erfahren Sie, welche kostenlosen SEO-Tools wirklich hilfreich sind — für Keyword-Recherche, Backlink-Analyse und mehr.",
+              "url": "https://ahrefs.com/blog/de/kostenlose-seo-tools/",
+              "breadcrumb": "ahrefs.com > blog > de > kostenlose-seo-tools",
+              "website_name": "Ahrefs",
+              "is_image": false,
+              "is_video": false,
+              "is_featured_snippet": false,
+              "is_malicious": false,
+              "is_web_story": false,
+              "amp_version": false,
+              "rating": null,
+              "price": null,
+              "highlighted": ["kostenlose SEO-Tools"],
+              "links": null,
+              "faq": null,
+              "extended_snippet": null,
+              "images": null,
+              "about_this_result": null,
+              "pre_snippet": null,
+              "extended_people_also_search": null,
+              "timestamp": "2026-05-01 00:00:00 +00:00",
+              "cache_url": null,
+              "related_search_url": null,
+              "se_domain": "google.de",
+              "backlinks_info": null
+            },
+            {
+              "type": "organic",
+              "rank_group": 2,
+              "rank_absolute": 2,
+              "position": "left",
+              "domain": "semrush.com",
+              "title": "Kostenlose SEO-Tools von Semrush",
+              "description": "Nutzen Sie unsere kostenlosen Tools für die Keyword-Recherche, Site-Audit und mehr.",
+              "url": "https://www.semrush.com/de/free-seo-tools/",
+              "breadcrumb": "semrush.com > de > free-seo-tools",
+              "website_name": "Semrush",
+              "is_image": false,
+              "is_video": false,
+              "is_featured_snippet": false,
+              "is_malicious": false
+            },
+            {
+              "type": "people_also_ask",
+              "rank_group": 3,
+              "rank_absolute": 3,
+              "position": "left",
+              "items": [
+                {
+                  "type": "people_also_ask_element",
+                  "title": "Welches ist das beste kostenlose SEO-Tool?",
+                  "expanded_element": null,
+                  "url": "https://ahrefs.com/blog/de/kostenlose-seo-tools/",
+                  "domain": "ahrefs.com",
+                  "featured_link": null
+                },
+                {
+                  "type": "people_also_ask_element",
+                  "title": "Welche SEO Tools gibt es?",
+                  "expanded_element": null,
+                  "url": "https://www.semrush.com/de/",
+                  "domain": "semrush.com",
+                  "featured_link": null
+                }
+              ]
+            },
+            {
+              "type": "organic",
+              "rank_group": 4,
+              "rank_absolute": 5,
+              "position": "left",
+              "domain": "moz.com",
+              "title": "Free SEO Tools by Moz",
+              "description": "Access free keyword research, link building, and site audit tools.",
+              "url": "https://moz.com/free-seo-tools",
+              "breadcrumb": "moz.com > free-seo-tools",
+              "website_name": "Moz",
+              "is_image": false,
+              "is_video": false,
+              "is_featured_snippet": false,
+              "is_malicious": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

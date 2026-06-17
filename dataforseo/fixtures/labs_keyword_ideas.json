@@ -1,0 +1,166 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.7890 sec.",
+  "cost": 0.001,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-kw-ideas-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.6789 sec.",
+      "cost": 0.001,
+      "result_count": 1,
+      "path": ["v3", "dataforseo_labs", "google", "keyword_ideas", "live"],
+      "data": {
+        "keywords": ["seo tools"],
+        "location_code": 2276,
+        "language_code": "de"
+      },
+      "result": [
+        {
+          "location_code": 2276,
+          "language_code": "de",
+          "items_count": 6,
+          "items": [
+            {
+              "se_type": "google",
+              "keyword": "beste seo tools",
+              "location_code": 2276,
+              "language_code": "de",
+              "keyword_info": {
+                "search_volume": 1900,
+                "competition": 0.55,
+                "competition_level": "MEDIUM",
+                "cpc": 2.30,
+                "monthly_searches": []
+              },
+              "keyword_properties": {
+                "se_type": "google",
+                "keyword_difficulty": 63
+              },
+              "search_intent_info": {
+                "main_intent": "commercial",
+                "foreign_intent": ["informational"],
+                "last_updated_time": "2026-05-01 00:00:00 +00:00"
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword": "seo tools vergleich",
+              "location_code": 2276,
+              "language_code": "de",
+              "keyword_info": {
+                "search_volume": 880,
+                "competition": 0.48,
+                "competition_level": "MEDIUM",
+                "cpc": 3.10,
+                "monthly_searches": []
+              },
+              "keyword_properties": {
+                "se_type": "google",
+                "keyword_difficulty": 55
+              },
+              "search_intent_info": {
+                "main_intent": "commercial",
+                "foreign_intent": ["informational"],
+                "last_updated_time": "2026-05-01 00:00:00 +00:00"
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword": "kostenlose seo tools für anfänger",
+              "location_code": 2276,
+              "language_code": "de",
+              "keyword_info": {
+                "search_volume": 390,
+                "competition": 0.22,
+                "competition_level": "LOW",
+                "cpc": 0.90,
+                "monthly_searches": []
+              },
+              "keyword_properties": {
+                "se_type": "google",
+                "keyword_difficulty": 28
+              },
+              "search_intent_info": {
+                "main_intent": "informational",
+                "foreign_intent": [],
+                "last_updated_time": "2026-05-01 00:00:00 +00:00"
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword": "seo tools liste",
+              "location_code": 2276,
+              "language_code": "de",
+              "keyword_info": {
+                "search_volume": 720,
+                "competition": 0.35,
+                "competition_level": "MEDIUM",
+                "cpc": 1.60,
+                "monthly_searches": []
+              },
+              "keyword_properties": {
+                "se_type": "google",
+                "keyword_difficulty": 44
+              },
+              "search_intent_info": {
+                "main_intent": "informational",
+                "foreign_intent": ["commercial"],
+                "last_updated_time": "2026-05-01 00:00:00 +00:00"
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword": "seo software",
+              "location_code": 2276,
+              "language_code": "de",
+              "keyword_info": {
+                "search_volume": 2400,
+                "competition": 0.68,
+                "competition_level": "HIGH",
+                "cpc": 5.20,
+                "monthly_searches": []
+              },
+              "keyword_properties": {
+                "se_type": "google",
+                "keyword_difficulty": 75
+              },
+              "search_intent_info": {
+                "main_intent": "commercial",
+                "foreign_intent": ["transactional"],
+                "last_updated_time": "2026-05-01 00:00:00 +00:00"
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword": "gratis seo analyse",
+              "location_code": 2276,
+              "language_code": "de",
+              "keyword_info": {
+                "search_volume": 590,
+                "competition": 0.40,
+                "competition_level": "MEDIUM",
+                "cpc": 2.80,
+                "monthly_searches": []
+              },
+              "keyword_properties": {
+                "se_type": "google",
+                "keyword_difficulty": 35
+              },
+              "search_intent_info": {
+                "main_intent": "commercial",
+                "foreign_intent": [],
+                "last_updated_time": "2026-05-01 00:00:00 +00:00"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

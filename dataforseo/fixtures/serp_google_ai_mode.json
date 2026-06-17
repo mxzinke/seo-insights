@@ -1,0 +1,61 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "2.3456 sec.",
+  "cost": 0.004,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-ai-mode-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "2.1234 sec.",
+      "cost": 0.004,
+      "result_count": 1,
+      "path": ["v3", "serp", "google", "ai_mode", "live", "advanced"],
+      "data": {
+        "keyword": "wie verbessere ich mein google ranking",
+        "location_code": 2276,
+        "language_code": "de"
+      },
+      "result": [
+        {
+          "keyword": "wie verbessere ich mein google ranking",
+          "type": "ai_mode",
+          "se_domain": "google.de",
+          "location_code": 2276,
+          "language_code": "de",
+          "datetime": "2026-06-17 10:00:00 +00:00",
+          "items_count": 1,
+          "items": [
+            {
+              "type": "ai_overview",
+              "rank_group": 1,
+              "rank_absolute": 1,
+              "ai_overview": {
+                "text": "Um Ihr Google-Ranking zu verbessern, sollten Sie hochwertige Inhalte erstellen, technisches SEO optimieren und Backlinks aufbauen. Wichtige Faktoren sind: 1) Qualität und Relevanz der Inhalte, 2) Ladegeschwindigkeit der Website, 3) Mobile-Optimierung, 4) Interne Verlinkung.",
+                "references": [
+                  {
+                    "source": "Google Search Central",
+                    "url": "https://developers.google.com/search/docs",
+                    "title": "Google Search Dokumentation"
+                  }
+                ]
+              },
+              "organic_items": [
+                {
+                  "rank_group": 1,
+                  "domain": "searchengineland.com",
+                  "title": "How to Improve Google Rankings",
+                  "url": "https://searchengineland.com/improve-google-rankings"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

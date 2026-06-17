@@ -1,0 +1,149 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.8901 sec.",
+  "cost": 0.0110,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-ranked-kw-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.7890 sec.",
+      "cost": 0.0110,
+      "result_count": 1,
+      "path": ["v3", "dataforseo_labs", "google", "ranked_keywords", "live"],
+      "data": {
+        "target": "example.de",
+        "location_code": 2276,
+        "language_code": "de",
+        "limit": 5
+      },
+      "result": [
+        {
+          "website": "example.de",
+          "type": "ranked_keywords",
+          "se_type": "google",
+          "location_code": 2276,
+          "language_code": "de",
+          "total_count": 42,
+          "items_count": 5,
+          "items": [
+            {
+              "se_type": "google",
+              "keyword_data": {
+                "keyword": "seo tools kostenlos",
+                "location_code": 2276,
+                "language_code": "de",
+                "keyword_info": {
+                  "search_volume": 2900,
+                  "competition": 0.61,
+                  "cpc": 1.85
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "type": "organic",
+                  "rank_group": 8,
+                  "rank_absolute": 8,
+                  "url": "https://example.de/seo-tools/",
+                  "etv": 48
+                }
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword_data": {
+                "keyword": "gratis seo analyse",
+                "location_code": 2276,
+                "language_code": "de",
+                "keyword_info": {
+                  "search_volume": 590,
+                  "competition": 0.40,
+                  "cpc": 2.80
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "type": "organic",
+                  "rank_group": 3,
+                  "rank_absolute": 3,
+                  "url": "https://example.de/seo-analyse/",
+                  "etv": 92
+                }
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword_data": {
+                "keyword": "keyword tool deutsch",
+                "location_code": 2276,
+                "language_code": "de",
+                "keyword_info": {
+                  "search_volume": 1300,
+                  "competition": 0.50,
+                  "cpc": 2.10
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "type": "organic",
+                  "rank_group": 12,
+                  "rank_absolute": 12,
+                  "url": "https://example.de/keyword-tool/",
+                  "etv": 22
+                }
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword_data": {
+                "keyword": "website seo check",
+                "location_code": 2276,
+                "language_code": "de",
+                "keyword_info": {
+                  "search_volume": 4400,
+                  "competition": 0.65,
+                  "cpc": 3.50
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "type": "organic",
+                  "rank_group": 19,
+                  "rank_absolute": 19,
+                  "url": "https://example.de/",
+                  "etv": 34
+                }
+              }
+            },
+            {
+              "se_type": "google",
+              "keyword_data": {
+                "keyword": "backlinks prüfen",
+                "location_code": 2276,
+                "language_code": "de",
+                "keyword_info": {
+                  "search_volume": 720,
+                  "competition": 0.42,
+                  "cpc": 2.40
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "type": "organic",
+                  "rank_group": 5,
+                  "rank_absolute": 5,
+                  "url": "https://example.de/backlinks/",
+                  "etv": 68
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.9876 sec.",
+  "cost": 0.0006,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-bing-organic-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.8765 sec.",
+      "cost": 0.0006,
+      "result_count": 1,
+      "path": ["v3", "serp", "bing", "organic", "live", "advanced"],
+      "data": {
+        "keyword": "seo tools kostenlos",
+        "location_code": 2276,
+        "language_code": "de",
+        "device": "desktop"
+      },
+      "result": [
+        {
+          "keyword": "seo tools kostenlos",
+          "type": "organic",
+          "se_domain": "bing.com",
+          "location_code": 2276,
+          "language_code": "de",
+          "check_url": "https://www.bing.com/search?q=seo+tools+kostenlos",
+          "datetime": "2026-06-17 10:00:00 +00:00",
+          "items_count": 10,
+          "items": [
+            {
+              "type": "organic",
+              "rank_group": 1,
+              "rank_absolute": 1,
+              "position": "left",
+              "domain": "ahrefs.com",
+              "title": "Die besten kostenlosen SEO-Tools – Ahrefs",
+              "description": "Entdecken Sie die besten kostenlosen SEO-Tools für Keyword-Analyse, Backlink-Check und mehr.",
+              "url": "https://ahrefs.com/blog/de/kostenlose-seo-tools/",
+              "breadcrumb": "ahrefs.com > blog > de",
+              "is_image": false,
+              "is_video": false,
+              "is_featured_snippet": false
+            },
+            {
+              "type": "organic",
+              "rank_group": 2,
+              "rank_absolute": 2,
+              "position": "left",
+              "domain": "sistrix.de",
+              "title": "SISTRIX Toolbox – Kostenlos testen",
+              "description": "Analysieren Sie Ihre SEO-Performance kostenlos mit der SISTRIX Toolbox.",
+              "url": "https://www.sistrix.de/kostenlos/",
+              "breadcrumb": "sistrix.de > kostenlos",
+              "is_image": false,
+              "is_video": false,
+              "is_featured_snippet": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

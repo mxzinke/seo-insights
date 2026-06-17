@@ -1,0 +1,77 @@
+{
+  "version": "0.1.20231231",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.4321 sec.",
+  "cost": 0.0005,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "demo-intent-0001",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.3456 sec.",
+      "cost": 0.0005,
+      "result_count": 1,
+      "path": ["v3", "dataforseo_labs", "google", "search_intent", "live"],
+      "data": {
+        "keywords": ["seo tools kostenlos", "keyword recherche", "seo agentur beauftragen", "was ist seo"],
+        "location_code": 2276,
+        "language_code": "de"
+      },
+      "result": [
+        {
+          "location_code": 2276,
+          "language_code": "de",
+          "items_count": 4,
+          "items": [
+            {
+              "keyword": "seo tools kostenlos",
+              "keyword_intent": {
+                "label": "informational",
+                "probability": 0.78
+              },
+              "secondary_keyword_intents": [
+                {"label": "commercial", "probability": 0.18},
+                {"label": "navigational", "probability": 0.04}
+              ]
+            },
+            {
+              "keyword": "keyword recherche",
+              "keyword_intent": {
+                "label": "informational",
+                "probability": 0.82
+              },
+              "secondary_keyword_intents": [
+                {"label": "commercial", "probability": 0.15},
+                {"label": "transactional", "probability": 0.03}
+              ]
+            },
+            {
+              "keyword": "seo agentur beauftragen",
+              "keyword_intent": {
+                "label": "commercial",
+                "probability": 0.71
+              },
+              "secondary_keyword_intents": [
+                {"label": "transactional", "probability": 0.24},
+                {"label": "informational", "probability": 0.05}
+              ]
+            },
+            {
+              "keyword": "was ist seo",
+              "keyword_intent": {
+                "label": "informational",
+                "probability": 0.96
+              },
+              "secondary_keyword_intents": [
+                {"label": "navigational", "probability": 0.04}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
