@@ -3005,21 +3005,43 @@
        Sticky nav — highlight active section
     ---------------------------------------------------------- */
     function initNavHighlight() {
-      const sections = document.querySelectorAll('section[id]');
-      const links = document.querySelectorAll('.nav-link');
-      if (!sections.length || !links.length) return;
+      const links = Array.from(document.querySelectorAll('.nav-link'));
+      if (!links.length) return;
+      // Only consider sections the nav actually links to, in document order.
+      const sections = links
+        .map(l => document.querySelector(l.getAttribute('href')))
+        .filter(Boolean);
+      if (!sections.length) return;
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            links.forEach(l => {
-              l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id);
-            });
-          }
-        });
-      }, { threshold: 0.3 });
+      const navEl = links[0].closest('nav') || links[0].closest('.nav-links');
 
-      sections.forEach(s => observer.observe(s));
+      function update() {
+        // Activation line sits just below the sticky nav.
+        const navH = navEl ? navEl.getBoundingClientRect().height : 56;
+        const line = navH + 24;
+
+        // The active section is the last one whose top has scrolled above the line.
+        let current = sections[0];
+        for (const s of sections) {
+          if (s.getBoundingClientRect().top - line <= 0) current = s;
+        }
+        // At the very bottom of the page, force the last section active.
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+          current = sections[sections.length - 1];
+        }
+
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current.id));
+      }
+
+      let ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => { update(); ticking = false; });
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', update);
+      update();
     }
 
     /* ----------------------------------------------------------
