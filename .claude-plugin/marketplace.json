@@ -1,12 +1,12 @@
 {
   "name": "seo-insights",
   "owner": { "name": "Maximilian Pfennig" },
+  "description": "SEO Insights — deep, deterministic Google Search Console analysis as a Claude plugin.",
   "plugins": [
     {
       "name": "seo-insights",
       "source": "./",
-      "description": "Deep, deterministic SEO analysis from Google Search Console.",
-      "version": "0.2.0"
+      "description": "Deep, deterministic SEO analysis from Google Search Console."
     }
   ]
 }

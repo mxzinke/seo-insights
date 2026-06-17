@@ -1,8 +1,14 @@
 {
-  "hooks": [
-    {
-      "event": "SessionStart",
-      "command": "bash ${CLAUDE_PLUGIN_ROOT}/scripts/check_setup.sh"
-    }
-  ]
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/check_setup.sh"
+          }
+        ]
+      }
+    ]
+  }
 }

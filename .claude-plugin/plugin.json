@@ -7,9 +7,5 @@
   "homepage": "https://github.com/mxzinke/seo-insights",
   "repository": "https://github.com/mxzinke/seo-insights",
   "license": "MIT",
-  "keywords": ["seo", "google-search-console", "keyword-research", "report"],
-  "skills": "./skills/",
-  "commands": ["./commands/"],
-  "agents": "./agents/",
-  "hooks": "./hooks/hooks.json"
+  "keywords": ["seo", "google-search-console", "keyword-research", "report"]
 }
