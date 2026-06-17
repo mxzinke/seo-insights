@@ -123,7 +123,7 @@ The most effective approach combines both tools:
 
 ### Step 3 — Feed into this tool
 1. Add the best topics to your ICP's `priority_topics` field by running `/seo-audience` (or updating the YAML directly if you're comfortable).
-2. Run `/seo-keywords` to cross-reference with your GSC data — this shows which of these topics you already (partially) rank for, and where the biggest opportunity gaps are.
+2. Run `/seo-keywords-research` to cross-reference with your GSC data — this shows which of these topics you already (partially) rank for, and where the biggest opportunity gaps are.
 
 ---
 

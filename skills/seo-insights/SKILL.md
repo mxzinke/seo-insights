@@ -175,7 +175,7 @@ until the AI curator pass runs.
 
 **This is the only place the AI makes a content judgment in this plugin.**
 
-When the user runs `/seo-keywords`, Claude:
+When the user runs `/seo-keywords-research`, Claude:
 1. Reads the ICP + candidate keywords from `keywords.json`
 2. Delegates to the `keyword-curator` sub-agent (Haiku, read-only)
 3. The curator returns per-keyword verdicts: `{relevant, reason, intent}`

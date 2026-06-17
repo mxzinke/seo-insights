@@ -44,7 +44,7 @@ computer.
 
 In the same **Plugins** view, find **SEO Insights** and click **Install**.
 This loads the skill, the `/seo-setup`, `/seo-audience`, `/seo-analyze`, and
-`/seo-keywords` commands, the Haiku keyword-curator sub-agent, and a
+`/seo-keywords-research` commands, the Haiku keyword-curator sub-agent, and a
 session-start check.
 
 ## 3. Run the guided setup — `/seo-setup`
@@ -81,9 +81,9 @@ Claude:
 Open the generated `report.html` in your browser for the full interactive
 cockpit (sortable tables, charts, keyword opportunities).
 
-## 6. Keyword research — `/seo-keywords`
+## 6. Keyword research — `/seo-keywords-research`
 
-Type `/seo-keywords`. Claude gathers candidate keywords (Search Console +
+Type `/seo-keywords-research`. Claude gathers candidate keywords (Search Console +
 Google Ads ideas + autocomplete), then the **Haiku keyword-curator sub-agent**
 judges which are genuinely relevant to *your* audience (with understanding — not
 string matching) and classifies intent. Only relevant keywords appear in the

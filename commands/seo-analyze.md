@@ -102,9 +102,9 @@ If `keywords.enabled` is true in the JSON, briefly summarize:
 - The top 3 by `opportunity_score` (keyword, intent, score, volume if available), with `relevance_reason` if present
 - Note whether Ads data was used (from `keywords.source_note`)
 
-If `relevance_reviewed` is false, note: "AI relevance review hasn't run yet — run `/seo-keywords` for a fully audience-filtered list."
+If `relevance_reviewed` is false, note: "AI relevance review hasn't run yet — run `/seo-keywords-research` for a fully audience-filtered list."
 
-Tell the user they can run `/seo-keywords` for a full keyword-focused breakdown with AI audience-relevance judgment.
+Tell the user they can run `/seo-keywords-research` for a full keyword-focused breakdown with AI audience-relevance judgment.
 
 ### 3d. Report path
 

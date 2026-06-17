@@ -2,7 +2,7 @@
 description: "Run or refresh the keyword research module, apply AI audience-relevance judgment via the keyword-curator sub-agent, and present the top AI-filtered keyword opportunities ranked by opportunity score, intent, volume, and competition."
 ---
 
-# /seo-keywords
+# /seo-keywords-research
 
 You are running the keyword research module in isolation. This gives a focused view of keyword opportunities without re-running the full analysis pipeline.
 
