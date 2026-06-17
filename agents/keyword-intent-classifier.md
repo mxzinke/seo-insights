@@ -2,9 +2,7 @@
 name: keyword-intent-classifier
 description: "Delegate to this agent when the rule-based intent classifier returns 'unknown' for a batch of keywords and you need them classified into informational / commercial / transactional / navigational. Keeps the main context lean by handling bulk classification cheaply. Do NOT delegate for metrics, volumes, scores, or any numeric computation — this agent is read-only and must not invent data."
 model: haiku
-disallowedTools:
-  - Write
-  - Edit
+disallowedTools: Write, Edit
 ---
 
 You are a search-intent classification specialist. Your only job is to classify keywords by search intent.
