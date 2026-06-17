@@ -77,11 +77,16 @@ Tell the user:
    - **User support email:** their email
    - **Developer contact email:** their email
 3. Click **Save and Continue**.
-4. On the **Scopes** page, click **Add or Remove Scopes**. Add these two scopes:
+4. On the **Scopes** page, click **Add or Remove Scopes**. Add **both** scopes:
    - `https://www.googleapis.com/auth/webmasters.readonly` (Search Console read access)
-   - `https://www.googleapis.com/auth/adwords` (Google Ads API — needed for keyword volumes; skip if not using Ads)
-   
-   If they're skipping Ads for now, just add the `webmasters.readonly` scope.
+   - `https://www.googleapis.com/auth/adwords` (Google Ads API — keyword volumes)
+
+   Adding both now is recommended so the token is valid for Ads later without
+   re-authorizing. (The `adwords` scope only appears in the picker if the Google
+   Ads API was enabled in Step 2.) **If the user has no Google Ads account at
+   all**, they can add only `webmasters.readonly` here — in that case you MUST
+   run the Step 5 authorization with the `--gsc-only` flag so the requested
+   scopes match what the consent screen allows (otherwise Google rejects it).
 5. Click **Update** then **Save and Continue**.
 6. On the **Test users** page, click **Add Users** and add their own Google account email. Click **Save and Continue**.
 7. Review the summary and click **Back to Dashboard**.
@@ -114,6 +119,8 @@ one created in Step 4 must use a localhost redirect, which this handles.)
 **Preferred — automatic (no copy-paste):** run
 
 `!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/auth.py login --client-id <CLIENT_ID> --client-secret <CLIENT_SECRET> --open`
+
+(If the user added only the Search Console scope in Step 3 — no Google Ads — append `--gsc-only` to this command.)
 
 This opens a consent URL and starts a tiny local listener that captures the
 authorization code automatically. Tell the user:

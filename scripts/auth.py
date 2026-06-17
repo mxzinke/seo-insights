@@ -154,10 +154,15 @@ def _capture_code(port: int, timeout: int = 300) -> str | None:
     return captured.get("code")
 
 
+def _scopes_for(args) -> str:
+    """Request both scopes by default; GSC-only when --gsc-only is set."""
+    return GSC_SCOPE if getattr(args, "gsc_only", False) else DEFAULT_SCOPES
+
+
 def cmd_login(args):
     port = _free_port()
     redirect_uri = f"http://{LOOPBACK_HOST}:{port}"
-    url = build_consent_url(args.client_id, redirect_uri)
+    url = build_consent_url(args.client_id, redirect_uri, _scopes_for(args))
     print("Open this URL in a browser signed in as the Search Console owner:\n")
     print(url + "\n")
     print(f"Waiting for the Google redirect on {redirect_uri} ... (up to 5 min)")
@@ -184,7 +189,7 @@ def cmd_login(args):
 # ---------------------------------------------------------------------------
 
 def cmd_consent(args):
-    url = build_consent_url(args.client_id, MANUAL_REDIRECT_URI)
+    url = build_consent_url(args.client_id, MANUAL_REDIRECT_URI, _scopes_for(args))
     print("Visit this URL in a browser signed in as the Search Console owner:\n")
     print(url)
     print(
@@ -231,10 +236,14 @@ def main():
     p_login.add_argument("--client-id", required=True)
     p_login.add_argument("--client-secret", required=True)
     p_login.add_argument("--open", action="store_true", help="Also try to open the browser automatically.")
+    p_login.add_argument("--gsc-only", action="store_true",
+                         help="Request only the Search Console scope (skip Google Ads).")
     p_login.set_defaults(func=cmd_login)
 
     p_consent = sub.add_parser("consent", help="Print the OAuth consent URL (manual localhost flow).")
     p_consent.add_argument("--client-id", required=True)
+    p_consent.add_argument("--gsc-only", action="store_true",
+                           help="Request only the Search Console scope (skip Google Ads).")
     p_consent.set_defaults(func=cmd_consent)
 
     p_exchange = sub.add_parser("exchange", help="Exchange a manually copied auth code for a refresh token.")
