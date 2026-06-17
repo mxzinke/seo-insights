@@ -438,6 +438,17 @@
       margin-bottom: 16px;
     }
 
+    .kw-relevance-reason {
+      font-size: 11px;
+      color: var(--color-text-faint);
+      font-style: italic;
+      margin-top: 2px;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+
     .badge-impact-high   { background: #e8f8ee; color: var(--color-green); border-color: #b8e8cc; }
     .badge-impact-medium { background: #fef8ec; color: var(--color-amber); border-color: #f0d8a0; }
     .badge-impact-low    { background: #f5f5f5; color: #555; border-color: #ddd; }
@@ -1577,6 +1588,7 @@
         <p class="section-subtitle">
           Sorted by opportunity score. GSC data is always real; volume data requires Google Ads API.
           {% if keywords_count %}<strong>{{ keywords_count }} keywords analysed.</strong>{% endif %}
+          {% if keywords_relevance_reviewed %}<strong style="color:var(--color-green);">AI-reviewed.</strong>{% endif %}
         </p>
       </div>
 
@@ -1594,6 +1606,17 @@
           <path d="M8 7v4M8 5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
         {{ keywords_source_note }}
+      </div>
+      {% endif %}
+
+      <!-- AI relevance review status -->
+      {% if not keywords_relevance_reviewed %}
+      <div class="kw-relevance-pending-note" style="display:flex; align-items:flex-start; gap:8px; padding:10px 14px; background:var(--color-amber-bg); border:1px solid #f0c080; border-radius:var(--radius-sm); font-size:13px; color:var(--color-amber); margin-bottom:12px;">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="flex-shrink:0; margin-top:1px;">
+          <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>AI relevance review pending — run <code>/seo-insights:keyword-research</code> for an audience-filtered list. Showing all candidates; some may be off-audience.</span>
       </div>
       {% endif %}
 
@@ -3111,9 +3134,15 @@
       const srcCls = 'kw-source-' + (kw.source || 'gsc');
       const srcLabel = kw.source === 'ads' ? 'Ads' : kw.source === 'autocomplete' ? 'Suggest' : 'GSC';
 
+      // Show AI relevance_reason as subtext when present
+      const reasonHtml = kw.relevance_reason
+        ? `<div class="kw-relevance-reason" title="${_esc(kw.relevance_reason)}">${_esc(kw.relevance_reason)}</div>`
+        : '';
+
       return `<tr>
         <td class="cell-main" title="${_esc(kw.keyword)}">${_esc(kw.keyword)}
           <span class="kw-source-badge ${srcCls}" style="margin-left:6px;">${srcLabel}</span>
+          ${reasonHtml}
         </td>
         <td style="text-align:center;">${renderKwIntentBadge(kw.intent || 'unknown')}</td>
         <td class="cell-num">${volStr}</td>

@@ -1,10 +1,14 @@
 ---
-description: "Run or refresh the keyword research module and present the top keyword opportunities ranked by opportunity score, intent, volume, and competition."
+description: "Run or refresh the keyword research module, apply AI audience-relevance judgment via the keyword-curator sub-agent, and present the top AI-filtered keyword opportunities ranked by opportunity score, intent, volume, and competition."
 ---
 
 # /seo-insights:keyword-research
 
 You are running the keyword research module in isolation. This gives a focused view of keyword opportunities without re-running the full analysis pipeline.
+
+**Two-phase design:**
+1. **Deterministic pipeline** — Python scripts produce all candidates + all numbers (scores, volumes, positions). No AI judgment in this phase.
+2. **AI relevance pass** — the `keyword-curator` sub-agent judges which candidates are genuinely relevant to the ICP audience (with understanding, not string matching). Numbers are never touched in this phase.
 
 ---
 
@@ -44,7 +48,7 @@ Then fetch data:
 
 ---
 
-## STEP 2 — Run keyword research
+## STEP 2 — Run keyword research (deterministic phase)
 
 Run the keyword research module against the most recent data directory:
 
@@ -52,13 +56,63 @@ Run the keyword research module against the most recent data directory:
 
 (Replace `<domain>` and `<date>` with actual values.)
 
-If you want to run in demo mode (no credentials needed, uses fixture data):
-
-`!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/keywords/research.py --data-dir ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date> --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml --demo`
+This produces `keywords.json` in the run directory. Each candidate has:
+- All numbers computed deterministically: `opportunity_score`, `search_volume`, `competition_index`, `our_current_position`
+- `relevance: null` and `relevance_reason: null` — unjudged until the AI pass runs
+- Hard exclusions: any term matching `excluded_terms` in the ICP is blocked before scoring
 
 ---
 
-## STEP 3 — Read and present keyword opportunities
+## STEP 3 — AI relevance pass (keyword-curator sub-agent)
+
+Read `${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date>/keywords.json` to get the candidate list.
+
+Also read the ICP at `${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml`.
+
+Now delegate the relevance + intent judgment to the `keyword-curator` sub-agent. Send it:
+
+```json
+{
+  "icp": {
+    "audience": "<from ICP>",
+    "problem_solved": "<from ICP>",
+    "value_proposition": "<from ICP>",
+    "country": "<from ICP>",
+    "language": "<from ICP>",
+    "search_intent": "<from ICP>",
+    "priority_topics": ["<from ICP>"]
+  },
+  "keywords": [
+    {"keyword": "<candidate 1>"},
+    {"keyword": "<candidate 2>"},
+    ...
+  ]
+}
+```
+
+The sub-agent returns a JSON array with `{keyword, relevant, reason, intent}` per keyword. It does NOT touch any numbers.
+
+Write the verdict array to `${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date>/keyword_relevance.json`.
+
+Important: the curator judges relevance with understanding, not string matching. A keyword can share words with the site's topics but still be off-audience (e.g. "pokemon karte mit ki erstellen" for a professional map tool — "karte" and "ki" overlap but the searcher wants pokemon cards, not maps).
+
+---
+
+## STEP 4 — Rebuild report with AI verdicts
+
+Re-run `build_report_data.py` so it picks up `keyword_relevance.json` and applies the AI filter:
+
+`!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/build_report_data.py --data-dir ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date> --icp ${CLAUDE_PLUGIN_ROOT}/config/icp.<domain>.yaml`
+
+Then re-render the report:
+
+`!python3 ${CLAUDE_PLUGIN_ROOT}/scripts/report.py ${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date>/report_data.json`
+
+The rebuilt report will have `keywords.relevance_reviewed = true` and only show AI-approved opportunities.
+
+---
+
+## STEP 5 — Read and present keyword opportunities
 
 Read `${CLAUDE_PLUGIN_ROOT}/data/<domain>/<date>/report_data.json` and look at the `keywords` section.
 
@@ -69,34 +123,35 @@ First tell the user which mode is active (from `keywords.source_note`):
 - **Free mode** (GSC + Google Autocomplete): Keyword ideas come from your existing GSC queries and autocomplete expansion. Volume data shows as "unavailable" — great for direction, not precise volume.
 - **Ads-enabled mode**: Full search volume, competition index, and 12-month trend data from the Google Ads API. Volumes are average monthly searches for the selected country/language.
 
-To enable Ads mode, the user needs a Google Ads developer token with Basic access. See `/seo-insights:setup` Step 8, or read `${CLAUDE_PLUGIN_ROOT}/SETUP.md` for instructions.
+Also confirm that `keywords.relevance_reviewed` is `true` (it should be after STEP 4).
 
 ### Top opportunities table
 
-Present the top 20 opportunities from `keywords.opportunities` (sorted by `opportunity_score` descending).
+Present the top 20 opportunities from `keywords.opportunities` (sorted by `opportunity_score` descending). These have already been filtered to `relevant: true` by the AI curator.
 
-Format as a clear table or list:
+Format as a clear table:
 
 ```
-Rank | Keyword | Intent | Volume | Competition | Our Position | Score
-1    | [keyword] | [intent] | [vol or "—"] | [Low/Med/High or "—"] | [pos or "not ranking"] | [score]/100
+Rank | Keyword | Intent | Volume | Competition | Our Position | Score | Relevance note
+1    | [keyword] | [intent] | [vol or "—"] | [Low/Med/High or "—"] | [pos or "not ranking"] | [score]/100 | [relevance_reason]
 ```
 
 For each entry use the exact values from the JSON. Never invent or estimate volumes or scores.
 
 Column explanations to give the user:
-- **Intent:** `informational` (wants to learn), `commercial` (comparing options), `transactional` (ready to act), `navigational` (looking for a specific page)
+- **Intent:** `informational` (wants to learn), `commercial` (comparing options), `transactional` (ready to act), `navigational` (looking for a specific page). Rule-based classifier; AI intent used when rule-based returned "unknown".
 - **Volume:** Average monthly searches (from Google Ads API when enabled; `—` in free mode)
 - **Competition:** How many advertisers bid on this keyword — `Low`, `Medium`, `High` (Ads-enabled only)
 - **Our Position:** Current average ranking in Google Search (from GSC). "not ranking" means the keyword was discovered but we have no GSC impression data yet.
-- **Score:** Opportunity score 0–100, computed deterministically from volume, competition, ranking gap, and ICP relevance. Higher is better.
+- **Score:** Opportunity score 0–100, computed deterministically from volume, competition, and ranking gap. Higher is better. (ICP string-matching is NOT used in this score — audience relevance is judged by the AI curator.)
+- **Relevance note:** The AI curator's one-sentence reason for including this keyword.
 
 ### Highlight top picks
 
 After the table, highlight 3–5 standout opportunities with a sentence each explaining why they're worth prioritizing. Focus on:
 - High score + high volume + low/medium competition
-- Good ICP relevance (topic matches priority_topics)
 - Keywords where the site ranks 5–20 (striking distance — small improvement = big click gains)
+- Include the AI curator's relevance reason to explain why each pick fits the audience
 
 ### Discovery tips
 
@@ -115,3 +170,5 @@ End with:
 ## Important
 
 All keyword scores, volumes, and positions come from the Python pipeline — they are deterministic computations from GSC and API data. Never invent, round differently, or estimate any metric that isn't present in the JSON.
+
+The AI curator (keyword-curator sub-agent) only judges RELEVANCE and INTENT — it never produces or modifies any numeric value. The `opportunity_score` in the JSON is always from the Python pipeline.

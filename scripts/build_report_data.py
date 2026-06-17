@@ -298,6 +298,104 @@ def build_charts(data_dir: pathlib.Path) -> dict:
     return charts
 
 
+def _apply_relevance_verdicts(data_dir: pathlib.Path, keywords_result: dict) -> dict:
+    """
+    Apply AI relevance verdicts from keyword_relevance.json (if present).
+
+    When the file exists (written by the keyword-curator sub-agent):
+      - Keep only keywords with relevant: true in opportunities.
+      - Attach relevance_reason from the AI verdict to each kept keyword.
+      - Prefer the AI intent over the rule-based intent when the rule-based
+        intent was "unknown".
+      - Set relevance_reviewed = true.
+
+    When the file is absent:
+      - Include all candidates unchanged.
+      - Set relevance_reviewed = false.
+      - Append a note to source_note about the pending AI review.
+
+    In both cases, no numbers (scores, volumes, positions) are altered.
+    """
+    relevance_path = data_dir / "keyword_relevance.json"
+    opportunities = keywords_result.get("opportunities", [])
+
+    if not relevance_path.exists():
+        # Unreviewed path — pass all candidates through but annotate
+        source_note = keywords_result.get("source_note", "")
+        pending_note = (
+            "AI relevance review not yet applied — showing all candidates "
+            "(some may be off-audience)."
+        )
+        if source_note and not source_note.endswith(" "):
+            source_note = source_note + " " + pending_note
+        else:
+            source_note = pending_note
+
+        return {
+            **keywords_result,
+            "source_note": source_note,
+            "relevance_reviewed": False,
+        }
+
+    # Load verdicts: list of {keyword, relevant, reason, intent?}
+    try:
+        with open(relevance_path) as fh:
+            raw = json.load(fh)
+    except Exception as exc:
+        print(f"[build] WARNING: could not load keyword_relevance.json: {exc}", file=sys.stderr)
+        return {
+            **keywords_result,
+            "relevance_reviewed": False,
+        }
+
+    # Build lookup: keyword_lower → verdict dict
+    verdicts: dict[str, dict] = {}
+    if isinstance(raw, list):
+        for v in raw:
+            if isinstance(v, dict) and v.get("keyword"):
+                verdicts[v["keyword"].strip().lower()] = v
+    elif isinstance(raw, dict):
+        # Also accept {keyword: {relevant, reason, intent?}} map form
+        for kw, v in raw.items():
+            if isinstance(v, dict):
+                verdicts[kw.strip().lower()] = v
+
+    # Filter and annotate opportunities
+    filtered = []
+    for kw in opportunities:
+        keyword_lower = kw.get("keyword", "").strip().lower()
+        verdict = verdicts.get(keyword_lower)
+
+        if verdict is None:
+            # No verdict for this keyword — include it (conservative: don't drop)
+            filtered.append({**kw, "relevance": None, "relevance_reason": None})
+            continue
+
+        if verdict.get("relevant") is False:
+            # AI judged this keyword off-audience — exclude from opportunities
+            continue
+
+        # relevant: true — keep it, annotate with AI reason
+        ai_reason = verdict.get("reason") or verdict.get("relevance_reason")
+        ai_intent = verdict.get("intent")
+
+        updated = {**kw, "relevance": True, "relevance_reason": ai_reason}
+
+        # Prefer AI intent when rule-based returned "unknown"
+        if ai_intent and kw.get("intent") == "unknown":
+            updated["intent"] = ai_intent
+
+        filtered.append(updated)
+
+    print(f"[build] AI relevance: {len(filtered)} of {len(opportunities)} candidates kept after review.")
+
+    return {
+        **keywords_result,
+        "opportunities": filtered,
+        "relevance_reviewed": True,
+    }
+
+
 def build_report_data(
     data_dir: pathlib.Path,
     icp_path: pathlib.Path | None = None,
@@ -369,7 +467,7 @@ def build_report_data(
                 demo=demo,
                 verbose=False,
             )
-            print(f"[build] Keyword research: {len(keywords_result.get('opportunities', []))} opportunities.")
+            print(f"[build] Keyword research: {len(keywords_result.get('opportunities', []))} raw candidates.")
         except Exception as exc:
             print(f"[build] WARNING: keyword research failed (non-fatal): {exc}", file=sys.stderr)
             keywords_result = {
@@ -379,6 +477,12 @@ def build_report_data(
             }
     else:
         print("[build] Skipping keyword research (no ICP configured).")
+
+    # --- Apply AI relevance verdicts (optional — from keyword_relevance.json) ---
+    # The keyword-curator sub-agent writes keyword_relevance.json after judging
+    # each candidate. When present, we filter to relevant: true only and annotate
+    # with the AI's reason. When absent, all candidates pass through unfiltered.
+    keywords_result = _apply_relevance_verdicts(data_dir, keywords_result)
 
     analyses = {
         "striking_distance": sd,

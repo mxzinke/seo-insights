@@ -16,13 +16,14 @@ For each keyword the output includes:
   intent            : str  (transactional | commercial | informational | navigational | unknown)
   intent_evidence   : str  (which modifier matched)
   our_current_position : float | null  (from GSC data; null if we don't rank)
-  icp_relevance     : float 0–1  (from validate_icp.icp_relevance)
   opportunity_score : float  — see formula below
   recommended_action: str
+  relevance         : null  (unjudged; set to true/false by AI curator pass)
+  relevance_reason  : null  (set by AI curator pass)
 
 Opportunity score formula
 -------------------------
-Scores are on a 0–100 scale computed deterministically from four inputs:
+Scores are on a 0–100 scale computed deterministically from three inputs:
 
   volume_score     = log10(max(search_volume, 10)) / log10(max_volume) * 40
                      (log-scaled; capped at 40 pts; null volume → 10 pts baseline)
@@ -34,16 +35,15 @@ Scores are on a 0–100 scale computed deterministically from four inputs:
                    = max(0, (30 - our_position) / 30) * 20 if we rank 1–30
                    = 0 when position > 30
 
-  icp_score        = icp_relevance * 10
-                     (ICP alignment; 0 if excluded term)
-
-  opportunity_score = round(volume_score + competition_score + gap_score + icp_score, 2)
+  opportunity_score = round(volume_score + competition_score + gap_score, 2)
 
 Reasoning:
   - Volume is the biggest lever (40 pts) but log-scaled so 100k isn't 100× a 1k keyword.
   - Competition (25 pts) rewards attainable gaps; LOW wins over HIGH.
   - Gap (25 pts) rewards content we haven't created yet, more than improving existing rank.
-  - ICP (10 pts) ensures audience fit is a tiebreaker.
+  - Audience relevance is NOT included here — it is judged by the AI curator sub-agent
+    after this pipeline runs (see agents/keyword-curator.md). The only hard exclusion
+    is excluded_terms (user's explicit opt-outs), which are applied before scoring.
 
 Usage
 -----
@@ -66,7 +66,7 @@ _ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from scripts.validate_icp import load_icp, icp_relevance  # noqa: E402
+from scripts.validate_icp import load_icp  # noqa: E402
 from scripts.keywords import intent as intent_mod           # noqa: E402
 from scripts.keywords import gsc_opportunities              # noqa: E402
 from scripts.keywords import autocomplete as ac             # noqa: E402
@@ -86,17 +86,19 @@ def _opportunity_score(
     search_volume: int | None,
     competition_index: int | None,
     our_position: float | None,
-    icp_rel: float,
     max_volume: int,
 ) -> float:
     """
-    Compute a deterministic opportunity score on a 0–100 scale.
+    Compute a deterministic opportunity score on a 0–90 scale.
 
     Formula (documented in module docstring):
       volume_score     = log10(max(volume, 10)) / log10(max(max_volume, 10)) * 40
       competition_score= (100 - competition_index) / 100 * 25
       gap_score        = 25 (no rank) | (30 - pos) / 30 * 20 (pos 1-30) | 0 (pos > 30)
-      icp_score        = icp_relevance * 10
+
+    Note: ICP relevance is intentionally excluded from this formula.
+    Audience relevance is judged by the AI curator sub-agent (agents/keyword-curator.md),
+    not by string-matching. excluded_terms are the only hard exclusion gate.
     """
     # Volume component (40 pts)
     if search_volume is not None and search_volume > 0:
@@ -119,10 +121,7 @@ def _opportunity_score(
     else:
         gap_score = 0.0
 
-    # ICP component (10 pts)
-    icp_score = icp_rel * 10
-
-    total = volume_score + competition_score + gap_score + icp_score
+    total = volume_score + competition_score + gap_score
     return round(min(total, 100.0), 2)
 
 
@@ -297,7 +296,9 @@ def run_research(
     ) -> None:
         kw_lower = keyword.strip().lower()
 
-        # Exclusion gate
+        # Hard exclusion gate — only excluded_terms block here.
+        # Audience relevance is NOT judged by string matching; it is handled
+        # by the AI curator sub-agent in a separate pass (agents/keyword-curator.md).
         for excl in excluded_terms:
             if excl in kw_lower:
                 return
@@ -316,21 +317,15 @@ def run_research(
             if mv.get("monthly_searches") is not None
         ]
 
-        # ICP relevance
-        rel = icp_relevance(icp, keyword)
-        if rel <= 0.0:
-            return  # excluded by ICP
-
         # Resolve our current position
         if our_pos is None:
             our_pos = gsc_position_map.get(kw_lower)
 
-        # Opportunity score
+        # Opportunity score — volume + competition + gap ONLY (no ICP string-match)
         score = _opportunity_score(
             search_volume=volume,
             competition_index=comp_index,
             our_position=our_pos,
-            icp_rel=rel,
             max_volume=max_volume,
         )
 
@@ -352,9 +347,12 @@ def run_research(
             "intent": intent_result["intent"],
             "intent_evidence": intent_result["evidence"],
             "our_current_position": our_pos,
-            "icp_relevance": rel,
             "opportunity_score": score,
             "recommended_action": rec_action,
+            # Relevance fields: null until the AI curator sub-agent populates them
+            # via keyword_relevance.json (see agents/keyword-curator.md).
+            "relevance": None,
+            "relevance_reason": None,
         }
 
         # Dedup: keep the entry with the highest opportunity score, prefer richer data

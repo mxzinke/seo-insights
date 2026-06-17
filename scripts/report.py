@@ -98,7 +98,7 @@ def prepare_template_context(data: dict) -> dict:
     charts = data.get("charts", {})
     icp = data.get("icp") or {}
     explore = data.get("explore") or {}
-    keywords_data = data.get("keywords") or {"enabled": False, "source_note": "", "opportunities": []}
+    keywords_data = data.get("keywords") or {"enabled": False, "source_note": "", "opportunities": [], "relevance_reviewed": False}
 
     wow = summary.get("wow") or {}
 
@@ -328,6 +328,7 @@ def prepare_template_context(data: dict) -> dict:
         "keywords_enabled": keywords_data.get("enabled", False),
         "keywords_source_note": keywords_data.get("source_note", ""),
         "keywords_count": len(keywords_data.get("opportunities", [])),
+        "keywords_relevance_reviewed": keywords_data.get("relevance_reviewed", False),
     }
 
 

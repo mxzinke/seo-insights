@@ -98,10 +98,13 @@ Quote numbers exactly from the JSON. For example: "The query 'example keyword' h
 
 If `keywords.enabled` is true in the JSON, briefly summarize:
 - How many keyword opportunities were found
-- The top 3 by `opportunity_score` (keyword, intent, score, volume if available)
+- Whether AI relevance review was applied (`keywords.relevance_reviewed`)
+- The top 3 by `opportunity_score` (keyword, intent, score, volume if available), with `relevance_reason` if present
 - Note whether Ads data was used (from `keywords.source_note`)
 
-Tell the user they can run `/seo-insights:keyword-research` for a full keyword-focused breakdown.
+If `relevance_reviewed` is false, note: "AI relevance review hasn't run yet — run `/seo-insights:keyword-research` for a fully audience-filtered list."
+
+Tell the user they can run `/seo-insights:keyword-research` for a full keyword-focused breakdown with AI audience-relevance judgment.
 
 ### 3d. Report path
 

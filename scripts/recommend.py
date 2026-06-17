@@ -6,7 +6,7 @@ Each recommendation is an action the site owner can take. Recommendations are:
   - Scored by impact (1–5) and effort (1–5)
   - Prioritized by impact/effort ratio (higher = do first)
   - Backed by traceable evidence rows from the analysis data
-  - Filtered through the ICP to ensure keyword opportunities are relevant
+  - Filtered through ICP excluded_terms, and by AI relevance verdicts when available
 
 Recommendation object schema:
   {
@@ -45,9 +45,6 @@ CATEGORIES = {
     "decay_recovery",
     "keyword_opportunity",
 }
-
-# ICP relevance score below which keyword-centric recommendations are skipped.
-ICP_RELEVANCE_MIN = 0.0  # Allow all by default; excluded_terms still block.
 
 
 def _rec(
@@ -306,9 +303,24 @@ def _from_keywords(keywords_result: dict, icp: dict) -> list[dict]:
     Only surfaces strong signals:
       - content_gap: high opportunity_score + no current rank (position is null)
       - optimize_ranking: high opportunity_score + we rank 8–20
-    ICP relevance gate: icp_relevance must be > 0.
+
+    Relevance gating:
+      - When AI relevance review has run (relevance_reviewed = true in keywords_result),
+        only keywords with relevance: true appear in the opportunities list (already
+        filtered by build_report_data._apply_relevance_verdicts). No additional gate
+        needed here — trust the AI verdict.
+      - When AI review has NOT run (relevance_reviewed = false), be conservative:
+        do not emit keyword content recommendations (to avoid recommending off-audience
+        keywords as confident actions). Return empty.
+      - excluded_terms filtering happened upstream in research.py.
     """
     if not keywords_result or not keywords_result.get("enabled"):
+        return []
+
+    # If no AI review has been applied, skip keyword recommendations entirely
+    # to avoid recommending potentially off-audience keywords as confident actions.
+    relevance_reviewed = keywords_result.get("relevance_reviewed", False)
+    if not relevance_reviewed:
         return []
 
     opportunities = keywords_result.get("opportunities", [])
@@ -322,17 +334,13 @@ def _from_keywords(keywords_result: dict, icp: dict) -> list[dict]:
 
         keyword = kw.get("keyword", "")
         score = kw.get("opportunity_score", 0)
-        icp_rel = kw.get("icp_relevance", 0.0)
         position = kw.get("our_current_position")
         action = kw.get("recommended_action", "monitor")
         volume = kw.get("search_volume")  # may be None (free layer)
         intent = kw.get("intent", "unknown")
         competition = kw.get("competition")
         comp_index = kw.get("competition_index")
-
-        # ICP gate
-        if icp_rel <= 0.0:
-            continue
+        relevance_reason = kw.get("relevance_reason")
 
         # Only surface strong opportunities
         if score < 40:
@@ -342,7 +350,6 @@ def _from_keywords(keywords_result: dict, icp: dict) -> list[dict]:
         evidence = {
             "keyword": keyword,
             "opportunity_score": score,
-            "icp_relevance": icp_rel,
             "intent": intent,
             "our_current_position": position,
             "search_volume": volume,
@@ -358,6 +365,7 @@ def _from_keywords(keywords_result: dict, icp: dict) -> list[dict]:
                 if competition and comp_index is not None
                 else "competition data unavailable"
             )
+            relevance_note = f" Relevance: {relevance_reason}" if relevance_reason else ""
             recs.append(_rec(
                 rec_id=f"kw_gap_{content_gap_count:03d}",
                 title=f'Content gap: create content targeting "{keyword}"',
@@ -374,8 +382,8 @@ def _from_keywords(keywords_result: dict, icp: dict) -> list[dict]:
                     f'"{keyword}" has an opportunity score of {score:.0f}/100 '
                     f"with {vol_note} and {comp_note}. "
                     f"We have zero presence for this keyword — creating relevant content "
-                    f"aligned with {intent} intent could capture this demand. "
-                    f"ICP relevance: {icp_rel:.2f}. "
+                    f"aligned with {intent} intent could capture this demand."
+                    f"{relevance_note} "
                     f"Source: keyword research pipeline (no numbers invented by model)."
                 ),
             ))
@@ -384,6 +392,7 @@ def _from_keywords(keywords_result: dict, icp: dict) -> list[dict]:
                 continue
             optimize_count += 1
             vol_note = f"{volume:,} avg monthly searches" if volume else "volume unavailable"
+            relevance_note = f" Relevance: {relevance_reason}" if relevance_reason else ""
             recs.append(_rec(
                 rec_id=f"kw_opt_{optimize_count:03d}",
                 title=f'Improve ranking for "{keyword}" (pos {position:.1f})',
@@ -400,7 +409,8 @@ def _from_keywords(keywords_result: dict, icp: dict) -> list[dict]:
                     f'"{keyword}" ranks at position {position:.1f} with {vol_note}. '
                     f"Opportunity score: {score:.0f}/100. "
                     f"Improving this ranking toward the top 3 could meaningfully increase "
-                    f"clicks given the search volume. ICP relevance: {icp_rel:.2f}. "
+                    f"clicks given the search volume."
+                    f"{relevance_note} "
                     f"Source: keyword research pipeline (all figures from Python pipeline)."
                 ),
             ))

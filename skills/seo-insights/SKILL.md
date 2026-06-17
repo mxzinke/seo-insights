@@ -126,9 +126,11 @@ What the pipeline does, in order:
 
 ## STEP 2b — Keyword Research (requires valid ICP; no extra credentials needed for free layer)
 
-Keyword research runs automatically as part of `build_report_data.py` when an ICP is
-provided. It answers: which new keywords are relevant, how much search volume they
-have, how contested they are, and what search intent they signal.
+Keyword research runs in **two phases**. This is the one place where the AI makes a judgment call — everything else is fully deterministic Python.
+
+### Phase 1 — Deterministic pipeline (always runs)
+
+`build_report_data.py` calls `research.py` to produce all candidates + all numbers:
 
 **Three data sources, in order of richness:**
 
@@ -157,24 +159,58 @@ unavailable in the report.
 opportunity_score = volume_score (40 pts)
                   + competition_score (25 pts)
                   + gap_score (25 pts)
-                  + icp_score (10 pts)
 ```
 
-All inputs come from API data or from the Python classifier. See `DETERMINISM.md`.
+All inputs come from API data or the rule-based classifier. See `DETERMINISM.md`.
+
+The only hard exclusion gate is `excluded_terms` from the ICP (user's explicit opt-outs).
+`priority_topics` are used only to seed keyword discovery — they are NOT used to
+string-match-filter candidates. That filtering would miss context ("karte" in German
+means both "map" and "card") and is done by the AI curator instead.
+
+Each candidate in `keywords.json` has `relevance: null` and `relevance_reason: null`
+until the AI curator pass runs.
+
+### Phase 2 — AI relevance judgment (keyword-curator sub-agent)
+
+**This is the only place the AI makes a content judgment in this plugin.**
+
+When the user runs `/seo-insights:keyword-research`, Claude:
+1. Reads the ICP + candidate keywords from `keywords.json`
+2. Delegates to the `keyword-curator` sub-agent (Haiku, read-only)
+3. The curator returns per-keyword verdicts: `{relevant, reason, intent}`
+4. Claude writes the verdicts to `<rundir>/keyword_relevance.json`
+5. `build_report_data.py` re-runs to apply the filter
+
+The curator judges relevance **with understanding**: a keyword can share words with the
+site's topics but still be off-audience (e.g. a pokemon card query for a professional
+map tool, even though "karte"/"ki" overlap). The curator never touches any number.
+
+**Graceful fallback:**
+
+When `keyword_relevance.json` is absent, `build_report_data.py` includes all candidates
+and sets `keywords.relevance_reviewed = false`. The report shows a pending note.
+`recommend.py` does NOT emit keyword content recommendations in the unreviewed state
+(to avoid recommending off-audience keywords as confident actions).
 
 **Demo mode:**
 
 ```bash
-bash scripts/demo.sh   # uses tests/fixtures/keyword_ideas_fixture.json
+bash scripts/demo.sh   # exercises both UNREVIEWED and REVIEWED paths
 ```
 
 The `keywords` key in `report_data.json` contains:
 - `enabled` : bool
-- `source_note` : which sources were active
+- `source_note` : which sources were active; includes pending note when unreviewed
+- `relevance_reviewed` : bool — true only when keyword_relevance.json was applied
 - `opportunities` : list sorted by `opportunity_score` desc
+  - When reviewed: only `relevant: true` keywords; each has `relevance_reason`
+  - When unreviewed: all candidates; `relevance: null`, `relevance_reason: null`
 
 The HTML report shows a sortable/filterable **Keyword Opportunities** table
-in its own section (accessible from the sticky nav under "Keywords").
+in its own section (accessible from the sticky nav under "Keywords"):
+- When reviewed: AI `relevance_reason` appears as subtext on each keyword row
+- When unreviewed: amber info note says "AI relevance review pending"
 
 ---
 

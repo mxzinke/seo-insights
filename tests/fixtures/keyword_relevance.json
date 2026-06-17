@@ -1,0 +1,290 @@
+[
+  {
+    "keyword": "google search console setup",
+    "relevant": true,
+    "reason": "Target audience uses GSC — setup guide matches their onboarding need.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "core web vitals optimization",
+    "relevant": true,
+    "reason": "B2B SEO teams actively optimize CWV as a ranking factor.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "page speed seo impact",
+    "relevant": true,
+    "reason": "Performance impact on rankings is a key concern for this audience.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "content optimization guide",
+    "relevant": true,
+    "reason": "SEO leads seek content optimization guidance directly.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "seo content decay",
+    "relevant": true,
+    "reason": "Content decay detection is a core capability of this tool.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "seo keyword cannibalization fix",
+    "relevant": true,
+    "reason": "Cannibalization analysis is a primary feature of this tool.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "click through rate improvement",
+    "relevant": true,
+    "reason": "CTR optimization is a central use case for the target audience.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "technical seo audit checklist",
+    "relevant": true,
+    "reason": "Technical SEO audits align directly with the tool's audit capabilities.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "google ads keyword planner alternative",
+    "relevant": true,
+    "reason": "Audience compares keyword tools — this tool is a relevant alternative.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "google search console alternative",
+    "relevant": true,
+    "reason": "Audience evaluates GSC-adjacent tools — highly relevant comparison query.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "keyword research tool free",
+    "relevant": false,
+    "reason": "Targets cost-focused beginners, not B2B SaaS growth teams.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "how to improve seo ranking",
+    "relevant": false,
+    "reason": "Generic beginner query; the audience needs data-driven tooling, not tutorials.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "seo reporting software",
+    "relevant": true,
+    "reason": "SEO reporting is a core output of this tool — matches the audience's job.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "best seo tools for small business",
+    "relevant": false,
+    "reason": "Small business focus mismatches the B2B SaaS 10-200 employee target.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "seo analysis tool",
+    "relevant": true,
+    "reason": "Direct match — audience searches for SEO analysis tools.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "seo analysis python script",
+    "relevant": true,
+    "reason": "Developer-oriented audience segment that builds custom SEO tooling.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "seo analysis free tool",
+    "relevant": false,
+    "reason": "Free-tool seekers are typically not the B2B SaaS growth team audience.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "seo analysis report example",
+    "relevant": true,
+    "reason": "Growth teams look for report examples to benchmark their own output.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "google search console impressions but no clicks",
+    "relevant": true,
+    "reason": "Exactly the CTR-gap problem this tool surfaces — high audience fit.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "google search console not showing data",
+    "relevant": true,
+    "reason": "GSC troubleshooting is within the audience's daily workflow.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "google search console api python example",
+    "relevant": true,
+    "reason": "Technical audience using the GSC API directly — core use case.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "keyword research without paid tools",
+    "relevant": false,
+    "reason": "Budget-constrained query; the audience invests in professional tooling.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "keyword research spreadsheet template",
+    "relevant": false,
+    "reason": "Manual spreadsheet approach is below the sophistication of this audience.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "content optimization for seo",
+    "relevant": true,
+    "reason": "Content optimization is a primary workflow for B2B SEO leads.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "content optimization checklist",
+    "relevant": true,
+    "reason": "Checklists are practical tools for SEO leads managing content teams.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "technical seo checklist 2025",
+    "relevant": true,
+    "reason": "Technical SEO checklists are standard reference material for this audience.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "technical seo audit template",
+    "relevant": true,
+    "reason": "Audit templates directly support the tool's core audit workflow.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "core web vitals lcp fix",
+    "relevant": true,
+    "reason": "LCP fixes are actionable CWV guidance the audience actively seeks.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "core web vitals cls score",
+    "relevant": true,
+    "reason": "CLS troubleshooting is part of the audience's performance optimization work.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "click through rate google search console",
+    "relevant": true,
+    "reason": "CTR analysis in GSC is a primary use case of this tool.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "what is striking distance seo",
+    "relevant": true,
+    "reason": "Striking distance is a core concept in this tool's quick-win analysis.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "how to improve ctr google search",
+    "relevant": true,
+    "reason": "CTR improvement in Google Search is a direct capability of this tool.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "technical seo audit",
+    "relevant": true,
+    "reason": "Technical SEO audits are a primary use case for B2B SEO leads.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "keyword ranking tracker",
+    "relevant": true,
+    "reason": "Ranking tracking is adjacent to the tool's GSC-based positioning analysis.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "search console ctr optimization",
+    "relevant": true,
+    "reason": "CTR optimization in Search Console is the tool's core CTR feature.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "seo monitoring tool",
+    "relevant": true,
+    "reason": "SEO monitoring is the overarching use case for B2B SaaS growth teams.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "content decay seo",
+    "relevant": true,
+    "reason": "Content decay detection is explicitly listed as a core tool capability.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "b2b seo strategy",
+    "relevant": true,
+    "reason": "B2B SEO strategy aligns with the audience and the tool's positioning.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "core web vitals checker",
+    "relevant": true,
+    "reason": "CWV checking is a built-in module of this tool.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "seo analysis python",
+    "relevant": true,
+    "reason": "Technical B2B teams building Python-based SEO analysis are in scope.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "saas seo",
+    "relevant": true,
+    "reason": "SaaS SEO is the exact audience context — high audience fit.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "google search console api python",
+    "relevant": true,
+    "reason": "GSC API usage in Python is core to this tool's technical audience.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "click through rate seo",
+    "relevant": true,
+    "reason": "CTR optimization is a primary use case for the audience.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "striking distance keywords",
+    "relevant": true,
+    "reason": "Striking distance is a central report section of this tool.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "seo recommendations tool",
+    "relevant": true,
+    "reason": "Generating prioritized SEO recommendations is the tool's primary output.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "website seo report",
+    "relevant": true,
+    "reason": "SEO reports are the end deliverable for growth teams using this tool.",
+    "intent": "commercial"
+  },
+  {
+    "keyword": "meta description optimization",
+    "relevant": true,
+    "reason": "Meta description optimization is surfaced in the on-page audit module.",
+    "intent": "informational"
+  },
+  {
+    "keyword": "page title seo best practices",
+    "relevant": true,
+    "reason": "Title optimization guidance is part of the tool's on-page recommendations.",
+    "intent": "informational"
+  }
+]
